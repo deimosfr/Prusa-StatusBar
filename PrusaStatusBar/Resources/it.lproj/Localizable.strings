@@ -1,0 +1,328 @@
+// Prusa StatusBar -- Italiano.
+//
+// Traduzione iniziale. Per migliorare una stringa, modifica il lato destro
+// di una riga e apri una PR. Per aggiungere una nuova lingua, vedi
+// LOCALIZATION.md. Le chiavi devono restare allineate a en.lproj/Localizable.strings.
+
+// General tab
+"general.global.section"                  = "Generale";
+"general.notifications.section"           = "Notifiche";
+"general.launch_at_login.label"           = "Avvia all'accesso";
+"general.launch_at_login.error"           = "Impossibile %@ l'avvio all'accesso: %@";
+"general.launch_at_login.verb_enable"     = "abilitare";
+"general.launch_at_login.verb_disable"    = "disabilitare";
+"general.check_for_updates.label"         = "Controlla aggiornamenti";
+"general.check_for_updates.footer"        = "Controlla GitHub una volta al giorno per una nuova versione. Nessun dato lascia il Mac oltre alla richiesta di versione.";
+"general.notifications.footer"            = "Ogni evento ha il proprio interruttore. Banner macOS nativi sulle transizioni supportate.";
+"general.appearance.accent.label"         = "Colore d'accento";
+"general.language.label"                  = "Lingua dell'app";
+"general.language.system"                 = "Sistema";
+
+// Menu bar tab
+"menubar.label.header"                    = "Etichetta della barra dei menu";
+"menubar.label.footer"                    = "Controlla cosa appare accanto all'icona durante la stampa. Disattiva entrambe per icona sola.";
+"menubar.remaining_time.label"            = "Mostra tempo residuo";
+"menubar.percentage.label"                = "Mostra percentuale";
+"menubar.refresh_connected.header"        = "Comportamento di aggiornamento";
+"menubar.refresh_connected.label"         = "Quando la stampante è raggiungibile";
+"menubar.refresh_connected.footer"        = "Usato finché le richieste hanno successo. Da %lld s a %lld min.";
+"menubar.refresh_disconnected.header"     = "Aggiornamento se disconnessa";
+"menubar.refresh_disconnected.label"      = "Quando la stampante è disconnessa";
+"menubar.refresh_disconnected.footer"     = "Usato dopo 2 fallimenti consecutivi, finché la stampante non torna. Da %lld s a %lld min.";
+"menubar.disconnected_icon.header"        = "Icona disconnessa";
+"menubar.disconnected_icon.footer"        = "Scegli come appare la barra dei menu quando la stampante non è raggiungibile. Clicca sull'emoji per sceglierne un altro.";
+"menubar.disconnected_icon.style.label"   = "Stile dell'icona disconnessa";
+"menubar.disconnected_icon.style.default" = "Icona predefinita";
+"menubar.disconnected_icon.style.minimal" = "Punto minimo";
+"menubar.disconnected_icon.style.none"    = "Nessuna icona";
+"menubar.disconnected_icon.style.emoji"   = "Emoji personalizzata";
+"menubar.disconnected_icon.emoji.tooltip" = "Clicca per scegliere un altro emoji";
+
+// Menu content tab
+"content.style.header"                    = "Stile scheda di stampa";
+"content.style.footer"                    = "Scegli l'aspetto della barra di avanzamento. Le anteprime girano in loop.";
+"content.metrics.header"                  = "Informazioni aggiuntive sulla stampante";
+"content.metrics.footer"                  = "Ogni riga appare solo quando la stampante riporta un valore.";
+"content.metrics.temperature.label"       = "Mostra temperatura piatto/ugello";
+"content.metrics.speed.label"             = "Mostra velocità di stampa";
+"content.metrics.z_height.label"          = "Mostra altezza Z";
+"content.metrics.nozzle_diameter.label"   = "Mostra diametro ugello";
+"content.metrics.filament_type.label"     = "Mostra tipo di filamento";
+"content.metrics.mmu.label"               = "Mostra MMU";
+"content.job_control.header"              = "Controllo stampa";
+"content.job_control.label"               = "Mostra pulsanti di azione";
+
+// Printer tab
+"printer.connection.header"               = "Connessione PrusaLink";
+"printer.display_name.footer"             = "Il nome è opzionale. Lascia vuoto per usare quello riportato dalla stampante.";
+"printer.connect_uuid.header"             = "Prusa Connect";
+"printer.connect_uuid.field_label"        = "UUID";
+"printer.connect_uuid.footer"             = "Opzionale. Abilita un pulsante dedicato a Prusa Connect nel menu.";
+"printer.camera.footer"                   = "Opzionale. Incorpora un flusso RTSP dal vivo nel menu a tendina.";
+"printer.camera.enable.label"             = "Abilita Buddy Camera";
+"printer.camera.enable.requires_url"      = "Imposta l'URL di PrusaLink per abilitare Buddy Camera.";
+"printer.security.header"                 = "Sicurezza";
+"printer.keychain.label"                  = "Salva chiave API nel Portachiavi di macOS";
+"printer.keychain.confirm_enable.title"   = "Spostare la chiave API nel Portachiavi di macOS?";
+"printer.keychain.confirm_enable.body"    = "La tua chiave API PrusaLink sarà salvata nel Portachiavi di macOS, cifrata e accessibile solo a questa app. La copia in chiaro nelle preferenze sarà rimossa.";
+"printer.keychain.confirm_enable.button"  = "Sposta nel Portachiavi";
+"printer.keychain.confirm_disable.title"  = "Salvare la chiave API in chiaro?";
+"printer.keychain.confirm_disable.body"   = "La tua chiave API PrusaLink sarà rimossa dal Portachiavi di macOS e salvata in chiaro nelle preferenze. Qualsiasi app o script eseguito dal tuo utente potrà leggerla. È meno sicuro.";
+"printer.keychain.confirm_disable.button" = "Salva in chiaro";
+"common.cancel"                           = "Annulla";
+
+// Notifications card
+"notification.started.title"              = "Stampa in avvio";
+"notification.started.description"        = "Quando un nuovo lavoro inizia a stampare.";
+"notification.started.body_default"       = "Una nuova stampa è iniziata.";
+"notification.finished.title"             = "Stampa completata";
+"notification.finished.description"       = "Quando un lavoro si completa con successo.";
+"notification.attention.title"            = "La stampante richiede attenzione";
+"notification.attention.description"      = "Filamento esaurito, sportello aperto, richiesto intervento.";
+"notification.error.title"                = "Errore stampante";
+"notification.error.description"          = "Guasto hardware, problema termico, stampa annullata.";
+"notification.blocked.title"              = "Banner bloccati da macOS";
+"notification.blocked.message"            = "Abilita Prusa StatusBar in Impostazioni di Sistema > Notifiche.";
+"notification.blocked.action"             = "Apri Impostazioni";
+"notification.card.title"                 = "Notifiche";
+"notification.card.subtitle"              = "Banner macOS nativi. Scegli quali eventi ti avvisano.";
+
+// Dropdown surfaces
+"dropdown.job.elapsed_label"              = "TRASCORSO";
+"dropdown.job.remaining_label"            = "RESIDUO";
+"dropdown.job.eta_label"                  = "ETA";
+"dropdown.actions.header"                 = "Azioni";
+"dropdown.actions.state_expanded"         = "Azioni, espanse";
+"dropdown.actions.state_collapsed"        = "Azioni, contratte";
+"dropdown.unconfigured.message"           = "Aggiungi URL PrusaLink e chiave API per iniziare a monitorare la stampante.";
+"dropdown.unconfigured.action"            = "Apri impostazioni stampante";
+"dropdown.unreachable.title"              = "Stampante non raggiungibile";
+"dropdown.unreachable.message"            = "Verifica che la stampante sia in rete e l'URL raggiungibile.";
+"dropdown.loading"                        = "Caricamento stato...";
+"dropdown.camera.preview"                 = "Anteprima telecamera (prototipo)";
+"dropdown.metrics.temp.target"            = "Obiettivo %lld°";
+"dropdown.metrics.temp.no_target"         = "Nessun obiettivo";
+
+// Errors and inline validation
+"error.uuid.invalid"                      = "Formato UUID non valido";
+"error.rtsp.invalid"                      = "URL RTSP non valido";
+"error.host.invalid"                      = "Inserisci solo IP o hostname";
+"error.url.invalid"                       = "URL non valido";
+"error.printer.missing_credentials"       = "Nessuna chiave API configurata";
+"error.printer.invalid_url"               = "L'URL della stampante non è valido";
+"error.printer.unreachable"               = "Stampante non raggiungibile";
+"error.printer.invalid_credentials"       = "Chiave API non valida";
+"error.printer.not_found"                 = "Risorsa non trovata";
+"error.printer.server_status"             = "La stampante ha restituito HTTP %lld";
+"error.printer.decoding"                  = "Impossibile decodificare la risposta della stampante: %@";
+
+// Accessibility
+"a11y.refresh_button"                     = "Aggiorna (⌘R)";
+"a11y.progress_bar"                       = "Avanzamento";
+"a11y.style_selector"                     = "Stile barra di avanzamento";
+"a11y.brand_accent"                       = "Colore d'accento di marca";
+"a11y.refresh_interval"                   = "Intervallo di aggiornamento";
+"a11y.temp"                               = "Temperatura %@";
+
+// About tab
+"about.coffee_link"                       = "Offrimi un caffè";
+"about.source_link"                       = "Codice sorgente";
+"about.issues_link"                       = "Segnala un problema";
+"about.go2rtc_credit"                     = "Transmuxing telecamera con go2rtc (MIT)";
+"about.community_notice"                  = "Applicazione della comunità, non ufficiale Prusa";
+
+// Misc
+"misc.refresh_interval.custom"            = "Personalizzato";
+"misc.status.error"                       = "Errore";
+
+// Preferences window tabs
+"prefs.tab.general"                       = "Generale";
+"prefs.tab.menu_bar"                      = "Barra dei menu";
+"prefs.tab.menu_content"                  = "Contenuto del menu";
+"prefs.tab.printer"                       = "Stampante";
+"prefs.tab.about"                         = "Informazioni";
+
+// Print card style preview labels
+"content.style.spool"                     = "Bobina filamento";
+"content.style.classic"                   = "Classico";
+"content.job_control.footer"              = "Aggiunge i pulsanti Riprendi, Pausa e Stop in una sezione comprimibile sopra i collegamenti PrusaLink e PrusaConnect. Ogni pulsante è disattivato quando la sua azione non è valida per lo stato attuale della stampante.";
+"content.web_links.header"                = "PrusaLink e PrusaConnect";
+"content.web_links.footer"                = "Mostra o nasconde i pulsanti PrusaLink e Prusa Connect nel menu a discesa.";
+"content.web_links.uuid.help"             = "L'UUID Prusa Connect è opzionale: lascialo vuoto per collegare alla dashboard cloud generica, oppure imposta un UUID stampante per collegare direttamente alla sua pagina.";
+"content.web_links.show_prusalink.label"  = "Mostra pulsante PrusaLink";
+"content.web_links.show_prusaconnect.label" = "Mostra pulsante Prusa Connect";
+
+// Printer tab additions
+"printer.field.url"                       = "URL";
+"printer.field.fallback_url"              = "URL di riserva";
+"printer.field.fallback_url.add"          = "Aggiungi URL di riserva (opzionale)";
+"printer.field.fallback_url.label"        = "URL di riserva (opzionale)";
+"printer.fallback_url.footer"             = "Usato automaticamente quando l'URL principale non è raggiungibile (es. percorso Wi-Fi, Ethernet o VPN verso la stessa stampante).";
+"printer.field.api_key"                   = "Chiave API";
+"printer.api_key.show"                    = "Mostra chiave API";
+"printer.api_key.hide"                    = "Nascondi chiave API";
+"printer.field.display_name"              = "Nome";
+"printer.url.test_help"                   = "Prova questo URL";
+"common.help.tooltip"                     = "Maggiori info";
+"common.help.learn_more"                  = "Scopri di più";
+"printer.help.url.body"                   = "Inserisci http://<ip> o http://<hostname> della tua stampante (per esempio http://192.168.1.42 o http://prusa-mk3.local). Aprilo prima nel browser web per verificare che PrusaLink si carichi.";
+"printer.help.api_key.body"               = "Trovi la chiave API di questa stampante su Prusa Connect.";
+"printer.help.camera.body"                = "Inserisci l'IP o l'hostname della Buddy Camera (per esempio 192.168.1.42 o prusa-mk3.local). L'IP o l'hostname della stampante è il valore più comune.";
+"printer.help.uuid.body"                  = "Trovi questo UUID nelle impostazioni della stampante su Prusa Connect. Opzionale: lascia vuoto se non usi Prusa Connect.";
+"printer.test.connected"                  = "Connessa";
+"printer.api_key.migrate_error"           = "Impossibile migrare la chiave API: %@";
+"printer.api_key.save_error"              = "Impossibile salvare la chiave API: %@";
+"printer.security.footer"                 = "Consigliato. Se disattivato, la chiave API è memorizzata in chiaro nelle preferenze ed è leggibile da qualsiasi app eseguita dal tuo utente.";
+"printer.notification_hint"               = "Le notifiche sono disattivate. Attivale nella scheda Generale per essere avvisato a fine stampa.";
+"printer.camera.header"                   = "Buddy Camera";
+"printer.camera.host_label"               = "Host telecamera";
+"printer.camera.test_help"                = "Prova telecamera";
+"printer.camera.reachable"                = "Telecamera raggiungibile";
+"printer.generic_camera.header"           = "Telecamera generica";
+"printer.generic_camera.footer"           = "Seconda telecamera opzionale.";
+"printer.generic_camera.enable.label"     = "Abilita telecamera generica";
+"printer.generic_camera.stream_url.label" = "URL flusso";
+"printer.generic_camera.still_url.label"  = "URL immagine fissa";
+"printer.generic_camera.auth_mode.label"  = "Autenticazione";
+"printer.generic_camera.auth_mode.none"   = "Nessuna";
+"printer.generic_camera.auth_mode.basic"  = "Basic";
+"printer.generic_camera.auth_mode.digest" = "Digest";
+"printer.generic_camera.username.label"   = "Nome utente";
+"printer.generic_camera.username.placeholder" = "admin";
+"printer.generic_camera.password.label"   = "Password";
+"printer.generic_camera.password.show"    = "Mostra password";
+"printer.generic_camera.password.hide"    = "Nascondi password";
+"printer.generic_camera.transport.label"  = "Trasporto RTSP";
+"printer.generic_camera.framerate.label"  = "Frequenza fotogrammi";
+"printer.generic_camera.framerate.value"  = "%lld fps";
+"printer.generic_camera.verify_ssl.label" = "Verifica certificato SSL";
+"printer.generic_camera.content_type.label" = "Content-Type";
+"printer.generic_camera.error.invalid_url" = "URL non valido. Usa rtsp://, http:// o https://.";
+"printer.generic_camera.error.http_status" = "HTTP %lld";
+"dropdown.generic_camera.preview"         = "Telecamera generica";
+
+// RTSP / camera errors
+"error.camera.empty"                      = "Inserisci IP o hostname della telecamera";
+"error.rtsp.timeout"                      = "Tempo scaduto";
+"error.rtsp.invalid_host"                 = "Host non valido";
+"error.rtsp.malformed"                    = "La telecamera ha risposto in modo inatteso";
+"error.rtsp.status"                       = "RTSP %lld";
+"error.rtsp.status_with_reason"           = "RTSP %lld %@";
+
+// About additions
+"about.coffee_help"                       = "Sostieni lo sviluppatore";
+"about.version"                           = "Versione %@ (%@)";
+
+// Footer
+"footer.preferences"                      = "Impostazioni";
+"footer.quit"                             = "Esci";
+"footer.update.available"                 = "Nuova versione disponibile";
+
+// Links row
+"links.prusalink.tooltip_enabled"         = "Apri PrusaLink nel browser";
+"links.prusalink.tooltip_unreachable"     = "Stampante non raggiungibile. Verifica la rete.";
+"links.prusalink.tooltip_unset"           = "Imposta prima l'URL della stampante in Impostazioni";
+"links.prusaconnect.tooltip_enabled"      = "Apri PrusaConnect nel browser";
+"links.prusaconnect.tooltip_unset"        = "Imposta prima l'UUID PrusaConnect in Impostazioni";
+
+// Job actions
+"actions.resume"                          = "Riprendi";
+"actions.pause"                           = "Pausa";
+"actions.stop"                            = "Stop";
+"actions.resume.tooltip"                  = "Riprendi la stampa in pausa";
+"actions.pause.tooltip"                   = "Metti in pausa la stampa";
+"actions.stop.tooltip"                    = "Annulla la stampa";
+"actions.resume.disabled"                 = "Riprendi è disponibile solo se la stampante è in pausa";
+"actions.pause.disabled"                  = "Pausa è disponibile solo durante la stampa";
+"actions.stop.disabled"                   = "Stop è disponibile solo durante una stampa";
+
+// Status pill
+"status.unconfigured"                     = "Non configurata";
+"status.disconnected"                     = "Disconnessa";
+"status.idle"                             = "Inattiva";
+"status.ready"                            = "Pronta";
+"status.busy"                             = "Occupata";
+"status.printing"                         = "In stampa";
+"status.paused"                           = "In pausa";
+"status.finished"                         = "Completata";
+"status.stopped"                          = "Fermata";
+"status.error"                            = "Errore";
+"status.attention"                        = "Attenzione";
+
+// Notifications additions
+"notification.finished.body_default"      = "La stampa è completata.";
+"notification.state_body"                 = "%@ ha segnalato %@.";
+
+// Live metrics + heaters
+"dropdown.metrics.speed"                  = "Velocità";
+"dropdown.metrics.z_height"               = "Altezza Z";
+"dropdown.metrics.nozzle_diameter"        = "Diametro ugello";
+"dropdown.metrics.filament_type"          = "Filamento";
+"dropdown.metrics.mmu"                    = "MMU";
+"dropdown.metrics.mmu.enabled"            = "Attivato";
+"dropdown.metrics.mmu.disabled"           = "Disattivato";
+"dropdown.heater.nozzle"                  = "Ugello";
+"dropdown.heater.bed"                     = "Piatto";
+
+// Hero header update line
+"hero.update.not_connected"               = "Non ancora connessa";
+"hero.update.waiting"                     = "In attesa del primo aggiornamento...";
+"hero.update.ago"                         = "Aggiornata %lld s fa";
+"hero.update.refreshing"                  = "%@ - aggiornamento";
+"hero.update.next_in"                     = "%@ - prossimo tra %lld s";
+
+// Azioni HTTP personalizzate
+"prefs.actions.slot.header_left"          = "Intestazione (sinistra)";
+"prefs.actions.slot.header_right"         = "Intestazione (destra)";
+"prefs.actions.slot.row_left"             = "Riga inferiore (sinistra)";
+"prefs.actions.slot.row_right"            = "Riga inferiore (destra)";
+"prefs.actions.slot.row_second_left"      = "Riga centrale (sinistra)";
+"prefs.actions.slot.row_second_right"     = "Riga centrale (destra)";
+"prefs.actions.section.appearance"        = "Aspetto";
+"prefs.actions.section.visibility"        = "Visibilità";
+"prefs.actions.section.request"           = "Richiesta";
+"prefs.actions.section.behavior"          = "Comportamento";
+"prefs.actions.field.name"                = "Nome";
+"prefs.actions.field.symbol"              = "Scegli simbolo";
+"prefs.actions.field.url_placeholder"     = "https://homeassistant.local/api/services/switch/turn_on";
+"prefs.actions.field.headers"             = "Intestazioni";
+"prefs.actions.field.confirm"             = "Chiedere conferma prima di eseguire";
+"prefs.actions.headers.add"               = "Aggiungi intestazione";
+"prefs.actions.headers.empty"             = "Nessuna intestazione configurata.";
+"prefs.actions.visibility.always"         = "Sempre";
+"prefs.actions.visibility.when_connected" = "Solo online";
+"prefs.actions.visibility.when_disconnected" = "Solo offline";
+"prefs.actions.preview.visibility.always"         = "Sempre visibile";
+"prefs.actions.preview.visibility.when_connected" = "Visibile quando online";
+"prefs.actions.preview.visibility.when_disconnected" = "Visibile quando offline";
+"prefs.actions.preview.confirm_on"        = "Conferma";
+"prefs.actions.preview.confirm_off"       = "Senza conferma";
+"prefs.actions.test"                      = "Test";
+"prefs.actions.url_warning"               = "URL non valido";
+"prefs.actions.toggle.requirements_header"   = "Manca per attivare questa azione:";
+"prefs.actions.toggle.requirement.url"       = "URL";
+"prefs.actions.toggle.requirement.icon"      = "Icona";
+"prefs.actions.toggle.requirement.name"      = "Nome";
+"prefs.actions.toggle.requirement.name_or_icon" = "Nome o icona";
+"printer.keychain.scope_note"             = "Copre la chiave API di PrusaLink e i segreti delle azioni personalizzate (URL, intestazioni, corpi della richiesta).";
+"custom_action.untitled"                  = "Azione personalizzata";
+"actions.confirm.run"                     = "Esegui";
+"actions.notification.failure_title"      = "Azione personalizzata non riuscita: %@";
+"symbol_picker.search_placeholder"        = "Cerca simboli";
+"symbol_picker.recent"                    = "Usati di recente";
+"symbol_picker.use"                       = "Usa simbolo";
+"symbol_picker.empty"                     = "Nessun simbolo corrispondente.";
+"symbol_picker.no_selection"              = "Nessun simbolo selezionato";
+"content.custom_actions.header"           = "Azioni HTTP personalizzate";
+"content.custom_actions.footer"           = "Configura fino a sei pulsanti che attivano richieste HTTP (HomeAssistant, webhook, prese smart). Due pulsanti solo icona si trovano nell'intestazione ai lati del nome della stampante; fino a quattro pulsanti icona + testo si trovano in una riga centrale (dopo le miniature delle telecamere) e una riga inferiore (sotto i link PrusaLink). Attiva il conferma per pulsante per richiedere un Sì/No prima di ogni clic.";
+"prefs.actions.headers.name_example"      = "es. Authorization";
+"prefs.actions.headers.value_example"     = "es. Bearer xxx";
+"prefs.actions.headers.show_value"        = "Mostra valore";
+"prefs.actions.headers.hide_value"        = "Nascondi valore";
+"prefs.actions.headers.remove"            = "Rimuovi intestazione";
+"prefs.actions.headers.key_label"         = "Chiave";
+"prefs.actions.headers.value_label"       = "Valore";
+"prefs.actions.field.body_placeholder"    = "{\"entity_id\": \"switch.printer\"}";
+"prefs.actions.field.method_label"        = "Metodo";
+"prefs.actions.field.url_label"           = "URL";
+"prefs.actions.field.body_label"          = "Corpo";

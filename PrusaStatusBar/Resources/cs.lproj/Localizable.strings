@@ -1,0 +1,328 @@
+// Prusa StatusBar -- Čeština.
+//
+// Počáteční překlad. Pro zlepšení textu upravte pravou stranu řádku a
+// otevřete PR. Pro přidání nového jazyka viz LOCALIZATION.md. Klíče
+// musí zůstat shodné s en.lproj/Localizable.strings.
+
+// General tab
+"general.global.section"                  = "Obecné";
+"general.notifications.section"           = "Oznámení";
+"general.launch_at_login.label"           = "Spustit po přihlášení";
+"general.launch_at_login.error"           = "Nelze %@ spuštění po přihlášení: %@";
+"general.launch_at_login.verb_enable"     = "povolit";
+"general.launch_at_login.verb_disable"    = "zakázat";
+"general.check_for_updates.label"         = "Kontrola aktualizací";
+"general.check_for_updates.footer"        = "Jednou denně zkontroluje GitHub na novou verzi. Žádná data neopustí váš Mac kromě dotazu na verzi.";
+"general.notifications.footer"            = "Každá událost má vlastní přepínač. Nativní macOS upozornění při podporovaných přechodech.";
+"general.appearance.accent.label"         = "Barva zvýraznění";
+"general.language.label"                  = "Jazyk aplikace";
+"general.language.system"                 = "Systém";
+
+// Menu bar tab
+"menubar.label.header"                    = "Popisek lišty nabídek";
+"menubar.label.footer"                    = "Určuje, co se zobrazí vedle ikony při tisku. Vypnutím obojího získáte pouze ikonu.";
+"menubar.remaining_time.label"            = "Zobrazit zbývající čas";
+"menubar.percentage.label"                = "Zobrazit procenta";
+"menubar.refresh_connected.header"        = "Chování obnovování";
+"menubar.refresh_connected.label"         = "Když je tiskárna dostupná";
+"menubar.refresh_connected.footer"        = "Použito, když dotazy uspívají. %lld s až %lld min.";
+"menubar.refresh_disconnected.header"     = "Obnovování při odpojení";
+"menubar.refresh_disconnected.label"      = "Když je tiskárna odpojená";
+"menubar.refresh_disconnected.footer"     = "Použito po 2 neúspěšných dotazech, dokud se tiskárna nevrátí. %lld s až %lld min.";
+"menubar.disconnected_icon.header"        = "Ikona při odpojení";
+"menubar.disconnected_icon.footer"        = "Vyberte, jak vypadá panel nabídek, když tiskárna není dostupná. Kliknutím na emoji vyberete jiné.";
+"menubar.disconnected_icon.style.label"   = "Styl ikony při odpojení";
+"menubar.disconnected_icon.style.default" = "Výchozí ikona";
+"menubar.disconnected_icon.style.minimal" = "Malá tečka";
+"menubar.disconnected_icon.style.none"    = "Žádná ikona";
+"menubar.disconnected_icon.style.emoji"   = "Vlastní emoji";
+"menubar.disconnected_icon.emoji.tooltip" = "Kliknutím vyberete jiné emoji";
+
+// Menu content tab
+"content.style.header"                    = "Styl karty tisku";
+"content.style.footer"                    = "Vyberte vzhled ukazatele postupu během tisku. Náhledy běží ve smyčce.";
+"content.metrics.header"                  = "Další informace o tiskárně";
+"content.metrics.footer"                  = "Každý řádek se zobrazí jen pokud tiskárna hodnotu hlásí.";
+"content.metrics.temperature.label"       = "Zobrazit teplotu podložky/trysky";
+"content.metrics.speed.label"             = "Zobrazit rychlost tisku";
+"content.metrics.z_height.label"          = "Zobrazit výšku Z";
+"content.metrics.nozzle_diameter.label"   = "Zobrazit průměr trysky";
+"content.metrics.filament_type.label"     = "Zobrazit typ filamentu";
+"content.metrics.mmu.label"               = "Zobrazit MMU";
+"content.job_control.header"              = "Ovládání tisku";
+"content.job_control.label"               = "Zobrazit tlačítka akcí";
+
+// Printer tab
+"printer.connection.header"               = "Připojení PrusaLink";
+"printer.display_name.footer"             = "Zobrazované jméno je volitelné. Ponechte prázdné pro jméno hlášené tiskárnou.";
+"printer.connect_uuid.header"             = "Prusa Connect";
+"printer.connect_uuid.field_label"        = "UUID";
+"printer.connect_uuid.footer"             = "Volitelné. Aktivuje vyhrazené tlačítko Prusa Connect v nabídce.";
+"printer.camera.footer"                   = "Volitelné. Vloží živý RTSP přenos do nabídky.";
+"printer.camera.enable.label"             = "Povolit Buddy Camera";
+"printer.camera.enable.requires_url"      = "Pro povolení Buddy Camera nastavte URL PrusaLink.";
+"printer.security.header"                 = "Zabezpečení";
+"printer.keychain.label"                  = "Uložit API klíč v Klíčence macOS";
+"printer.keychain.confirm_enable.title"   = "Přesunout API klíč do Klíčenky macOS?";
+"printer.keychain.confirm_enable.body"    = "Váš API klíč PrusaLink bude uložen v Klíčence macOS, zašifrován a dostupný pouze této aplikaci. Kopie v otevřeném textu v předvolbách aplikace bude odstraněna.";
+"printer.keychain.confirm_enable.button"  = "Přesunout do Klíčenky";
+"printer.keychain.confirm_disable.title"  = "Uložit API klíč v otevřeném textu?";
+"printer.keychain.confirm_disable.body"   = "Váš API klíč PrusaLink bude odstraněn z Klíčenky macOS a uložen v otevřeném textu v předvolbách aplikace. Jakákoli aplikace nebo skript spuštěný pod vaším uživatelem si jej může přečíst. Je to méně bezpečné.";
+"printer.keychain.confirm_disable.button" = "Uložit v otevřeném textu";
+"common.cancel"                           = "Zrušit";
+
+// Notifications card
+"notification.started.title"              = "Tisk se spouští";
+"notification.started.description"        = "Když nová úloha začíná tisknout.";
+"notification.started.body_default"       = "Nový tisk byl spuštěn.";
+"notification.finished.title"             = "Tisk dokončen";
+"notification.finished.description"       = "Když úloha úspěšně skončí.";
+"notification.attention.title"            = "Tiskárna vyžaduje pozornost";
+"notification.attention.description"      = "Konec filamentu, otevřená dvířka, nutný zásah uživatele.";
+"notification.error.title"                = "Chyba tiskárny";
+"notification.error.description"          = "Selhání hardwaru, tepelný problém, přerušený tisk.";
+"notification.blocked.title"              = "Upozornění blokována macOS";
+"notification.blocked.message"            = "Aktivujte Prusa StatusBar v Nastavení systému > Oznámení.";
+"notification.blocked.action"             = "Otevřít Nastavení";
+"notification.card.title"                 = "Oznámení";
+"notification.card.subtitle"              = "Nativní macOS oznámení. Zvolte, které události vás upozorní.";
+
+// Dropdown surfaces
+"dropdown.job.elapsed_label"              = "UPLYNULO";
+"dropdown.job.remaining_label"            = "ZBÝVÁ";
+"dropdown.job.eta_label"                  = "ETA";
+"dropdown.actions.header"                 = "Akce";
+"dropdown.actions.state_expanded"         = "Akce, rozbaleno";
+"dropdown.actions.state_collapsed"        = "Akce, sbaleno";
+"dropdown.unconfigured.message"           = "Přidejte URL PrusaLink a API klíč pro zahájení sledování tiskárny.";
+"dropdown.unconfigured.action"            = "Otevřít nastavení tiskárny";
+"dropdown.unreachable.title"              = "Tiskárna nedostupná";
+"dropdown.unreachable.message"            = "Ověřte, že je tiskárna na síti a URL je dostupná.";
+"dropdown.loading"                        = "Načítání stavu...";
+"dropdown.camera.preview"                 = "Náhled kamery (prototyp)";
+"dropdown.metrics.temp.target"            = "Cíl %lld°";
+"dropdown.metrics.temp.no_target"         = "Bez cíle";
+
+// Errors and inline validation
+"error.uuid.invalid"                      = "Neplatný formát UUID";
+"error.rtsp.invalid"                      = "Neplatná RTSP URL";
+"error.host.invalid"                      = "Zadejte pouze IP nebo hostname";
+"error.url.invalid"                       = "Neplatná URL";
+"error.printer.missing_credentials"       = "Není nakonfigurován API klíč";
+"error.printer.invalid_url"               = "URL tiskárny není platná";
+"error.printer.unreachable"               = "Tiskárna nedostupná";
+"error.printer.invalid_credentials"       = "Neplatný API klíč";
+"error.printer.not_found"                 = "Zdroj nenalezen";
+"error.printer.server_status"             = "Tiskárna vrátila HTTP %lld";
+"error.printer.decoding"                  = "Nelze dekódovat odpověď tiskárny: %@";
+
+// Accessibility
+"a11y.refresh_button"                     = "Obnovit (⌘R)";
+"a11y.progress_bar"                       = "Postup";
+"a11y.style_selector"                     = "Styl ukazatele postupu";
+"a11y.brand_accent"                       = "Značková barva zvýraznění";
+"a11y.refresh_interval"                   = "Interval obnovování";
+"a11y.temp"                               = "Teplota %@";
+
+// About tab
+"about.coffee_link"                       = "Kup mi kávu";
+"about.source_link"                       = "Zdrojový kód";
+"about.issues_link"                       = "Nahlásit problém";
+"about.go2rtc_credit"                     = "Živý kamerový přenos zajišťuje go2rtc (MIT)";
+"about.community_notice"                  = "Komunitní aplikace, neoficiální produkt Prusa";
+
+// Misc
+"misc.refresh_interval.custom"            = "Vlastní";
+"misc.status.error"                       = "Chyba";
+
+// Preferences window tabs
+"prefs.tab.general"                       = "Obecné";
+"prefs.tab.menu_bar"                      = "Lišta nabídek";
+"prefs.tab.menu_content"                  = "Obsah nabídky";
+"prefs.tab.printer"                       = "Tiskárna";
+"prefs.tab.about"                         = "O aplikaci";
+
+// Print card style preview labels
+"content.style.spool"                     = "Cívka filamentu";
+"content.style.classic"                   = "Klasický";
+"content.job_control.footer"              = "Přidá tlačítka Pokračovat, Pozastavit a Zastavit do sbalitelné sekce nad odkazy PrusaLink a PrusaConnect. Každé je zakázané, pokud jeho akce není v aktuálním stavu tiskárny platná.";
+"content.web_links.header"                = "PrusaLink a PrusaConnect";
+"content.web_links.footer"                = "Zobrazí nebo skryje tlačítka PrusaLink a Prusa Connect v rozbalovací nabídce.";
+"content.web_links.uuid.help"             = "UUID Prusa Connect je volitelné: ponechte prázdné pro odkaz na obecný cloudový dashboard, nebo zadejte UUID tiskárny pro přímý odkaz na její stránku.";
+"content.web_links.show_prusalink.label"  = "Zobrazit tlačítko PrusaLink";
+"content.web_links.show_prusaconnect.label" = "Zobrazit tlačítko Prusa Connect";
+
+// Printer tab additions
+"printer.field.url"                       = "URL";
+"printer.field.fallback_url"              = "Záložní URL";
+"printer.field.fallback_url.add"          = "Přidat záložní URL (volitelné)";
+"printer.field.fallback_url.label"        = "Záložní URL (volitelné)";
+"printer.fallback_url.footer"             = "Použije se automaticky, když primární URL není dostupná (např. Wi-Fi, Ethernet nebo VPN trasa ke stejné tiskárně).";
+"printer.field.api_key"                   = "API klíč";
+"printer.api_key.show"                    = "Zobrazit API klíč";
+"printer.api_key.hide"                    = "Skrýt API klíč";
+"printer.field.display_name"              = "Zobrazované jméno";
+"printer.url.test_help"                   = "Otestovat tuto URL";
+"common.help.tooltip"                     = "Více informací";
+"common.help.learn_more"                  = "Zjistit více";
+"printer.help.url.body"                   = "Zadejte http://<ip> nebo http://<hostname> své tiskárny (například http://192.168.1.42 nebo http://prusa-mk3.local). Nejprve adresu otevřete ve webovém prohlížeči a ověřte, že se PrusaLink načte.";
+"printer.help.api_key.body"               = "API klíč pro tuto tiskárnu najdete v Prusa Connect.";
+"printer.help.camera.body"                = "Zadejte IP adresu nebo hostname Buddy Camery (například 192.168.1.42 nebo prusa-mk3.local). IP nebo hostname tiskárny je nejčastější hodnota.";
+"printer.help.uuid.body"                  = "Toto UUID najdete v nastavení tiskárny v Prusa Connect. Volitelné: nechte prázdné, pokud Prusa Connect nepoužíváte.";
+"printer.test.connected"                  = "Připojeno";
+"printer.api_key.migrate_error"           = "Migrace API klíče selhala: %@";
+"printer.api_key.save_error"              = "Uložení API klíče selhalo: %@";
+"printer.security.footer"                 = "Doporučeno. Pokud vypnuto, API klíč je uložen v čitelné podobě v nastavení aplikace a může jej přečíst libovolná aplikace běžící pod vaším uživatelem.";
+"printer.notification_hint"               = "Oznámení jsou vypnutá. Zapněte je v záložce Obecné, abyste byli upozorněni na konec tisku.";
+"printer.camera.header"                   = "Buddy Camera";
+"printer.camera.host_label"               = "Host kamery";
+"printer.camera.test_help"                = "Otestovat kameru";
+"printer.camera.reachable"                = "Kamera dostupná";
+"printer.generic_camera.header"           = "Obecná kamera";
+"printer.generic_camera.footer"           = "Volitelná druhá kamera.";
+"printer.generic_camera.enable.label"     = "Povolit obecnou kameru";
+"printer.generic_camera.stream_url.label" = "URL streamu";
+"printer.generic_camera.still_url.label"  = "URL statického snímku";
+"printer.generic_camera.auth_mode.label"  = "Ověřování";
+"printer.generic_camera.auth_mode.none"   = "Žádné";
+"printer.generic_camera.auth_mode.basic"  = "Basic";
+"printer.generic_camera.auth_mode.digest" = "Digest";
+"printer.generic_camera.username.label"   = "Uživatelské jméno";
+"printer.generic_camera.username.placeholder" = "admin";
+"printer.generic_camera.password.label"   = "Heslo";
+"printer.generic_camera.password.show"    = "Zobrazit heslo";
+"printer.generic_camera.password.hide"    = "Skrýt heslo";
+"printer.generic_camera.transport.label"  = "Přenos RTSP";
+"printer.generic_camera.framerate.label"  = "Snímková frekvence";
+"printer.generic_camera.framerate.value"  = "%lld fps";
+"printer.generic_camera.verify_ssl.label" = "Ověřit SSL certifikát";
+"printer.generic_camera.content_type.label" = "Content-Type";
+"printer.generic_camera.error.invalid_url" = "Neplatná URL. Použijte rtsp://, http:// nebo https://.";
+"printer.generic_camera.error.http_status" = "HTTP %lld";
+"dropdown.generic_camera.preview"         = "Obecná kamera";
+
+// RTSP / camera errors
+"error.camera.empty"                      = "Zadejte IP nebo hostname kamery";
+"error.rtsp.timeout"                      = "Vypršel časový limit";
+"error.rtsp.invalid_host"                 = "Neplatný host";
+"error.rtsp.malformed"                    = "Kamera vrátila neočekávanou odpověď";
+"error.rtsp.status"                       = "RTSP %lld";
+"error.rtsp.status_with_reason"           = "RTSP %lld %@";
+
+// About additions
+"about.coffee_help"                       = "Podpoř vývojáře";
+"about.version"                           = "Verze %@ (%@)";
+
+// Footer
+"footer.preferences"                      = "Nastavení";
+"footer.quit"                             = "Ukončit";
+"footer.update.available"                 = "Nová verze k dispozici";
+
+// Links row
+"links.prusalink.tooltip_enabled"         = "Otevřít PrusaLink v prohlížeči";
+"links.prusalink.tooltip_unreachable"     = "Tiskárna nedostupná. Zkontrolujte síť.";
+"links.prusalink.tooltip_unset"           = "Nejprve nastavte URL tiskárny v Nastavení";
+"links.prusaconnect.tooltip_enabled"      = "Otevřít PrusaConnect v prohlížeči";
+"links.prusaconnect.tooltip_unset"        = "Nejprve nastavte UUID PrusaConnect v Nastavení";
+
+// Job actions
+"actions.resume"                          = "Pokračovat";
+"actions.pause"                           = "Pozastavit";
+"actions.stop"                            = "Zastavit";
+"actions.resume.tooltip"                  = "Pokračovat v pozastaveném tisku";
+"actions.pause.tooltip"                   = "Pozastavit aktuální tisk";
+"actions.stop.tooltip"                    = "Zrušit aktuální tisk";
+"actions.resume.disabled"                 = "Pokračovat lze pouze, je-li tiskárna pozastavena";
+"actions.pause.disabled"                  = "Pozastavit lze pouze během tisku";
+"actions.stop.disabled"                   = "Zastavit lze pouze během tisku";
+
+// Status pill
+"status.unconfigured"                     = "Nenakonfigurováno";
+"status.disconnected"                     = "Odpojeno";
+"status.idle"                             = "Nečinná";
+"status.ready"                            = "Připravena";
+"status.busy"                             = "Zaneprázdněna";
+"status.printing"                         = "Tiskne";
+"status.paused"                           = "Pozastaveno";
+"status.finished"                         = "Dokončeno";
+"status.stopped"                          = "Zastaveno";
+"status.error"                            = "Chyba";
+"status.attention"                        = "Pozornost";
+
+// Notifications additions
+"notification.finished.body_default"      = "Tisk je dokončen.";
+"notification.state_body"                 = "%@ hlásí %@.";
+
+// Live metrics + heaters
+"dropdown.metrics.speed"                  = "Rychlost";
+"dropdown.metrics.z_height"               = "Výška Z";
+"dropdown.metrics.nozzle_diameter"        = "Průměr trysky";
+"dropdown.metrics.filament_type"          = "Filament";
+"dropdown.metrics.mmu"                    = "MMU";
+"dropdown.metrics.mmu.enabled"            = "Povoleno";
+"dropdown.metrics.mmu.disabled"           = "Zakázáno";
+"dropdown.heater.nozzle"                  = "Tryska";
+"dropdown.heater.bed"                     = "Podložka";
+
+// Hero header update line
+"hero.update.not_connected"               = "Zatím nepřipojeno";
+"hero.update.waiting"                     = "Čekání na první aktualizaci...";
+"hero.update.ago"                         = "Aktualizováno před %lld s";
+"hero.update.refreshing"                  = "%@ - obnovování";
+"hero.update.next_in"                     = "%@ - další za %lld s";
+
+// Vlastní HTTP akce
+"prefs.actions.slot.header_left"          = "Záhlaví (vlevo)";
+"prefs.actions.slot.header_right"         = "Záhlaví (vpravo)";
+"prefs.actions.slot.row_left"             = "Spodní řádek (vlevo)";
+"prefs.actions.slot.row_right"            = "Spodní řádek (vpravo)";
+"prefs.actions.slot.row_second_left"      = "Prostřední řádek (vlevo)";
+"prefs.actions.slot.row_second_right"     = "Prostřední řádek (vpravo)";
+"prefs.actions.section.appearance"        = "Vzhled";
+"prefs.actions.section.visibility"        = "Viditelnost";
+"prefs.actions.section.request"           = "Požadavek";
+"prefs.actions.section.behavior"          = "Chování";
+"prefs.actions.field.name"                = "Název";
+"prefs.actions.field.symbol"              = "Vyberte symbol";
+"prefs.actions.field.url_placeholder"     = "https://homeassistant.local/api/services/switch/turn_on";
+"prefs.actions.field.headers"             = "Hlavičky";
+"prefs.actions.field.confirm"             = "Před spuštěním požádat o potvrzení";
+"prefs.actions.headers.add"               = "Přidat hlavičku";
+"prefs.actions.headers.empty"             = "Nejsou nakonfigurovány žádné hlavičky.";
+"prefs.actions.visibility.always"         = "Vždy";
+"prefs.actions.visibility.when_connected" = "Pouze online";
+"prefs.actions.visibility.when_disconnected" = "Pouze offline";
+"prefs.actions.preview.visibility.always"         = "Vždy viditelné";
+"prefs.actions.preview.visibility.when_connected" = "Viditelné když online";
+"prefs.actions.preview.visibility.when_disconnected" = "Viditelné když offline";
+"prefs.actions.preview.confirm_on"        = "Potvrdit";
+"prefs.actions.preview.confirm_off"       = "Bez potvrzení";
+"prefs.actions.test"                      = "Test";
+"prefs.actions.url_warning"               = "Neplatná URL";
+"prefs.actions.toggle.requirements_header"   = "Chybí pro povolení této akce:";
+"prefs.actions.toggle.requirement.url"       = "URL";
+"prefs.actions.toggle.requirement.icon"      = "Ikona";
+"prefs.actions.toggle.requirement.name"      = "Název";
+"prefs.actions.toggle.requirement.name_or_icon" = "Název nebo ikona";
+"printer.keychain.scope_note"             = "Pokrývá API klíč PrusaLink a tajné údaje vlastních akcí (URL, hlavičky, těla požadavků).";
+"custom_action.untitled"                  = "Vlastní akce";
+"actions.confirm.run"                     = "Spustit";
+"actions.notification.failure_title"      = "Vlastní akce selhala: %@";
+"symbol_picker.search_placeholder"        = "Hledat symboly";
+"symbol_picker.recent"                    = "Nedávno použité";
+"symbol_picker.use"                       = "Použít symbol";
+"symbol_picker.empty"                     = "Žádné odpovídající symboly.";
+"symbol_picker.no_selection"              = "Nevybrán žádný symbol";
+"content.custom_actions.header"           = "Vlastní HTTP akce";
+"content.custom_actions.footer"           = "Nakonfigurujte až šest tlačítek, která spouštějí HTTP požadavky (HomeAssistant, webhooky, chytré zásuvky). Dvě tlačítka pouze s ikonou jsou v záhlaví na obou stranách názvu tiskárny; až čtyři tlačítka ikona + text jsou v prostředním řádku (za náhledy kamer) a ve spodním řádku (pod odkazy PrusaLink). Zapněte přepínač potvrzení pro každé tlačítko, aby se před každým kliknutím vyžadoval dotaz Ano/Ne.";
+"prefs.actions.headers.name_example"      = "např. Authorization";
+"prefs.actions.headers.value_example"     = "např. Bearer xxx";
+"prefs.actions.headers.show_value"        = "Zobrazit hodnotu";
+"prefs.actions.headers.hide_value"        = "Skrýt hodnotu";
+"prefs.actions.headers.remove"            = "Odebrat hlavičku";
+"prefs.actions.headers.key_label"         = "Klíč";
+"prefs.actions.headers.value_label"       = "Hodnota";
+"prefs.actions.field.body_placeholder"    = "{\"entity_id\": \"switch.printer\"}";
+"prefs.actions.field.method_label"        = "Metoda";
+"prefs.actions.field.url_label"           = "URL";
+"prefs.actions.field.body_label"          = "Tělo";

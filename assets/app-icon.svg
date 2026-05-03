@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="#FD5000"/>
+
+  <text x="512" y="500"
+        text-anchor="middle"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-weight="700"
+        font-size="260"
+        textLength="720"
+        lengthAdjust="spacingAndGlyphs"
+        fill="#FFFFFF">PRUSA</text>
+
+  <rect x="152" y="540" width="720" height="180" fill="#FFFFFF"/>
+
+  <text x="512" y="630"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-weight="700"
+        font-size="120"
+        textLength="640"
+        lengthAdjust="spacingAndGlyphs"
+        fill="#FD5000">STATUSBAR</text>
+</svg>

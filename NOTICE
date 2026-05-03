@@ -1,0 +1,19 @@
+Prusa StatusBar
+Copyright 2026 Pierre Mavro
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product bundles or distributes the following third-party components:
+
+1. go2rtc
+   - Source: https://github.com/AlexxIT/go2rtc
+   - License: MIT
+   - Usage: Fetched at build time by `scripts/fetch-go2rtc.sh` and embedded
+     in the macOS application bundle as a helper binary used to relay
+     PrusaLink camera streams.
+
+2. Cookie (font)
+   - Source: https://fonts.google.com/specimen/Cookie
+   - License: SIL Open Font License 1.1
+   - License text: see `PrusaStatusBar/Resources/Fonts/OFL.txt`
+   - Usage: Bundled in the application as a UI font.

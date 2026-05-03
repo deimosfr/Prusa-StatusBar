@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/deimosfr/Prusa-StatusBar/security/policy
+    about: Do not file public issues for security problems. See SECURITY.md.

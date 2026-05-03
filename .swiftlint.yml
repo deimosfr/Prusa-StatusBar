@@ -1,0 +1,18 @@
+excluded:
+  - PrusaStatusBar.xcodeproj
+  - .build
+  - DerivedData
+
+nesting:
+  type_level: 2
+
+identifier_name:
+  min_length:
+    warning: 1
+    error: 1
+  excluded:
+    - id
+
+file_length:
+  warning: 500
+  error: 600

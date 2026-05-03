@@ -1,0 +1,112 @@
+name: Bug report
+description: Something is broken or behaving unexpectedly.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill in the fields
+        below. Logs are the single most useful thing for triage, so please
+        include them whenever possible.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: Prusa StatusBar version
+      description: From the menu bar dropdown > About, or `defaults read /Applications/PrusaStatusBar.app/Contents/Info.plist CFBundleShortVersionString`.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: macos-version
+    attributes:
+      label: macOS version
+      options:
+        - "macOS 14 Sonoma"
+        - "macOS 15 Sequoia"
+        - "macOS 26 Tahoe"
+        - "Other (specify in additional context)"
+    validations:
+      required: true
+
+  - type: input
+    id: install-method
+    attributes:
+      label: How was the app installed?
+      placeholder: "Homebrew cask / DMG / built from source"
+    validations:
+      required: true
+
+  - type: input
+    id: printer-model
+    attributes:
+      label: Printer model
+      placeholder: "Core One, MK4, MK4S, XL, Mini+, ..."
+
+  - type: input
+    id: printer-firmware
+    attributes:
+      label: Printer / PrusaLink firmware version
+      placeholder: "e.g. 6.1.3"
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: What did you do, in order? The more specific, the better.
+      placeholder: |
+        1. Open Preferences
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Capture recent app logs from Console.app / `log` and paste them here.
+        Run this in Terminal:
+        ```
+        log show --predicate 'subsystem == "com.deimosfr.prusastatusbar"' --last 1h
+        ```
+        Redact anything sensitive (such as printer URLs or hostnames) before
+        pasting. Do not paste your PrusaLink API key.
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / screen recordings
+      description: Drag-and-drop images or videos here.
+
+  - type: checkboxes
+    id: prototype-mode
+    attributes:
+      label: Build mode
+      options:
+        - label: This was a Prototype mode build (in-memory stub, no real printer).
+          required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else relevant, networking setup, VPN, multiple printers, etc.

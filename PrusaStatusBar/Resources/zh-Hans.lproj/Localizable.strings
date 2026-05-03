@@ -1,0 +1,328 @@
+// Prusa StatusBar -- 简体中文.
+//
+// 初始翻译。要改进字符串，请编辑任意行的右侧并提交 PR。
+// 要添加新语言，请参阅 LOCALIZATION.md。
+// 键必须与 en.lproj/Localizable.strings 保持一致。
+
+// General tab
+"general.global.section"                  = "通用";
+"general.notifications.section"           = "通知";
+"general.launch_at_login.label"           = "登录时启动";
+"general.launch_at_login.error"           = "无法%@登录时启动: %@";
+"general.launch_at_login.verb_enable"     = "启用";
+"general.launch_at_login.verb_disable"    = "禁用";
+"general.check_for_updates.label"         = "检查更新";
+"general.check_for_updates.footer"        = "每天一次向 GitHub 检查新版本。除版本请求外没有数据离开您的 Mac。";
+"general.notifications.footer"            = "每个事件都有自己的开关。在受支持的状态变化时显示原生 macOS 通知。";
+"general.appearance.accent.label"         = "强调色";
+"general.language.label"                  = "应用语言";
+"general.language.system"                 = "系统";
+
+// Menu bar tab
+"menubar.label.header"                    = "菜单栏标签";
+"menubar.label.footer"                    = "控制打印期间菜单栏图标旁的显示内容。两者均关闭以仅显示图标。";
+"menubar.remaining_time.label"            = "显示剩余时间";
+"menubar.percentage.label"                = "显示百分比";
+"menubar.refresh_connected.header"        = "刷新行为";
+"menubar.refresh_connected.label"         = "打印机可达时";
+"menubar.refresh_connected.footer"        = "在轮询成功时使用。%lld 秒到 %lld 分钟。";
+"menubar.refresh_disconnected.header"     = "已断开时刷新";
+"menubar.refresh_disconnected.label"      = "打印机断开时";
+"menubar.refresh_disconnected.footer"     = "连续 2 次失败后使用，直到打印机恢复。%lld 秒到 %lld 分钟。";
+"menubar.disconnected_icon.header"        = "断开时的图标";
+"menubar.disconnected_icon.footer"        = "选择打印机不可用时菜单栏的外观。再次点击表情可换一个。";
+"menubar.disconnected_icon.style.label"   = "断开时的图标样式";
+"menubar.disconnected_icon.style.default" = "默认图标";
+"menubar.disconnected_icon.style.minimal" = "极小圆点";
+"menubar.disconnected_icon.style.none"    = "无图标";
+"menubar.disconnected_icon.style.emoji"   = "自定义表情";
+"menubar.disconnected_icon.emoji.tooltip" = "点击以更换表情";
+
+// Menu content tab
+"content.style.header"                    = "打印卡片样式";
+"content.style.footer"                    = "选择打印期间进度条的外观。预览循环播放。";
+"content.metrics.header"                  = "打印机附加信息";
+"content.metrics.footer"                  = "仅当打印机报告该值时，对应行才会显示。";
+"content.metrics.temperature.label"       = "显示热床/喷嘴温度";
+"content.metrics.speed.label"             = "显示打印速度";
+"content.metrics.z_height.label"          = "显示 Z 轴高度";
+"content.metrics.nozzle_diameter.label"   = "显示喷嘴直径";
+"content.metrics.filament_type.label"     = "显示耗材类型";
+"content.metrics.mmu.label"               = "显示 MMU";
+"content.job_control.header"              = "打印控制";
+"content.job_control.label"               = "显示操作按钮";
+
+// Printer tab
+"printer.connection.header"               = "PrusaLink 连接";
+"printer.display_name.footer"             = "显示名称为可选。留空则使用打印机报告的名称。";
+"printer.connect_uuid.header"             = "Prusa Connect";
+"printer.connect_uuid.field_label"        = "UUID";
+"printer.connect_uuid.footer"             = "可选。在下拉菜单中启用专用 Prusa Connect 按钮。";
+"printer.camera.footer"                   = "可选。在下拉菜单中嵌入实时 RTSP 视频流。";
+"printer.camera.enable.label"             = "启用 Buddy Camera";
+"printer.camera.enable.requires_url"      = "请设置 PrusaLink URL 后再启用 Buddy Camera。";
+"printer.security.header"                 = "安全";
+"printer.keychain.label"                  = "将 API 密钥存储在 macOS 钥匙串中";
+"printer.keychain.confirm_enable.title"   = "将 API 密钥移至 macOS 钥匙串？";
+"printer.keychain.confirm_enable.body"    = "您的 PrusaLink API 密钥将以加密方式保存在 macOS 钥匙串中，仅本应用可访问。应用偏好中的明文副本将被移除。";
+"printer.keychain.confirm_enable.button"  = "移至钥匙串";
+"printer.keychain.confirm_disable.title"  = "以明文存储 API 密钥？";
+"printer.keychain.confirm_disable.body"   = "您的 PrusaLink API 密钥将被移出 macOS 钥匙串，并以明文形式保存在应用偏好中。以您的用户身份运行的任何应用或脚本均可读取。安全性较低。";
+"printer.keychain.confirm_disable.button" = "以明文存储";
+"common.cancel"                           = "取消";
+
+// Notifications card
+"notification.started.title"              = "打印开始";
+"notification.started.description"        = "当新任务开始打印时。";
+"notification.started.body_default"       = "新的打印已开始。";
+"notification.finished.title"             = "打印完成";
+"notification.finished.description"       = "当任务成功完成时。";
+"notification.attention.title"            = "打印机需要关注";
+"notification.attention.description"      = "耗材用尽、舱门打开、需要用户操作。";
+"notification.error.title"                = "打印机错误";
+"notification.error.description"          = "硬件故障、热失控、打印中止。";
+"notification.blocked.title"              = "通知被 macOS 阻止";
+"notification.blocked.message"            = "请在 系统设置 > 通知 中启用 Prusa StatusBar。";
+"notification.blocked.action"             = "打开设置";
+"notification.card.title"                 = "通知";
+"notification.card.subtitle"              = "原生 macOS 通知。选择需要提醒的事件。";
+
+// Dropdown surfaces
+"dropdown.job.elapsed_label"              = "已用";
+"dropdown.job.remaining_label"            = "剩余";
+"dropdown.job.eta_label"                  = "预计完成";
+"dropdown.actions.header"                 = "操作";
+"dropdown.actions.state_expanded"         = "操作，已展开";
+"dropdown.actions.state_collapsed"        = "操作，已收起";
+"dropdown.unconfigured.message"           = "添加 PrusaLink URL 和 API 密钥以开始监控您的打印机。";
+"dropdown.unconfigured.action"            = "打开打印机设置";
+"dropdown.unreachable.title"              = "打印机不可达";
+"dropdown.unreachable.message"            = "请检查打印机是否在网络中且 URL 可达。";
+"dropdown.loading"                        = "正在加载状态...";
+"dropdown.camera.preview"                 = "摄像头预览 (原型)";
+"dropdown.metrics.temp.target"            = "目标 %lld°";
+"dropdown.metrics.temp.no_target"         = "无目标";
+
+// Errors and inline validation
+"error.uuid.invalid"                      = "UUID 格式无效";
+"error.rtsp.invalid"                      = "RTSP URL 无效";
+"error.host.invalid"                      = "仅输入 IP 或主机名";
+"error.url.invalid"                       = "URL 无效";
+"error.printer.missing_credentials"       = "未配置 API 密钥";
+"error.printer.invalid_url"               = "打印机 URL 无效";
+"error.printer.unreachable"               = "打印机不可达";
+"error.printer.invalid_credentials"       = "API 密钥无效";
+"error.printer.not_found"                 = "未找到资源";
+"error.printer.server_status"             = "打印机返回了 HTTP %lld";
+"error.printer.decoding"                  = "无法解码打印机响应：%@";
+
+// Accessibility
+"a11y.refresh_button"                     = "刷新 (⌘R)";
+"a11y.progress_bar"                       = "进度";
+"a11y.style_selector"                     = "进度条样式";
+"a11y.brand_accent"                       = "品牌强调色";
+"a11y.refresh_interval"                   = "刷新间隔";
+"a11y.temp"                               = "%@ 温度";
+
+// About tab
+"about.coffee_link"                       = "请我喝杯咖啡";
+"about.source_link"                       = "源代码";
+"about.issues_link"                       = "报告问题";
+"about.go2rtc_credit"                     = "实时摄像头转流由 go2rtc (MIT) 提供";
+"about.community_notice"                  = "社区应用，非 Prusa 官方";
+
+// Misc
+"misc.refresh_interval.custom"            = "自定义";
+"misc.status.error"                       = "错误";
+
+// Preferences window tabs
+"prefs.tab.general"                       = "通用";
+"prefs.tab.menu_bar"                      = "菜单栏";
+"prefs.tab.menu_content"                  = "菜单内容";
+"prefs.tab.printer"                       = "打印机";
+"prefs.tab.about"                         = "关于";
+
+// Print card style preview labels
+"content.style.spool"                     = "耗材线轴";
+"content.style.classic"                   = "经典";
+"content.job_control.footer"              = "在 PrusaLink 与 PrusaConnect 链接上方的可折叠区域中添加 恢复、暂停 和 停止 按钮。当当前打印机状态下操作不可用时，相应按钮会被禁用。";
+"content.web_links.header"                = "PrusaLink 与 PrusaConnect";
+"content.web_links.footer"                = "在下拉菜单中显示或隐藏 PrusaLink 与 Prusa Connect 按钮。";
+"content.web_links.uuid.help"             = "Prusa Connect UUID 为可选项：留空则链接到通用云控制台；填入打印机 UUID 则直接链接到该打印机的页面。";
+"content.web_links.show_prusalink.label"  = "显示 PrusaLink 按钮";
+"content.web_links.show_prusaconnect.label" = "显示 Prusa Connect 按钮";
+
+// Printer tab additions
+"printer.field.url"                       = "URL";
+"printer.field.fallback_url"              = "备用 URL";
+"printer.field.fallback_url.add"          = "添加备用 URL（可选）";
+"printer.field.fallback_url.label"        = "备用 URL（可选）";
+"printer.fallback_url.footer"             = "当主 URL 不可达时自动使用（例如同一打印机的 Wi-Fi、以太网或 VPN 路径）。";
+"printer.field.api_key"                   = "API 密钥";
+"printer.api_key.show"                    = "显示 API 密钥";
+"printer.api_key.hide"                    = "隐藏 API 密钥";
+"printer.field.display_name"              = "显示名称";
+"printer.url.test_help"                   = "测试此 URL";
+"common.help.tooltip"                     = "更多信息";
+"common.help.learn_more"                  = "了解更多";
+"printer.help.url.body"                   = "请输入打印机的 http://<ip> 或 http://<hostname>（例如 http://192.168.1.42 或 http://prusa-mk3.local）。先在浏览器中打开该地址，确认 PrusaLink 能够加载。";
+"printer.help.api_key.body"               = "可在 Prusa Connect 中找到此打印机的 API 密钥。";
+"printer.help.camera.body"                = "请输入 Buddy Camera 的 IP 或主机名（例如 192.168.1.42 或 prusa-mk3.local）。最常见的值就是打印机本身的 IP 或主机名。";
+"printer.help.uuid.body"                  = "可以在 Prusa Connect 中此打印机的设置里找到该 UUID。可选：如果不使用 Prusa Connect，可留空。";
+"printer.test.connected"                  = "已连接";
+"printer.api_key.migrate_error"           = "无法迁移 API 密钥: %@";
+"printer.api_key.save_error"              = "无法保存 API 密钥: %@";
+"printer.security.footer"                 = "推荐。关闭时，API 密钥将以明文形式保存在应用偏好中，并可被以您的用户身份运行的任何应用读取。";
+"printer.notification_hint"               = "通知已禁用。在通用标签中启用以在打印结束时收到提醒。";
+"printer.camera.header"                   = "Buddy Camera";
+"printer.camera.host_label"               = "摄像头主机";
+"printer.camera.test_help"                = "测试摄像头";
+"printer.camera.reachable"                = "摄像头可达";
+"printer.generic_camera.header"           = "通用摄像头";
+"printer.generic_camera.footer"           = "可选的第二个摄像头。";
+"printer.generic_camera.enable.label"     = "启用通用摄像头";
+"printer.generic_camera.stream_url.label" = "视频流 URL";
+"printer.generic_camera.still_url.label"  = "静态图像 URL";
+"printer.generic_camera.auth_mode.label"  = "身份验证";
+"printer.generic_camera.auth_mode.none"   = "无";
+"printer.generic_camera.auth_mode.basic"  = "Basic";
+"printer.generic_camera.auth_mode.digest" = "Digest";
+"printer.generic_camera.username.label"   = "用户名";
+"printer.generic_camera.username.placeholder" = "admin";
+"printer.generic_camera.password.label"   = "密码";
+"printer.generic_camera.password.show"    = "显示密码";
+"printer.generic_camera.password.hide"    = "隐藏密码";
+"printer.generic_camera.transport.label"  = "RTSP 传输";
+"printer.generic_camera.framerate.label"  = "帧率";
+"printer.generic_camera.framerate.value"  = "%lld fps";
+"printer.generic_camera.verify_ssl.label" = "验证 SSL 证书";
+"printer.generic_camera.content_type.label" = "Content-Type";
+"printer.generic_camera.error.invalid_url" = "无效的 URL。请使用 rtsp://、http:// 或 https://。";
+"printer.generic_camera.error.http_status" = "HTTP %lld";
+"dropdown.generic_camera.preview"         = "通用摄像头";
+
+// RTSP / camera errors
+"error.camera.empty"                      = "请输入摄像头 IP 或主机名";
+"error.rtsp.timeout"                      = "已超时";
+"error.rtsp.invalid_host"                 = "无效的主机";
+"error.rtsp.malformed"                    = "摄像头返回了意外的响应";
+"error.rtsp.status"                       = "RTSP %lld";
+"error.rtsp.status_with_reason"           = "RTSP %lld %@";
+
+// About additions
+"about.coffee_help"                       = "支持开发者";
+"about.version"                           = "版本 %@ (%@)";
+
+// Footer
+"footer.preferences"                      = "偏好设置";
+"footer.quit"                             = "退出";
+"footer.update.available"                 = "有新版本可用";
+
+// Links row
+"links.prusalink.tooltip_enabled"         = "在浏览器中打开 PrusaLink";
+"links.prusalink.tooltip_unreachable"     = "打印机不可达。请检查网络。";
+"links.prusalink.tooltip_unset"           = "请先在偏好设置中设置打印机 URL";
+"links.prusaconnect.tooltip_enabled"      = "在浏览器中打开 PrusaConnect";
+"links.prusaconnect.tooltip_unset"        = "请先在偏好设置中设置 PrusaConnect UUID";
+
+// Job actions
+"actions.resume"                          = "恢复";
+"actions.pause"                           = "暂停";
+"actions.stop"                            = "停止";
+"actions.resume.tooltip"                  = "恢复已暂停的打印";
+"actions.pause.tooltip"                   = "暂停当前打印";
+"actions.stop.tooltip"                    = "取消当前打印";
+"actions.resume.disabled"                 = "仅在打印机处于暂停状态时可用";
+"actions.pause.disabled"                  = "仅在打印机正在打印时可用";
+"actions.stop.disabled"                   = "仅在打印进行中时可用";
+
+// Status pill
+"status.unconfigured"                     = "未配置";
+"status.disconnected"                     = "已断开";
+"status.idle"                             = "空闲";
+"status.ready"                            = "就绪";
+"status.busy"                             = "忙碌";
+"status.printing"                         = "打印中";
+"status.paused"                           = "已暂停";
+"status.finished"                         = "已完成";
+"status.stopped"                          = "已停止";
+"status.error"                            = "错误";
+"status.attention"                        = "需要关注";
+
+// Notifications additions
+"notification.finished.body_default"      = "打印已完成。";
+"notification.state_body"                 = "%@ 报告 %@。";
+
+// Live metrics + heaters
+"dropdown.metrics.speed"                  = "速度";
+"dropdown.metrics.z_height"               = "Z 轴高度";
+"dropdown.metrics.nozzle_diameter"        = "喷嘴直径";
+"dropdown.metrics.filament_type"          = "耗材";
+"dropdown.metrics.mmu"                    = "MMU";
+"dropdown.metrics.mmu.enabled"            = "已启用";
+"dropdown.metrics.mmu.disabled"           = "已禁用";
+"dropdown.heater.nozzle"                  = "喷嘴";
+"dropdown.heater.bed"                     = "热床";
+
+// Hero header update line
+"hero.update.not_connected"               = "尚未连接";
+"hero.update.waiting"                     = "等待首次更新...";
+"hero.update.ago"                         = "%lld 秒前更新";
+"hero.update.refreshing"                  = "%@ - 刷新中";
+"hero.update.next_in"                     = "%@ - %lld 秒后";
+
+// 自定义 HTTP 操作
+"prefs.actions.slot.header_left"          = "页眉（左）";
+"prefs.actions.slot.header_right"         = "页眉（右）";
+"prefs.actions.slot.row_left"             = "底部行（左）";
+"prefs.actions.slot.row_right"            = "底部行（右）";
+"prefs.actions.slot.row_second_left"      = "中间行（左）";
+"prefs.actions.slot.row_second_right"     = "中间行（右）";
+"prefs.actions.section.appearance"        = "外观";
+"prefs.actions.section.visibility"        = "可见性";
+"prefs.actions.section.request"           = "请求";
+"prefs.actions.section.behavior"          = "行为";
+"prefs.actions.field.name"                = "名称";
+"prefs.actions.field.symbol"              = "选择符号";
+"prefs.actions.field.url_placeholder"     = "https://homeassistant.local/api/services/switch/turn_on";
+"prefs.actions.field.headers"             = "请求头";
+"prefs.actions.field.confirm"             = "运行前请求确认";
+"prefs.actions.headers.add"               = "添加请求头";
+"prefs.actions.headers.empty"             = "未配置请求头。";
+"prefs.actions.visibility.always"         = "始终";
+"prefs.actions.visibility.when_connected" = "仅在线";
+"prefs.actions.visibility.when_disconnected" = "仅离线";
+"prefs.actions.preview.visibility.always"         = "始终可见";
+"prefs.actions.preview.visibility.when_connected" = "在线时可见";
+"prefs.actions.preview.visibility.when_disconnected" = "离线时可见";
+"prefs.actions.preview.confirm_on"        = "确认";
+"prefs.actions.preview.confirm_off"       = "无需确认";
+"prefs.actions.test"                      = "测试";
+"prefs.actions.url_warning"               = "URL 格式错误";
+"prefs.actions.toggle.requirements_header"   = "需要以下信息才能启用此操作：";
+"prefs.actions.toggle.requirement.url"       = "URL";
+"prefs.actions.toggle.requirement.icon"      = "图标";
+"prefs.actions.toggle.requirement.name"      = "名称";
+"prefs.actions.toggle.requirement.name_or_icon" = "名称或图标";
+"printer.keychain.scope_note"             = "涵盖 PrusaLink API 密钥和自定义操作的机密（URL、请求头、请求正文）。";
+"custom_action.untitled"                  = "自定义操作";
+"actions.confirm.run"                     = "运行";
+"actions.notification.failure_title"      = "自定义操作失败：%@";
+"symbol_picker.search_placeholder"        = "搜索符号";
+"symbol_picker.recent"                    = "最近使用";
+"symbol_picker.use"                       = "使用此符号";
+"symbol_picker.empty"                     = "没有匹配的符号。";
+"symbol_picker.no_selection"              = "未选择符号";
+"content.custom_actions.header"           = "自定义 HTTP 操作";
+"content.custom_actions.footer"           = "配置最多六个发起 HTTP 请求的按钮（HomeAssistant、Webhook、智能插座等）。两个仅图标按钮位于打印机名称两侧的页眉中；最多四个图标+文字按钮位于中间行（摄像头预览之后）和底部行（PrusaLink 链接下方）。开启每个按钮的确认开关，可在每次点击前要求“是/否”确认。";
+"prefs.actions.headers.name_example"      = "例如 Authorization";
+"prefs.actions.headers.value_example"     = "例如 Bearer xxx";
+"prefs.actions.headers.show_value"        = "显示值";
+"prefs.actions.headers.hide_value"        = "隐藏值";
+"prefs.actions.headers.remove"            = "移除请求头";
+"prefs.actions.headers.key_label"         = "键";
+"prefs.actions.headers.value_label"       = "值";
+"prefs.actions.field.body_placeholder"    = "{\"entity_id\": \"switch.printer\"}";
+"prefs.actions.field.method_label"        = "方法";
+"prefs.actions.field.url_label"           = "URL";
+"prefs.actions.field.body_label"          = "正文";

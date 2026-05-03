@@ -1,0 +1,328 @@
+// Prusa StatusBar -- 日本語.
+//
+// 初期翻訳。文字列を改善するには、行の右側を編集してPRを開いてください。
+// 新しい言語を追加するには LOCALIZATION.md を参照してください。
+// キーは en.lproj/Localizable.strings と一致させてください。
+
+// General tab
+"general.global.section"                  = "全般";
+"general.notifications.section"           = "通知";
+"general.launch_at_login.label"           = "ログイン時に起動";
+"general.launch_at_login.error"           = "ログイン時の起動を%@できませんでした: %@";
+"general.launch_at_login.verb_enable"     = "有効化";
+"general.launch_at_login.verb_disable"    = "無効化";
+"general.check_for_updates.label"         = "アップデートを確認";
+"general.check_for_updates.footer"        = "1日1回 GitHub に新しいリリースがないか確認します。バージョン取得リクエスト以外のデータは送信されません。";
+"general.notifications.footer"            = "各イベントには個別のスイッチがあります。対応する遷移時にmacOSネイティブ通知を表示します。";
+"general.appearance.accent.label"         = "アクセントカラー";
+"general.language.label"                  = "アプリの言語";
+"general.language.system"                 = "システム";
+
+// Menu bar tab
+"menubar.label.header"                    = "メニューバーラベル";
+"menubar.label.footer"                    = "印刷中にメニューバーアイコンの隣に表示する内容を制御します。両方オフでアイコンのみ。";
+"menubar.remaining_time.label"            = "残り時間を表示";
+"menubar.percentage.label"                = "パーセントを表示";
+"menubar.refresh_connected.header"        = "更新の動作";
+"menubar.refresh_connected.label"         = "プリンタが到達可能な場合";
+"menubar.refresh_connected.footer"        = "ポーリングが成功している間に使用されます。%lld秒〜%lld分。";
+"menubar.refresh_disconnected.header"     = "切断中の更新間隔";
+"menubar.refresh_disconnected.label"      = "プリンタが切断されている場合";
+"menubar.refresh_disconnected.footer"     = "2回連続で失敗後、プリンタが復帰するまで使用。%lld秒〜%lld分。";
+"menubar.disconnected_icon.header"        = "切断時のアイコン";
+"menubar.disconnected_icon.footer"        = "プリンタに接続できないときのメニューバーの表示を選びます。絵文字をもう一度クリックすると別の絵文字に変更できます。";
+"menubar.disconnected_icon.style.label"   = "切断時のアイコンのスタイル";
+"menubar.disconnected_icon.style.default" = "デフォルトのアイコン";
+"menubar.disconnected_icon.style.minimal" = "小さなドット";
+"menubar.disconnected_icon.style.none"    = "アイコンなし";
+"menubar.disconnected_icon.style.emoji"   = "カスタム絵文字";
+"menubar.disconnected_icon.emoji.tooltip" = "クリックして別の絵文字を選ぶ";
+
+// Menu content tab
+"content.style.header"                    = "印刷カードのスタイル";
+"content.style.footer"                    = "印刷中の進捗バーの見た目を選択します。プレビューはループ再生されます。";
+"content.metrics.header"                  = "プリンタ追加情報";
+"content.metrics.footer"                  = "各行はプリンタが値を報告した場合のみ表示されます。";
+"content.metrics.temperature.label"       = "ベッド/ノズル温度を表示";
+"content.metrics.speed.label"             = "印刷速度を表示";
+"content.metrics.z_height.label"          = "Z軸高さを表示";
+"content.metrics.nozzle_diameter.label"   = "ノズル径を表示";
+"content.metrics.filament_type.label"     = "フィラメントの種類を表示";
+"content.metrics.mmu.label"               = "MMUを表示";
+"content.job_control.header"              = "印刷制御";
+"content.job_control.label"               = "アクションボタンを表示";
+
+// Printer tab
+"printer.connection.header"               = "PrusaLink 接続";
+"printer.display_name.footer"             = "表示名は任意です。空欄でプリンタが報告する名前を使用します。";
+"printer.connect_uuid.header"             = "Prusa Connect";
+"printer.connect_uuid.field_label"        = "UUID";
+"printer.connect_uuid.footer"             = "オプション。ドロップダウンに専用Prusa Connectボタンを有効化します。";
+"printer.camera.footer"                   = "オプション。ライブRTSPフィードをドロップダウンに埋め込みます。";
+"printer.camera.enable.label"             = "Buddy Camera を有効化";
+"printer.camera.enable.requires_url"      = "Buddy Camera を有効にするには PrusaLink の URL を設定してください。";
+"printer.security.header"                 = "セキュリティ";
+"printer.keychain.label"                  = "APIキーをmacOSキーチェーンに保存";
+"printer.keychain.confirm_enable.title"   = "APIキーをmacOSキーチェーンに移動しますか？";
+"printer.keychain.confirm_enable.body"    = "PrusaLink APIキーはmacOSキーチェーンに暗号化されて保存され、このアプリのみがアクセスできます。アプリ設定内の平文コピーは削除されます。";
+"printer.keychain.confirm_enable.button"  = "キーチェーンに移動";
+"printer.keychain.confirm_disable.title"  = "APIキーを平文で保存しますか？";
+"printer.keychain.confirm_disable.body"   = "PrusaLink APIキーはmacOSキーチェーンから削除され、アプリ設定内に平文で保存されます。あなたのユーザーで実行中のあらゆるアプリやスクリプトが読み取れます。安全性は低下します。";
+"printer.keychain.confirm_disable.button" = "平文で保存";
+"common.cancel"                           = "キャンセル";
+
+// Notifications card
+"notification.started.title"              = "印刷開始";
+"notification.started.description"        = "新しいジョブが印刷を開始したとき。";
+"notification.started.body_default"       = "新しい印刷が開始されました。";
+"notification.finished.title"             = "印刷完了";
+"notification.finished.description"       = "ジョブが正常に完了したとき。";
+"notification.attention.title"            = "プリンタが対応を必要としています";
+"notification.attention.description"      = "フィラメント切れ、扉オープン、ユーザー操作が必要。";
+"notification.error.title"                = "プリンタエラー";
+"notification.error.description"          = "ハードウェア障害、サーマルランナウェイ、印刷中止。";
+"notification.blocked.title"              = "macOSによりバナーがブロックされています";
+"notification.blocked.message"            = "システム設定 > 通知 で Prusa StatusBar を有効化してください。";
+"notification.blocked.action"             = "設定を開く";
+"notification.card.title"                 = "通知";
+"notification.card.subtitle"              = "macOSネイティブ通知。アラート対象のイベントを選択します。";
+
+// Dropdown surfaces
+"dropdown.job.elapsed_label"              = "経過";
+"dropdown.job.remaining_label"            = "残り";
+"dropdown.job.eta_label"                  = "ETA";
+"dropdown.actions.header"                 = "アクション";
+"dropdown.actions.state_expanded"         = "アクション、展開済み";
+"dropdown.actions.state_collapsed"        = "アクション、折りたたみ済み";
+"dropdown.unconfigured.message"           = "プリンタ監視を始めるには、PrusaLinkのURLとAPIキーを追加してください。";
+"dropdown.unconfigured.action"            = "プリンタ設定を開く";
+"dropdown.unreachable.title"              = "プリンタに到達できません";
+"dropdown.unreachable.message"            = "プリンタがネットワーク上にあり、URLが到達可能か確認してください。";
+"dropdown.loading"                        = "ステータスを読み込み中...";
+"dropdown.camera.preview"                 = "カメラプレビュー (プロトタイプ)";
+"dropdown.metrics.temp.target"            = "目標 %lld°";
+"dropdown.metrics.temp.no_target"         = "目標なし";
+
+// Errors and inline validation
+"error.uuid.invalid"                      = "UUID形式が正しくありません";
+"error.rtsp.invalid"                      = "RTSP URLが正しくありません";
+"error.host.invalid"                      = "IPまたはホスト名のみ入力してください";
+"error.url.invalid"                       = "URLが正しくありません";
+"error.printer.missing_credentials"       = "APIキーが設定されていません";
+"error.printer.invalid_url"               = "プリンタのURLが正しくありません";
+"error.printer.unreachable"               = "プリンタに到達できません";
+"error.printer.invalid_credentials"       = "APIキーが無効です";
+"error.printer.not_found"                 = "リソースが見つかりません";
+"error.printer.server_status"             = "プリンタが HTTP %lld を返しました";
+"error.printer.decoding"                  = "プリンタの応答をデコードできませんでした: %@";
+
+// Accessibility
+"a11y.refresh_button"                     = "更新 (⌘R)";
+"a11y.progress_bar"                       = "進捗";
+"a11y.style_selector"                     = "進捗バーのスタイル";
+"a11y.brand_accent"                       = "ブランドアクセントカラー";
+"a11y.refresh_interval"                   = "更新間隔";
+"a11y.temp"                               = "%@ 温度";
+
+// About tab
+"about.coffee_link"                       = "コーヒーをおごる";
+"about.source_link"                       = "ソースコード";
+"about.issues_link"                       = "問題を報告";
+"about.go2rtc_credit"                     = "ライブカメラ伝送はgo2rtc (MIT)を使用";
+"about.community_notice"                  = "コミュニティアプリ、Prusa非公式";
+
+// Misc
+"misc.refresh_interval.custom"            = "カスタム";
+"misc.status.error"                       = "エラー";
+
+// Preferences window tabs
+"prefs.tab.general"                       = "一般";
+"prefs.tab.menu_bar"                      = "メニューバー";
+"prefs.tab.menu_content"                  = "メニュー内容";
+"prefs.tab.printer"                       = "プリンタ";
+"prefs.tab.about"                         = "情報";
+
+// Print card style preview labels
+"content.style.spool"                     = "フィラメントスプール";
+"content.style.classic"                   = "クラシック";
+"content.job_control.footer"              = "PrusaLink および PrusaConnect リンクの上に折りたたみ可能なセクションで「再開」「一時停止」「停止」ボタンを追加します。各ボタンは、現在のプリンタ状態でアクションが無効な場合は無効になります。";
+"content.web_links.header"                = "PrusaLink と PrusaConnect";
+"content.web_links.footer"                = "ドロップダウンで PrusaLink と Prusa Connect ボタンの表示/非表示を切り替えます。";
+"content.web_links.uuid.help"             = "Prusa Connect UUID は任意です。空欄のままにすると汎用クラウドダッシュボードへリンクし、プリンターの UUID を設定するとそのプリンターのページへ直接リンクします。";
+"content.web_links.show_prusalink.label"  = "PrusaLink ボタンを表示";
+"content.web_links.show_prusaconnect.label" = "Prusa Connect ボタンを表示";
+
+// Printer tab additions
+"printer.field.url"                       = "URL";
+"printer.field.fallback_url"              = "フォールバックURL";
+"printer.field.fallback_url.add"          = "フォールバックURLを追加（任意）";
+"printer.field.fallback_url.label"        = "フォールバックURL（任意）";
+"printer.fallback_url.footer"             = "メインURLに到達できない場合に自動的に使用されます（同じプリンタへの Wi-Fi、Ethernet、VPN 経路など）。";
+"printer.field.api_key"                   = "APIキー";
+"printer.api_key.show"                    = "APIキーを表示";
+"printer.api_key.hide"                    = "APIキーを非表示";
+"printer.field.display_name"              = "表示名";
+"printer.url.test_help"                   = "このURLをテスト";
+"common.help.tooltip"                     = "詳細情報";
+"common.help.learn_more"                  = "詳しく見る";
+"printer.help.url.body"                   = "プリンターの http://<ip> または http://<hostname> を入力してください（例: http://192.168.1.42 または http://prusa-mk3.local）。先にブラウザでアドレスを開き、PrusaLink が表示されることを確認してください。";
+"printer.help.api_key.body"               = "API キーは Prusa Connect 上のこのプリンターのページで確認できます。";
+"printer.help.camera.body"                = "Buddy Camera の IP またはホスト名を入力してください（例: 192.168.1.42 または prusa-mk3.local）。プリンター本体の IP またはホスト名を使うのが一般的です。";
+"printer.help.uuid.body"                  = "この UUID は Prusa Connect のプリンター設定で確認できます。任意項目: Prusa Connect を使用しない場合は空欄のままで構いません。";
+"printer.test.connected"                  = "接続済み";
+"printer.api_key.migrate_error"           = "APIキーの移行に失敗しました: %@";
+"printer.api_key.save_error"              = "APIキーの保存に失敗しました: %@";
+"printer.security.footer"                 = "推奨。オフの場合、APIキーはアプリ設定にプレーンテキストで保存され、ユーザーとして実行されている任意のアプリから読み取り可能です。";
+"printer.notification_hint"               = "通知が無効です。一般タブで有効化すると印刷終了時に通知されます。";
+"printer.camera.header"                   = "Buddy Camera";
+"printer.camera.host_label"               = "カメラホスト";
+"printer.camera.test_help"                = "カメラをテスト";
+"printer.camera.reachable"                = "カメラ到達可能";
+"printer.generic_camera.header"           = "汎用カメラ";
+"printer.generic_camera.footer"           = "任意の2台目カメラ。";
+"printer.generic_camera.enable.label"     = "汎用カメラを有効化";
+"printer.generic_camera.stream_url.label" = "ストリームURL";
+"printer.generic_camera.still_url.label"  = "静止画URL";
+"printer.generic_camera.auth_mode.label"  = "認証";
+"printer.generic_camera.auth_mode.none"   = "なし";
+"printer.generic_camera.auth_mode.basic"  = "Basic";
+"printer.generic_camera.auth_mode.digest" = "Digest";
+"printer.generic_camera.username.label"   = "ユーザー名";
+"printer.generic_camera.username.placeholder" = "admin";
+"printer.generic_camera.password.label"   = "パスワード";
+"printer.generic_camera.password.show"    = "パスワードを表示";
+"printer.generic_camera.password.hide"    = "パスワードを隠す";
+"printer.generic_camera.transport.label"  = "RTSPトランスポート";
+"printer.generic_camera.framerate.label"  = "フレームレート";
+"printer.generic_camera.framerate.value"  = "%lld fps";
+"printer.generic_camera.verify_ssl.label" = "SSL証明書を検証";
+"printer.generic_camera.content_type.label" = "Content-Type";
+"printer.generic_camera.error.invalid_url" = "無効なURLです。rtsp://、http://、または https:// を使用してください。";
+"printer.generic_camera.error.http_status" = "HTTP %lld";
+"dropdown.generic_camera.preview"         = "汎用カメラ";
+
+// RTSP / camera errors
+"error.camera.empty"                      = "カメラのIPまたはホスト名を入力";
+"error.rtsp.timeout"                      = "タイムアウト";
+"error.rtsp.invalid_host"                 = "無効なホスト";
+"error.rtsp.malformed"                    = "カメラから予期しない応答";
+"error.rtsp.status"                       = "RTSP %lld";
+"error.rtsp.status_with_reason"           = "RTSP %lld %@";
+
+// About additions
+"about.coffee_help"                       = "開発者を応援する";
+"about.version"                           = "バージョン %@ (%@)";
+
+// Footer
+"footer.preferences"                      = "環境設定";
+"footer.quit"                             = "終了";
+"footer.update.available"                 = "新しいバージョンが利用可能";
+
+// Links row
+"links.prusalink.tooltip_enabled"         = "ブラウザで PrusaLink を開く";
+"links.prusalink.tooltip_unreachable"     = "プリンタに到達できません。ネットワークを確認してください。";
+"links.prusalink.tooltip_unset"           = "先に環境設定でプリンタURLを設定してください";
+"links.prusaconnect.tooltip_enabled"      = "ブラウザで PrusaConnect を開く";
+"links.prusaconnect.tooltip_unset"        = "先に環境設定で PrusaConnect UUID を設定してください";
+
+// Job actions
+"actions.resume"                          = "再開";
+"actions.pause"                           = "一時停止";
+"actions.stop"                            = "停止";
+"actions.resume.tooltip"                  = "一時停止中の印刷を再開";
+"actions.pause.tooltip"                   = "現在の印刷を一時停止";
+"actions.stop.tooltip"                    = "現在の印刷をキャンセル";
+"actions.resume.disabled"                 = "一時停止中のみ再開できます";
+"actions.pause.disabled"                  = "印刷中のみ一時停止できます";
+"actions.stop.disabled"                   = "印刷中のみ停止できます";
+
+// Status pill
+"status.unconfigured"                     = "未設定";
+"status.disconnected"                     = "切断";
+"status.idle"                             = "アイドル";
+"status.ready"                            = "準備完了";
+"status.busy"                             = "ビジー";
+"status.printing"                         = "印刷中";
+"status.paused"                           = "一時停止中";
+"status.finished"                         = "完了";
+"status.stopped"                          = "停止";
+"status.error"                            = "エラー";
+"status.attention"                        = "要注意";
+
+// Notifications additions
+"notification.finished.body_default"      = "印刷が完了しました。";
+"notification.state_body"                 = "%@ は %@ を報告しました。";
+
+// Live metrics + heaters
+"dropdown.metrics.speed"                  = "速度";
+"dropdown.metrics.z_height"               = "Z軸高さ";
+"dropdown.metrics.nozzle_diameter"        = "ノズル径";
+"dropdown.metrics.filament_type"          = "フィラメント";
+"dropdown.metrics.mmu"                    = "MMU";
+"dropdown.metrics.mmu.enabled"            = "有効";
+"dropdown.metrics.mmu.disabled"           = "無効";
+"dropdown.heater.nozzle"                  = "ノズル";
+"dropdown.heater.bed"                     = "ベッド";
+
+// Hero header update line
+"hero.update.not_connected"               = "未接続";
+"hero.update.waiting"                     = "初回更新を待機中...";
+"hero.update.ago"                         = "%lld 秒前に更新";
+"hero.update.refreshing"                  = "%@ - 更新中";
+"hero.update.next_in"                     = "%@ - 次は %lld 秒後";
+
+// カスタムHTTPアクション
+"prefs.actions.slot.header_left"          = "ヘッダー（左）";
+"prefs.actions.slot.header_right"         = "ヘッダー（右）";
+"prefs.actions.slot.row_left"             = "下段（左）";
+"prefs.actions.slot.row_right"            = "下段（右）";
+"prefs.actions.slot.row_second_left"      = "中段（左）";
+"prefs.actions.slot.row_second_right"     = "中段（右）";
+"prefs.actions.section.appearance"        = "外観";
+"prefs.actions.section.visibility"        = "表示";
+"prefs.actions.section.request"           = "リクエスト";
+"prefs.actions.section.behavior"          = "動作";
+"prefs.actions.field.name"                = "名前";
+"prefs.actions.field.symbol"              = "シンボルを選択";
+"prefs.actions.field.url_placeholder"     = "https://homeassistant.local/api/services/switch/turn_on";
+"prefs.actions.field.headers"             = "ヘッダー";
+"prefs.actions.field.confirm"             = "実行前に確認を求める";
+"prefs.actions.headers.add"               = "ヘッダーを追加";
+"prefs.actions.headers.empty"             = "ヘッダーは設定されていません。";
+"prefs.actions.visibility.always"         = "常時";
+"prefs.actions.visibility.when_connected" = "オンライン時のみ";
+"prefs.actions.visibility.when_disconnected" = "オフライン時のみ";
+"prefs.actions.preview.visibility.always"         = "常に表示";
+"prefs.actions.preview.visibility.when_connected" = "オンライン時に表示";
+"prefs.actions.preview.visibility.when_disconnected" = "オフライン時に表示";
+"prefs.actions.preview.confirm_on"        = "確認あり";
+"prefs.actions.preview.confirm_off"       = "確認なし";
+"prefs.actions.test"                      = "テスト";
+"prefs.actions.url_warning"               = "URLが不正です";
+"prefs.actions.toggle.requirements_header"   = "このアクションを有効にするには:";
+"prefs.actions.toggle.requirement.url"       = "URL";
+"prefs.actions.toggle.requirement.icon"      = "アイコン";
+"prefs.actions.toggle.requirement.name"      = "名前";
+"prefs.actions.toggle.requirement.name_or_icon" = "名前またはアイコン";
+"printer.keychain.scope_note"             = "PrusaLink の API キーとカスタムアクションのシークレット（URL、ヘッダー、リクエストボディ）を対象とします。";
+"custom_action.untitled"                  = "カスタムアクション";
+"actions.confirm.run"                     = "実行";
+"actions.notification.failure_title"      = "カスタムアクションが失敗しました: %@";
+"symbol_picker.search_placeholder"        = "シンボルを検索";
+"symbol_picker.recent"                    = "最近使った項目";
+"symbol_picker.use"                       = "このシンボルを使用";
+"symbol_picker.empty"                     = "一致するシンボルはありません。";
+"symbol_picker.no_selection"              = "シンボルが選択されていません";
+"content.custom_actions.header"           = "カスタムHTTPアクション";
+"content.custom_actions.footer"           = "HTTPリクエストを発行する最大6つのボタンを設定できます（HomeAssistant、Webhook、スマートプラグなど）。アイコンのみのボタン2つはプリンタ名の両側にあるヘッダーに配置され、アイコン+テキストのボタン最大4つは中段（カメラ表示の下）と下段（PrusaLinkリンクの下）に配置されます。各クリック前に「はい／いいえ」の確認を求めるには、ボタンごとの確認スイッチを有効にしてください。";
+"prefs.actions.headers.name_example"      = "例: Authorization";
+"prefs.actions.headers.value_example"     = "例: Bearer xxx";
+"prefs.actions.headers.show_value"        = "値を表示";
+"prefs.actions.headers.hide_value"        = "値を隠す";
+"prefs.actions.headers.remove"            = "ヘッダーを削除";
+"prefs.actions.headers.key_label"         = "キー";
+"prefs.actions.headers.value_label"       = "値";
+"prefs.actions.field.body_placeholder"    = "{\"entity_id\": \"switch.printer\"}";
+"prefs.actions.field.method_label"        = "メソッド";
+"prefs.actions.field.url_label"           = "URL";
+"prefs.actions.field.body_label"          = "ボディ";
