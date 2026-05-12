@@ -167,7 +167,7 @@
 "common.help.learn_more"                  = "Más información";
 "printer.help.url.body"                   = "Introduce http://<ip> o http://<nombre_de_host> de tu impresora (por ejemplo http://192.168.1.42 o http://prusa-mk3.local). Ábrela primero en tu navegador para confirmar que PrusaLink se carga.";
 "printer.help.api_key.body"               = "Encuentra la clave API de esta impresora en Prusa Connect.";
-"printer.help.camera.body"                = "Introduce la IP o el nombre de host de la Buddy Camera (por ejemplo 192.168.1.42 o prusa-mk3.local). La IP o el nombre de host de la impresora es el valor más habitual.";
+"printer.help.camera.body"                = "Introduce la IP o el nombre de host de la Buddy Camera (por ejemplo 192.168.1.42 o buddy-cam.local).\n\nImportante: en la Buddy Camera, RTSP está DESACTIVADO por defecto. Actívalo en PrusaConnect en Cámara > Control de cámara, de lo contrario la imagen no podrá conectarse.";
 "printer.help.uuid.body"                  = "Encuentra este UUID en los ajustes de la impresora en Prusa Connect. Opcional: déjalo en blanco si no usas Prusa Connect.";
 "printer.test.connected"                  = "Conectada";
 "printer.api_key.migrate_error"           = "No se pudo migrar la clave API: %@";

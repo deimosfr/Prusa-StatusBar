@@ -167,7 +167,7 @@
 "common.help.learn_more"                  = "詳しく見る";
 "printer.help.url.body"                   = "プリンターの http://<ip> または http://<hostname> を入力してください（例: http://192.168.1.42 または http://prusa-mk3.local）。先にブラウザでアドレスを開き、PrusaLink が表示されることを確認してください。";
 "printer.help.api_key.body"               = "API キーは Prusa Connect 上のこのプリンターのページで確認できます。";
-"printer.help.camera.body"                = "Buddy Camera の IP またはホスト名を入力してください（例: 192.168.1.42 または prusa-mk3.local）。プリンター本体の IP またはホスト名を使うのが一般的です。";
+"printer.help.camera.body"                = "Buddy Camera の IP またはホスト名を入力してください（例: 192.168.1.42 または buddy-cam.local）。\n\n重要: Buddy Camera では RTSP は既定で無効です。PrusaConnect の Camera > Camera control から有効にしてください。有効にしないとタイルは接続できません。";
 "printer.help.uuid.body"                  = "この UUID は Prusa Connect のプリンター設定で確認できます。任意項目: Prusa Connect を使用しない場合は空欄のままで構いません。";
 "printer.test.connected"                  = "接続済み";
 "printer.api_key.migrate_error"           = "APIキーの移行に失敗しました: %@";
