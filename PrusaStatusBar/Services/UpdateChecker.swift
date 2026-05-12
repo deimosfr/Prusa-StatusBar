@@ -1,11 +1,13 @@
 import Foundation
 
-/// Drives the once-per-24h GitHub Releases poll. Hydrates `availableUpdate`
-/// on the model from `UserPreferences` at init so the FooterBar callout is
-/// visible immediately after launch when an update was already known. Runs
-/// a single `Task` that wakes hourly to re-check whether the 24h window
-/// has elapsed since `lastUpdateCheckDate`. Failures are silently absorbed
-/// and the next attempt fires on the next wake.
+/// Drives the GitHub Releases poll. At launch, fires one forced check
+/// that bypasses the 24h gate so the user always sees a fresh result
+/// when they reopen the app. After that, a single `Task` wakes hourly
+/// and re-checks whether 24h has elapsed since `lastUpdateCheckDate`.
+/// Hydrates `availableUpdate` from `UserPreferences` at init so the
+/// FooterBar callout is visible immediately after launch when an
+/// update was already known. Failures are silently absorbed and the
+/// next attempt fires on the next wake.
 @MainActor
 public final class UpdateChecker {
     private let model: AppModel
@@ -49,8 +51,9 @@ public final class UpdateChecker {
         loopTask = nil
     }
 
-    /// Out-of-band single check. Used by tests and as a hook for
-    /// future "Check now" buttons. Skips the 24h gate.
+    /// Out-of-band single check. Used by tests and by
+    /// `AppServices.onRequestUpdateCheck` (e.g. the General-tab toggle
+    /// flipping back ON). Skips the 24h gate.
     public func checkNow() async {
         await performCheck()
     }
@@ -58,11 +61,17 @@ public final class UpdateChecker {
     // MARK: - Loop
 
     private func run() async {
+        // Forced launch-time check: bypass the 24h gate so each app
+        // start surfaces a fresh result. Records `lastUpdateCheckDate`
+        // on success, which re-anchors the hourly loop below.
+        if preferences.checkForUpdatesEnabled {
+            await performCheck()
+        }
         while !Task.isCancelled {
+            try? await Task.sleep(nanoseconds: UInt64(wakeInterval * 1_000_000_000))
             if shouldCheck() {
                 await performCheck()
             }
-            try? await Task.sleep(nanoseconds: UInt64(wakeInterval * 1_000_000_000))
         }
     }
 
