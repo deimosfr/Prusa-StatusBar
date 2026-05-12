@@ -167,7 +167,7 @@
 "common.help.learn_more"                  = "Zjistit více";
 "printer.help.url.body"                   = "Zadejte http://<ip> nebo http://<hostname> své tiskárny (například http://192.168.1.42 nebo http://prusa-mk3.local). Nejprve adresu otevřete ve webovém prohlížeči a ověřte, že se PrusaLink načte.";
 "printer.help.api_key.body"               = "API klíč pro tuto tiskárnu najdete v Prusa Connect.";
-"printer.help.camera.body"                = "Zadejte IP adresu nebo hostname Buddy Camery (například 192.168.1.42 nebo prusa-mk3.local). IP nebo hostname tiskárny je nejčastější hodnota.";
+"printer.help.camera.body"                = "Zadejte IP adresu nebo hostname Buddy Camery (například 192.168.1.42 nebo buddy-cam.local).\n\nDůležité: RTSP je u Buddy Camery ve výchozím stavu VYPNUTÉ. Povolte ho v PrusaConnect v Kamera > Ovládání kamery, jinak se dlaždice nepřipojí.";
 "printer.help.uuid.body"                  = "Toto UUID najdete v nastavení tiskárny v Prusa Connect. Volitelné: nechte prázdné, pokud Prusa Connect nepoužíváte.";
 "printer.test.connected"                  = "Připojeno";
 "printer.api_key.migrate_error"           = "Migrace API klíče selhala: %@";

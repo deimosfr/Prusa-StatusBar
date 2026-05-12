@@ -59,7 +59,7 @@ https://github.com/user-attachments/assets/85046996-f5a1-4bcb-9e79-58f294655967
 - **Job controls** without leaving the menu bar: pause, resume, stop.
 - **Quick links** to open PrusaLink (the local web UI) or PrusaConnect (the cloud dashboard). Buttons dim when the printer is unreachable or the link is not configured, and either button can be hidden if you do not use it.
 - **Custom HTTP action buttons**: add your own buttons in the top, middle, or bottom row of the dropdown to POST or GET against any endpoint (Home Assistant, smart plugs, your own scripts). Optional auth headers and secrets are stored in the Keychain.
-- **Optional camera tile**: for Prusa Buddy firmware (MK4, XL, MK3.9, and friends), the bundled `go2rtc` helper relays the printer RTSP stream locally. For any other camera, point Prusa StatusBar at an HTTP/HTTPS still or stream URL and it shows up in the same tile. Video stays on your local network.
+- **Optional camera tile**: for the Prusa Buddy 3D Camera, the live RTSP stream shows up directly in the menu bar. RTSP is **off by default** on the camera, so you must enable it once in PrusaConnect under *Camera > Camera control* (see the [Camera section](#camera-optional) below). For any other camera, point Prusa StatusBar at an HTTP/HTTPS still or stream URL and it shows up in the same tile. Video stays on your local network.
 - **Native notifications** when a print starts, finishes, or the printer needs your attention. Each notification type can be toggled independently. When a camera is configured (Buddy or generic), the notification embeds a **live camera snapshot** captured at the moment of the event; otherwise it falls back to the gcode thumbnail.
 - **Fallback printer URL**: if your printer hops between Wi-Fi and Ethernet, set a backup URL and the app falls back to it automatically.
 - **Configurable refresh interval**, with separate values for when the printer is connected vs disconnected, so you can save battery on the road.
@@ -107,13 +107,20 @@ reachable on more than one address.
 
 ### Camera (optional)
 
-If your printer firmware exposes an RTSP stream (Prusa Buddy on MK4 and
-similar), open *Preferences > Printer > Buddy Camera* and paste the RTSP
-URL; the bundled `go2rtc` helper runs locally and converts the stream so
-the menu bar can show a live tile. For any other camera that serves an
-HTTP/HTTPS still or stream, use *Preferences > Printer > Camera* to point
-Prusa StatusBar at the URL directly. Auth credentials are stored in the
-Keychain. Nothing leaves your network.
+If you have a Prusa Buddy 3D Camera, open
+*Preferences > Printer > Buddy Camera* and enter the camera's own IP or
+hostname (not the printer's); its RTSP stream then shows up as a live
+tile in the menu bar. For any other camera that serves an HTTP/HTTPS
+still or stream, use *Preferences > Printer > Generic Camera*.
+Auth credentials are stored in the Keychain. Nothing leaves your network.
+
+> **Important: enable RTSP on the Buddy Camera first.** The Buddy 3D
+> Camera ships with its RTSP stream **disabled by default**. Open
+> PrusaConnect, go to *Camera > Camera control*, and turn RTSP on for
+> this camera. Without this step the camera tile cannot connect even if
+> the IP or hostname is correct. See Prusa's
+> [Buddy 3D Camera article](https://help.prusa3d.com/article/buddy3d-camera_821264#features)
+> for the exact steps.
 
 ## Privacy and security
 
