@@ -137,6 +137,44 @@ struct UpdateCheckerTests {
     }
 
     @Test
+    func startFiresLaunchTimeCheckEvenWithFreshLastDate() async throws {
+        let release = try GitHubRelease(
+            tag: "v1.5.0",
+            htmlURL: #require(URL(string: "https://example.test/release/1.5.0"))
+        )
+        let client = CountingReleaseClient(result: .success(release))
+        let model = AppModel()
+        let (prefs, _) = makePreferences()
+        // Last check 10 minutes ago: the normal 24h gate would skip,
+        // but `start()` must force a launch-time check.
+        let now = Date(timeIntervalSince1970: 1_700_000_000)
+        prefs.lastUpdateCheckDate = now.addingTimeInterval(-10 * 60)
+        let checker = UpdateChecker(
+            model: model,
+            client: client,
+            preferences: prefs,
+            runningVersion: SemanticVersion(major: 1, minor: 0, patch: 0),
+            wakeInterval: 24 * 60 * 60,
+            now: { now }
+        )
+
+        checker.start()
+        // Yield until the launch-time check completes (asserted via
+        // CountingReleaseClient's call count incrementing).
+        for _ in 0 ..< 100 {
+            let calls = await client.callCount
+            if calls >= 1 { break }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        checker.stop()
+
+        let calls = await client.callCount
+        #expect(calls == 1)
+        #expect(model.availableUpdate == release)
+        #expect(prefs.lastUpdateCheckDate == now)
+    }
+
+    @Test
     func hydrationDiscardsStaleStoredUpdateBelowRunningVersion() {
         let model = AppModel()
         let (prefs, _) = makePreferences()
