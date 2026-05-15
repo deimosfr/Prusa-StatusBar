@@ -123,6 +123,7 @@
 		9892F61C7B50D5C7750441C4 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796B7A9C12A1BD276619A187 /* PreferencesWindow.swift */; };
 		99B85BE321C085470AAA8E3A /* UserPreferences+CustomActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DAA7E6CB94AE41C7F7F1F4 /* UserPreferences+CustomActions.swift */; };
 		9E01EB023DBAC132FB582F76 /* NotificationImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677AAEE9702751F9456E3BEC /* NotificationImage.swift */; };
+		9FC2324164CC9C9EE1FE1291 /* DetachedStatusWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFA947C53AC9CAE9FF98676 /* DetachedStatusWindowController.swift */; };
 		A0DE1BFC96C9E59CF114A748 /* GenericCameraSecretsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF255CDB91261E22B5F0312B /* GenericCameraSecretsStore.swift */; };
 		A2222D92E07DCD175FE7D55D /* ActionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD37CACC6D40ACD57C9AEF /* ActionsSection.swift */; };
 		A572439161C5663B19496F00 /* DisconnectedIconStylePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F74880505D4E63902C3FBF7 /* DisconnectedIconStylePicker.swift */; };
@@ -327,6 +328,7 @@
 		A303204F7FC35BF4C5E85133 /* AppServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppServices.swift; sourceTree = "<group>"; };
 		A92BE5989CA4A26FD7C81AA6 /* CameraSnapshotProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSnapshotProvider.swift; sourceTree = "<group>"; };
 		AB7B10A1654B203C7A0820F3 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
+		ACFA947C53AC9CAE9FF98676 /* DetachedStatusWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetachedStatusWindowController.swift; sourceTree = "<group>"; };
 		AF81764CEABA7BE23C1BD196 /* AnimatedPercentChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedPercentChip.swift; sourceTree = "<group>"; };
 		B03914CD423E3ECC98299E70 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B068DF8D99041051EFC7FA85 /* UpdateCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCheckerTests.swift; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 				7C4F1262C4A586437574B9D7 /* CameraQuickLookWindowController.swift */,
 				66815EE5A404BDEE764B0EDC /* CameraStreamKeepalive.swift */,
 				6EBD690F68E4ED1C0EEE8583 /* CustomActionsSection.swift */,
+				ACFA947C53AC9CAE9FF98676 /* DetachedStatusWindowController.swift */,
 				B92321F45A3CC1E75D6D9CDB /* DropdownView.swift */,
 				D5E3A827E5B85503CE799041 /* DropdownView+CustomActions.swift */,
 				7D413B5006C1449975021ED6 /* GeneralTab.swift */,
@@ -875,6 +878,7 @@
 				CF5BED69B30E01A19FE8DE07 /* CustomActionSlotCard.swift in Sources */,
 				37B645A9E57F74D3865BE7E5 /* CustomActionsRow.swift in Sources */,
 				5BF470FA703D65D9BC9DAD5D /* CustomActionsSection.swift in Sources */,
+				9FC2324164CC9C9EE1FE1291 /* DetachedStatusWindowController.swift in Sources */,
 				A572439161C5663B19496F00 /* DisconnectedIconStylePicker.swift in Sources */,
 				86B855EEA0F810E156D4B2B6 /* DropdownView+CustomActions.swift in Sources */,
 				ADB0C7E9F133CCDF2809B11C /* DropdownView.swift in Sources */,

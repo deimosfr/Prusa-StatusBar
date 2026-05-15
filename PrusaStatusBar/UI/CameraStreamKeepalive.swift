@@ -22,6 +22,7 @@ final class CameraStreamKeepalive {
 
     private var openPopups: Set<CameraTileKind> = []
     private var popoverVisible: Bool = false
+    private var detachedWindowOpen: Bool = false
 
     init(stopGoRTC: @escaping @MainActor () -> Void) {
         self.stopGoRTC = stopGoRTC
@@ -41,7 +42,7 @@ final class CameraStreamKeepalive {
         // The last popup just closed and the popover is also closed, so
         // nothing in the app needs the helper. Mirror the original
         // popover-close teardown.
-        if openPopups.isEmpty, !popoverVisible {
+        if openPopups.isEmpty, !popoverVisible, !detachedWindowOpen {
             stopGoRTC()
         }
     }
@@ -51,10 +52,23 @@ final class CameraStreamKeepalive {
     }
 
     /// Called from `MenuBarPopoverDelegate.popoverDidClose`. Tears down
-    /// go2rtc only when no popup is keeping it alive.
+    /// go2rtc only when no popup or detached window is keeping it alive.
     func popoverDidClose() {
         popoverVisible = false
-        if openPopups.isEmpty {
+        if openPopups.isEmpty, !detachedWindowOpen {
+            stopGoRTC()
+        }
+    }
+
+    /// Call BEFORE closing the popover when detaching to a window so the
+    /// popover-close path does not tear down go2rtc mid-transition.
+    func detachedWindowDidOpen() {
+        detachedWindowOpen = true
+    }
+
+    func detachedWindowDidClose() {
+        detachedWindowOpen = false
+        if openPopups.isEmpty, !popoverVisible {
             stopGoRTC()
         }
     }

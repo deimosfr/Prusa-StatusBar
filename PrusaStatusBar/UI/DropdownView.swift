@@ -33,6 +33,11 @@ struct DropdownView: View {
     /// previews and tests free from window-controller plumbing.
     var onZoomCamera: (CameraTileKind, CameraQuickLookSource) -> Void = { _, _ in }
 
+    /// Detaches the dropdown into a persistent floating window. `nil`
+    /// hides the button (used inside the detached window to prevent
+    /// circular detach).
+    var onDetach: (() -> Void)?
+
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State var customActionFeedback: [CustomActionSlot: CustomActionFeedback] = [:]
 
@@ -59,27 +64,39 @@ struct DropdownView: View {
                 onRunRight: { runCustomAction(.headerRight) }
             )
 
-            // ViewThatFits picks the non-scrolling layout when the middle
-            // region fits within the bound below; otherwise it falls back to a
-            // ScrollView so the user can reach every section without losing
-            // sight of the pinned FooterBar (Preferences / Quit).
-            ViewThatFits(in: .vertical) {
+            // Detached window: render middleStack with its natural intrinsic
+            // size so NSHostingController's preferredContentSize reflects the
+            // real content height. The controller uses that to auto-fit the
+            // window. If the user manually shrinks the window, content clips
+            // (acceptable trade-off vs. an always-empty scroll area).
+            // Popover: ViewThatFits prefers no scroll; falls back to ScrollView
+            // with permanent indicator when content overflows the fixed popover
+            // height.
+            if model.detachedWindowVisible {
                 middleStack
-                ScrollView(.vertical, showsIndicators: true) {
+            } else {
+                ViewThatFits(in: .vertical) {
                     middleStack
+                    ScrollView(.vertical, showsIndicators: true) {
+                        middleStack
+                    }
+                    .scrollBounceBehavior(.basedOnSize)
                 }
-                .scrollBounceBehavior(.basedOnSize)
             }
 
             FooterBar(onPreferences: onPreferences, onQuit: onQuit,
-                      availableUpdate: model.availableUpdate, onOpenRelease: onOpenRelease)
+                      availableUpdate: model.availableUpdate, onOpenRelease: onOpenRelease,
+                      onDetach: onDetach)
                 .padding(.top, -Theme.Spacing.xxs - 2)
         }
         .padding(.horizontal, Theme.Layout.popoverPadding)
         .padding(.top, Theme.Layout.popoverPadding)
         .padding(.bottom, Theme.Layout.popoverFooterBottomPadding)
         .frame(width: Theme.Layout.popoverWidth, alignment: .topLeading)
-        .frame(maxHeight: maxPopoverHeight, alignment: .topLeading)
+        .frame(
+            maxHeight: model.detachedWindowVisible ? nil : maxPopoverHeight,
+            alignment: .topLeading
+        )
         .background(.regularMaterial)
         .environment(\.brandAccent, model.accent)
         .environment(\.brandCustomHex, model.customAccentHex)
@@ -143,11 +160,6 @@ struct DropdownView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var maxPopoverHeight: CGFloat {
-        let screenHeight = NSScreen.main?.visibleFrame.height ?? 900
-        return max(200, screenHeight - Theme.Layout.popoverScreenMargin)
-    }
-
     // MARK: - Variant routing
 
     private enum Presentation: Equatable {
@@ -159,21 +171,6 @@ struct DropdownView: View {
 
     private enum PresentationKind: Equatable {
         case unconfigured, disconnected, loading, content
-    }
-
-    private var presentationKind: PresentationKind {
-        switch presentation {
-        case .unconfigured: .unconfigured
-        case .disconnected: .disconnected
-        case .loading: .loading
-        case .content: .content
-        }
-    }
-
-    private var shouldRenderGenericCameraTile: Bool {
-        model.popoverVisible
-            && model.genericCameraConfig.enabled
-            && model.genericCameraConfig.hasUsableSource
     }
 
     private var presentation: Presentation {
@@ -413,7 +410,7 @@ extension DropdownView {
             // `CameraPlayerView.dismantleNSView` -> AVPlayer pause/clear.
             // The popover delegate additionally stops go2rtc, so neither
             // CPU nor camera bandwidth is used while the menu is closed.
-            if model.popoverVisible, model.buddyCameraEnabled, let rtsp = nonEmpty(model.rtspURL) {
+            if dropdownVisible, model.buddyCameraEnabled, let rtsp = nonEmpty(model.rtspURL) {
                 CameraTile(urlString: rtsp, model: model, onZoom: { onZoomCamera(.buddy, $0) })
             }
 
@@ -440,6 +437,34 @@ extension DropdownView {
 
             LiveMetricsCard(rows: extraRows(for: status))
         }
+    }
+}
+
+private extension DropdownView {
+    /// True whenever the dropdown content is on screen -- either inside the
+    /// transient popover or inside the detached floating window.
+    var dropdownVisible: Bool {
+        model.popoverVisible || model.detachedWindowVisible
+    }
+
+    var maxPopoverHeight: CGFloat {
+        let screenHeight = NSScreen.main?.visibleFrame.height ?? 900
+        return max(200, screenHeight - Theme.Layout.popoverScreenMargin)
+    }
+
+    private var presentationKind: PresentationKind {
+        switch presentation {
+        case .unconfigured: .unconfigured
+        case .disconnected: .disconnected
+        case .loading: .loading
+        case .content: .content
+        }
+    }
+
+    var shouldRenderGenericCameraTile: Bool {
+        dropdownVisible
+            && model.genericCameraConfig.enabled
+            && model.genericCameraConfig.hasUsableSource
     }
 }
 

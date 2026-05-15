@@ -117,10 +117,15 @@ public final class AppModel {
     /// also fires on resume from pause.
     public var printingBurstToken: Int = 0
 
-    /// True only while the dropdown popover is on screen. Drives conditional
-    /// mounting of resource-heavy views (camera tile + go2rtc helper) so the
-    /// app does not stream RTSP while the menu is closed.
+    /// True only while the dropdown popover is on screen OR the detached status
+    /// window is open. Drives conditional mounting of resource-heavy views
+    /// (camera tile + go2rtc helper) so the app does not stream RTSP while
+    /// the menu is closed.
     public var popoverVisible: Bool = false
+
+    /// True while the detached status window is open. `MenuBarController` uses
+    /// this to route left-clicks to the window instead of toggling the popover.
+    public var detachedWindowVisible: Bool = false
 
     /// Last rendered camera tile height per kind, captured the first time
     /// each tile draws a real frame in the current online session. Drives

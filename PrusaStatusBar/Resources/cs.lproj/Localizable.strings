@@ -217,6 +217,7 @@
 "footer.preferences"                      = "Nastavení";
 "footer.quit"                             = "Ukončit";
 "footer.update.available"                 = "Nová verze k dispozici";
+"footer.detach"                           = "Oddělit do okna";
 
 // Links row
 "links.prusalink.tooltip_enabled"         = "Otevřít PrusaLink v prohlížeči";

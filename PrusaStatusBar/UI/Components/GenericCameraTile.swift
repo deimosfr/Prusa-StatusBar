@@ -15,13 +15,29 @@ struct GenericCameraTile: View {
     private let kind: CameraTileKind = .generic
 
     @State private var fallbackToStill: Bool = false
+    /// Sticky readiness flag for the stream branch. Mirrors `CameraTile`:
+    /// flips true on first `.readyToPlay`, reset when the active source
+    /// changes (via `.id(tileIdentity)`).
+    @State private var isReady: Bool = false
+    /// Native video aspect (width / height) reported by the player. Nil
+    /// until the first frame decodes. Used to size the tile to the actual
+    /// video and avoid AVPlayerLayer black bars.
+    @State private var videoAspect: CGFloat?
 
     var body: some View {
         ZStack {
             Color.black
             content
+            if showsLoadingSpinner {
+                loadingOverlay
+            }
         }
-        .modifier(CameraTileFrame(model: model, kind: kind))
+        .modifier(CameraTileFrame(
+            model: model,
+            kind: kind,
+            isReady: !showsLoadingSpinner,
+            videoAspect: videoAspect
+        ))
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
@@ -36,9 +52,31 @@ struct GenericCameraTile: View {
         .id(tileIdentity)
         .onChange(of: tileIdentity) { _, _ in
             // Reset fallback whenever the active source changes; the new
-            // stream gets a fresh retry budget.
+            // stream gets a fresh retry budget. Same for readiness and
+            // video aspect, the new stream has to prove itself again.
             fallbackToStill = false
+            isReady = false
+            videoAspect = nil
         }
+    }
+
+    private var loadingOverlay: some View {
+        ProgressView()
+            .controlSize(.small)
+            .progressViewStyle(.circular)
+            .tint(.white)
+            .allowsHitTesting(false)
+    }
+
+    /// Only show the spinner while the stream branch is warming up. The
+    /// still-image branch has its own loading affordance in
+    /// `StillImagePollerView`.
+    private var showsLoadingSpinner: Bool {
+        #if PROTOTYPE_MODE
+            return false
+        #else
+            return shouldRenderStream && resolveStreamHLSURL() != nil && !isReady
+        #endif
     }
 
     @ViewBuilder
@@ -86,7 +124,12 @@ struct GenericCameraTile: View {
             if shouldRenderStream, let hlsURL = resolveStreamHLSURL() {
                 CameraPlayerView(
                     url: hlsURL,
-                    onFailureExhausted: handleStreamFailure
+                    onFailureExhausted: handleStreamFailure,
+                    onReady: { isReady = true },
+                    onPresentationSize: { size in
+                        guard size.height > 0 else { return }
+                        videoAspect = size.width / size.height
+                    }
                 )
             } else if let stillURL = config.resolvedStillImageURL() {
                 StillImagePollerView(url: stillURL, config: config)

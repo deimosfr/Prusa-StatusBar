@@ -217,6 +217,7 @@
 "footer.preferences"                      = "Einstellungen";
 "footer.quit"                             = "Beenden";
 "footer.update.available"                 = "Neue Version verfügbar";
+"footer.detach"                           = "Als Fenster ablösen";
 
 // Links row
 "links.prusalink.tooltip_enabled"         = "PrusaLink im Browser öffnen";
