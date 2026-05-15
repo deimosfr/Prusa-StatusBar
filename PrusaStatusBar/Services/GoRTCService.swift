@@ -2,19 +2,30 @@ import Darwin
 import Foundation
 import os
 
-/// PGID slot read by the C-level `atexit` fallback. Updated by
-/// `GoRTCService.start` and cleared by `GoRTCService.stop`. Lives at file
-/// scope because `atexit` accepts a C function pointer with no captures.
+/// PGID slot read by the C-level `atexit` fallback. Set to the helper's
+/// pid after a successful `setpgid(pid, pid)` so a group kill covers any
+/// descendants. Zero when `setpgid` was not attempted or failed.
 private nonisolated(unsafe) var goRTCTrackedPGID: pid_t = 0
 
-/// `atexit` handler. Touches only the C global above so it is safe to call
-/// from any termination path, including ones that bypass Swift runtime
-/// teardown. Sends SIGKILL to the helper's process group if we have one.
+/// Raw PID of the running helper. Always set regardless of whether
+/// `setpgid` succeeded. Used by the atexit fallback as a direct-kill
+/// backstop for sandboxed runs where `setpgid` returns EPERM.
+private nonisolated(unsafe) var goRTCTrackedPID: pid_t = 0
+
+/// `atexit` handler. Touches only the C globals above so it is safe to
+/// call from any termination path, including ones that bypass Swift runtime
+/// teardown. Tries a process-group kill first (covers descendants when
+/// `setpgid` succeeded), then falls back to a direct-PID kill so the
+/// helper dies even when the App Sandbox blocked `setpgid`.
 @_cdecl("prusaStatusBarGoRTCAtexit")
 func prusaStatusBarGoRTCAtexit() {
     let pgid = goRTCTrackedPGID
     if pgid > 0 {
         _ = Darwin.kill(-pgid, SIGKILL)
+    }
+    let pid = goRTCTrackedPID
+    if pid > 0 {
+        _ = Darwin.kill(pid, SIGKILL)
     }
 }
 
@@ -101,8 +112,13 @@ final class GoRTCService {
     /// Idempotent: returns the HLS URL for the given RTSP source. If the
     /// helper is already running for the same RTSP URL, no work is done.
     /// Otherwise the helper is restarted with the new config.
+    ///
+    /// go2rtc defaults to UDP transport for RTSP. Many cameras (and some
+    /// routers) block UDP RTSP or only support TCP. Forcing TCP via the
+    /// go2rtc URL fragment makes the Buddy camera work in the same
+    /// conditions where VLC (which defaults to TCP) succeeds.
     func hlsURL(forRTSP rtsp: String) -> URL? {
-        upsertStream(name: Self.snapshotBuddyStreamName, source: rtsp)
+        upsertStream(name: Self.snapshotBuddyStreamName, source: withTCPTransport(rtsp))
     }
 
     /// Generic-camera variant: accepts any source go2rtc can transmux
@@ -141,6 +157,7 @@ final class GoRTCService {
         guard let helper = dependencies.helperURL() else { return }
         let needsRestart = process?.isRunning != true || streams != currentStreams
         guard needsRestart else { return }
+        killOrphanIfNeeded()
         stop()
         do {
             try start(helper: helper, streams: streams)
@@ -164,6 +181,7 @@ final class GoRTCService {
         guard let proc = process else {
             currentStreams = [:]
             goRTCTrackedPGID = 0
+            goRTCTrackedPID = 0
             removePIDFile()
             return
         }
@@ -171,6 +189,7 @@ final class GoRTCService {
         currentStreams = [:]
         let pgid = goRTCTrackedPGID
         goRTCTrackedPGID = 0
+        goRTCTrackedPID = 0
 
         guard proc.isRunning else {
             removePIDFile()
@@ -217,7 +236,7 @@ final class GoRTCService {
         // SIGKILL whatever process happens to inherit the recycled id.
         if pidLooksLikeHelper(pid) {
             logger.info("Reaping orphan go2rtc pid=\(pid, privacy: .public)")
-            _ = Darwin.kill(-pid, SIGKILL)
+            _ = Darwin.kill(pid, SIGKILL)
             // Wait briefly for the kernel to tear it down. waitpid is not
             // available since the process is not our child anymore.
             let deadline = Date().addingTimeInterval(0.5)
@@ -256,11 +275,13 @@ final class GoRTCService {
         // kill(-pgid, SIGKILL) downstream covers any descendants. Calling
         // setpgid from the parent right after run() is race-safe, the child
         // is already fork-execed.
-        if setpgid(pid, pid) != 0 {
+        if setpgid(pid, pid) == 0 {
+            goRTCTrackedPGID = pid
+        } else {
             let err = errno
             logger.warning("setpgid failed pid=\(pid, privacy: .public) errno=\(err, privacy: .public)")
         }
-        goRTCTrackedPGID = pid
+        goRTCTrackedPID = pid
         writePIDFile(pid: pid)
         logger.info("go2rtc launched, pid=\(pid, privacy: .public)")
     }
@@ -351,6 +372,41 @@ final class GoRTCService {
 /// `GoRTCService`'s body under the lint budget. Same-file extension so
 /// `private` access stays intact.
 extension GoRTCService {
+    /// Appends `#transport=tcp` to an RTSP URL for go2rtc. If a fragment
+    /// already exists the parameter is appended with `&` so existing
+    /// go2rtc options are preserved.
+    func withTCPTransport(_ rtsp: String) -> String {
+        guard rtsp.lowercased().hasPrefix("rtsp") else { return rtsp }
+        guard let hashIndex = rtsp.firstIndex(of: "#") else {
+            return "\(rtsp)#transport=tcp"
+        }
+        let fragment = String(rtsp[rtsp.index(after: hashIndex)...])
+        let hasTransport = fragment.split(separator: "&").contains {
+            $0.split(separator: "=", maxSplits: 1).first.map(String.init) == "transport"
+        }
+        return hasTransport ? rtsp : "\(rtsp)&transport=tcp"
+    }
+
+    /// Reads the PID file written by the previous app session and sends
+    /// SIGKILL to the recorded process if it is still alive and the path
+    /// of that process matches the bundled helper binary. This prevents an
+    /// orphaned go2rtc (left behind by a crash or force-quit, where the
+    /// atexit SIGKILL could not reach it because `setpgid` is blocked by
+    /// the App Sandbox) from holding port \(dependencies.port) and blocking
+    /// a fresh start.
+    func killOrphanIfNeeded() {
+        guard
+            let raw = try? String(contentsOf: dependencies.pidFileURL, encoding: .utf8),
+            let pid = pid_t(raw.trimmingCharacters(in: .whitespacesAndNewlines)),
+            pid != process?.processIdentifier,
+            isProcessAlive(pid),
+            pidLooksLikeHelper(pid)
+        else { return }
+        logger.warning("killing orphaned go2rtc pid=\(pid, privacy: .public)")
+        Darwin.kill(pid, SIGKILL)
+        removePIDFile()
+    }
+
     func isPortBound(_ port: UInt16) -> Bool {
         let socketFD = Darwin.socket(AF_INET, SOCK_STREAM, 0)
         guard socketFD >= 0 else { return false }
