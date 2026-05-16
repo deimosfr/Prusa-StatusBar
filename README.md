@@ -57,6 +57,7 @@ https://github.com/user-attachments/assets/85046996-f5a1-4bcb-9e79-58f294655967
 - **Temperatures**: nozzle and bed, current vs target, with ring gauges.
 - **Optional extras**: show print speed, Z height, nozzle diameter, MMU status, and filament type in the dropdown when you want them.
 - **Job controls** without leaving the menu bar: pause, resume, stop.
+- **Detach to a floating window**: pop the dropdown out into a dedicated, always-available window with the same content. Useful for a second monitor or keeping the print visible while another app has focus.
 - **Quick links** to open PrusaLink (the local web UI) or PrusaConnect (the cloud dashboard). Buttons dim when the printer is unreachable or the link is not configured, and either button can be hidden if you do not use it.
 - **Custom HTTP action buttons**: add your own buttons in the top, middle, or bottom row of the dropdown to POST or GET against any endpoint (Home Assistant, smart plugs, your own scripts). Optional auth headers and secrets are stored in the Keychain.
 - **Optional camera tile**: for the Prusa Buddy 3D Camera, the live RTSP stream shows up directly in the menu bar. RTSP is **off by default** on the camera, so you must enable it once in PrusaConnect under *Camera > Camera control* (see the [Camera section](#camera-optional) below). For any other camera, point Prusa StatusBar at an HTTP/HTTPS still or stream URL and it shows up in the same tile. Video stays on your local network.
