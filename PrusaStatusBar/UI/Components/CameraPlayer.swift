@@ -56,7 +56,12 @@
         /// AVPlayer hits it during that window the AVPlayerItem flips to
         /// .failed and never retries on its own, leaving a dark tile. We
         /// re-attempt with linear backoff up to a short cap.
-        private let retryBackoffs: [TimeInterval] = [0.4, 0.7, 1.0, 1.5, 2.0, 2.5]
+        ///
+        /// Extended to cover cameras with slow RTSP keyframe intervals: go2rtc
+        /// needs at least one keyframe before generating the first HLS segment.
+        /// With a 2-5s keyframe interval plus RTSP connection time, the
+        /// original 8.1s budget was too tight. 23s covers most real cameras.
+        private let retryBackoffs: [TimeInterval] = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0]
 
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)

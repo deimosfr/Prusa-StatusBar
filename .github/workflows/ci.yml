@@ -9,6 +9,9 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  pull-requests: write
+
 env:
   RTK_DISABLE: "1"
 
@@ -57,3 +60,162 @@ jobs:
 
       - name: Run tests
         run: just test
+
+  build-dmg:
+    name: Build ad-hoc DMG (${{ matrix.arch }})
+    needs: lint-test
+    if: github.event_name == 'pull_request'
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      matrix:
+        arch: [arm64, x86_64]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read pinned Xcode version
+        id: xcode-pin
+        run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ steps.xcode-pin.outputs.version }}
+
+      - name: Install Homebrew tooling
+        run: |
+          brew update
+          brew install just xcodegen create-dmg
+
+      - name: Cache DerivedData
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-deriveddata-${{ hashFiles('project.yml', 'PrusaStatusBar/**/*.swift', 'PrusaStatusBarTests/**/*.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-deriveddata-
+
+      - name: Cache go2rtc helper
+        uses: actions/cache@v4
+        with:
+          path: PrusaStatusBar/Resources/go2rtc
+          key: go2rtc-${{ matrix.arch }}-${{ hashFiles('scripts/fetch-go2rtc.sh') }}
+
+      - name: Resolve metadata
+        id: meta
+        run: |
+          set -euo pipefail
+          PR_NUM=${{ github.event.pull_request.number }}
+          SHORT_SHA=$(git rev-parse --short=7 HEAD)
+          VERSION=$(grep -E '^[[:space:]]*MARKETING_VERSION:' project.yml | head -n1 | sed -E 's/.*MARKETING_VERSION:[[:space:]]*"([^"]+)".*/\1/')
+          DMG_NAME="PrusaStatusBar-${VERSION}-pr${PR_NUM}-${SHORT_SHA}-${{ matrix.arch }}.dmg"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "dmg_name=${DMG_NAME}" >> "$GITHUB_OUTPUT"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "DMG_NAME=${DMG_NAME}" >> "$GITHUB_ENV"
+
+      - name: Fetch bundled go2rtc helper (${{ matrix.arch }})
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: ./scripts/fetch-go2rtc.sh
+
+      - name: Generate Xcode project
+        run: just gen
+
+      - name: Build Release .app (${{ matrix.arch }})
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project PrusaStatusBar.xcodeproj \
+            -scheme PrusaStatusBar \
+            -configuration Release \
+            -derivedDataPath build \
+            ARCHS="${{ matrix.arch }}" \
+            ONLY_ACTIVE_ARCH=NO \
+            MARKETING_VERSION="${VERSION}" \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="-" \
+            DEVELOPMENT_TEAM="" \
+            clean build
+          lipo -info "build/Build/Products/Release/PrusaStatusBar.app/Contents/MacOS/PrusaStatusBar"
+
+      - name: Package DMG (ad-hoc signed)
+        run: |
+          set -euo pipefail
+          ./scripts/make-dmg.sh \
+            "build/Build/Products/Release/PrusaStatusBar.app" \
+            "${DMG_NAME}"
+
+      - name: Compute sha256
+        run: |
+          SHA256=$(shasum -a 256 "${DMG_NAME}" | cut -d ' ' -f1)
+          echo "${SHA256}" > "${DMG_NAME}.sha256"
+          echo "sha256(${DMG_NAME})=${SHA256}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-${{ github.event.pull_request.number }}-dmg-${{ matrix.arch }}
+          path: |
+            ${{ env.DMG_NAME }}
+            ${{ env.DMG_NAME }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  comment-pr:
+    name: Comment on PR with artifact links
+    needs: build-dmg
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Post beta build comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const sha = context.sha.substring(0, 7);
+            const prNum = context.payload.pull_request.number;
+            const body = [
+              '<!-- beta-build-comment -->',
+              '## Beta build ready',
+              '',
+              `Ad-hoc signed DMGs for commit \`${sha}\` -- download from [this Actions run](${runUrl}) (Artifacts section at the bottom).`,
+              '',
+              '| Artifact | Architecture |',
+              '|---|---|',
+              `| \`pr-${prNum}-dmg-arm64\` | Apple Silicon (M1/M2/M3/M4) |`,
+              `| \`pr-${prNum}-dmg-x86_64\` | Intel |`,
+              '',
+              '**Gatekeeper bypass required** (ad-hoc signed, not notarized):',
+              '```bash',
+              'xattr -dr com.apple.quarantine /Applications/PrusaStatusBar.app',
+              '```',
+              'Or: right-click the app > Open > Open (two-step, first time only).',
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNum,
+            });
+            const existing = comments.find(c => c.body.includes('<!-- beta-build-comment -->'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNum,
+                body,
+              });
+            }
