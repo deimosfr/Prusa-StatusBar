@@ -147,12 +147,22 @@
 
         private func scheduleRetry() {
             guard let url = loadedURL else { return }
-            guard retryAttempt < retryBackoffs.count else {
-                failureExhaustedHandler?()
-                return
+            let delay: TimeInterval
+            if retryAttempt < retryBackoffs.count {
+                delay = retryBackoffs[retryAttempt]
+                retryAttempt += 1
+            } else {
+                // Fast budget exhausted. Notify the fallback handler exactly
+                // once, then switch to a slow 10s periodic retry so the tile
+                // self-heals when go2rtc eventually delivers the stream
+                // (e.g. camera with a very long keyframe interval).
+                // tearDown() cancels pendingRetry, so retries stop on close.
+                if retryAttempt == retryBackoffs.count {
+                    failureExhaustedHandler?()
+                    retryAttempt += 1
+                }
+                delay = 10.0
             }
-            let delay = retryBackoffs[retryAttempt]
-            retryAttempt += 1
             pendingRetry?.cancel()
             pendingRetry = Task { @MainActor [weak self] in
                 try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
