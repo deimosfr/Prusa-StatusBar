@@ -217,6 +217,7 @@
 "footer.preferences"                      = "偏好设置";
 "footer.quit"                             = "退出";
 "footer.update.available"                 = "有新版本可用";
+"footer.detach"                           = "分离到窗口";
 
 // Links row
 "links.prusalink.tooltip_enabled"         = "在浏览器中打开 PrusaLink";

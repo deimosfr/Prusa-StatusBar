@@ -18,12 +18,30 @@ struct CameraTile: View {
 
     private let kind: CameraTileKind = .buddy
 
+    /// Sticky readiness flag. Flips true once the player reports the first
+    /// `.readyToPlay` and stays true for the lifetime of this view so the
+    /// spinner does not flap back on during transient stalls. A new RTSP
+    /// URL resets it via the `.id(urlString)` view-identity bump.
+    @State private var isReady: Bool = false
+    /// Native video aspect (width / height) reported by the player. Nil
+    /// until the first frame is decoded. Used to size the tile to the
+    /// actual video so AVPlayerLayer does not add black bars.
+    @State private var videoAspect: CGFloat?
+
     var body: some View {
         ZStack {
             Color.black
             content
+            if showsLoadingSpinner {
+                loadingOverlay
+            }
         }
-        .modifier(CameraTileFrame(model: model, kind: kind))
+        .modifier(CameraTileFrame(
+            model: model,
+            kind: kind,
+            isReady: !showsLoadingSpinner,
+            videoAspect: videoAspect
+        ))
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
@@ -36,6 +54,26 @@ struct CameraTile: View {
             }
         }
         .id(urlString)
+    }
+
+    private var loadingOverlay: some View {
+        ProgressView()
+            .controlSize(.small)
+            .progressViewStyle(.circular)
+            .tint(.white)
+            .allowsHitTesting(false)
+    }
+
+    /// Only show the spinner while we are actively waiting for an HLS
+    /// stream. In prototype mode and in the "invalid URL" branch, the
+    /// content view already conveys state, so a spinner on top would be
+    /// noise.
+    private var showsLoadingSpinner: Bool {
+        #if PROTOTYPE_MODE
+            return false
+        #else
+            return resolveHLSURL() != nil && !isReady
+        #endif
     }
 
     @ViewBuilder
@@ -51,7 +89,14 @@ struct CameraTile: View {
             }
         #else
             if let hlsURL = resolveHLSURL() {
-                CameraPlayerView(url: hlsURL)
+                CameraPlayerView(
+                    url: hlsURL,
+                    onReady: { isReady = true },
+                    onPresentationSize: { size in
+                        guard size.height > 0 else { return }
+                        videoAspect = size.width / size.height
+                    }
+                )
             } else {
                 Text(L10n.t("error.rtsp.invalid"))
                     .font(.prusaCaption)
@@ -98,9 +143,26 @@ let cameraTilePlaceholderMinHeight: CGFloat = 180
 struct CameraTileFrame: ViewModifier {
     let model: AppModel
     let kind: CameraTileKind
+    /// When `false`, ignore any cached video height and fall back to the
+    /// loading-state placeholder. Avoids a giant black rectangle while the
+    /// player is still warming up after the cache was populated by an
+    /// earlier successful render.
+    var isReady: Bool = true
+    /// Native video aspect (width / height) reported by AVPlayerItem
+    /// once decoding starts. When set, the tile is sized to that aspect
+    /// so AVPlayerLayer's `.resizeAspect` fills exactly with no
+    /// letterbox/pillarbox bars. Falls back to cached or placeholder
+    /// height when nil.
+    var videoAspect: CGFloat?
 
     func body(content: Content) -> some View {
-        if let cached = model.cameraTileHeights[kind] {
+        if !isReady {
+            content.frame(maxWidth: .infinity, minHeight: cameraTilePlaceholderMinHeight)
+        } else if let aspect = videoAspect, aspect > 0 {
+            content
+                .frame(maxWidth: .infinity)
+                .aspectRatio(aspect, contentMode: .fit)
+        } else if let cached = model.cameraTileHeights[kind] {
             content.frame(maxWidth: .infinity, minHeight: cached, maxHeight: cached)
         } else {
             content.frame(maxWidth: .infinity, minHeight: cameraTilePlaceholderMinHeight)

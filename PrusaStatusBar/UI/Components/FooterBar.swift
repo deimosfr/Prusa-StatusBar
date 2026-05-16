@@ -1,18 +1,19 @@
 import SwiftUI
 
-/// Slim bottom row with two icon-only buttons: gear (Preferences, ⌘,) on
-/// the leading edge and power (Quit, ⌘Q) on the trailing edge. When
-/// `availableUpdate` is non-nil, a centered "New version available"
-/// button in `Color("BrandGreen")` sits between them and opens the
-/// GitHub release page on click. No surface fill or border, the chrome
-/// blends into the popover background. Refresh lives in `HeroHeader`,
-/// next to the "Updated Xs ago..." line, per
-/// `openspec/specs/menu-bar-ui/spec.md`.
+/// Slim bottom row with icon-only buttons: gear (Preferences, ⌘,) on the
+/// leading edge followed immediately by the optional detach button, then
+/// a centered "New version available" callout when an update is available,
+/// and power (Quit, ⌘Q) on the trailing edge. No surface fill or border --
+/// the chrome blends into the popover background. Refresh lives in
+/// `HeroHeader`, per `openspec/specs/menu-bar-ui/spec.md`.
 struct FooterBar: View {
     let onPreferences: () -> Void
     let onQuit: () -> Void
     var availableUpdate: GitHubRelease?
     var onOpenRelease: () -> Void = {}
+    /// When non-nil, shows a "Detach to window" button immediately after the
+    /// Preferences button. Pass `nil` inside the detached window itself.
+    var onDetach: (() -> Void)?
 
     var body: some View {
         HStack(spacing: 0) {
@@ -23,6 +24,15 @@ struct FooterBar: View {
                 action: onPreferences
             )
             .keyboardShortcut(",", modifiers: [.command])
+
+            if let onDetach {
+                FooterIconButton(
+                    symbol: "pip.enter",
+                    title: L10n.t("footer.detach"),
+                    shortcutHint: nil,
+                    action: onDetach
+                )
+            }
 
             Spacer(minLength: 0)
 
@@ -45,12 +55,19 @@ struct FooterBar: View {
 private struct FooterIconButton: View {
     let symbol: String
     let title: String
-    let shortcutHint: String
+    var shortcutHint: String?
     let action: () -> Void
 
     @State private var isHovering = false
     @Environment(\.brandAccent) private var accent
     @Environment(\.brandCustomHex) private var customHex
+
+    private var helpText: String {
+        if let shortcutHint, !shortcutHint.isEmpty {
+            return "\(title) (\(shortcutHint))"
+        }
+        return title
+    }
 
     var body: some View {
         Button(action: action) {
@@ -62,8 +79,8 @@ private struct FooterIconButton: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(isHovering ? Theme.Palette.brand(accent, customHex: customHex) : Theme.Palette.textSecondary)
-        .help("\(title) (\(shortcutHint))")
-        .accessibilityLabel(Text("\(title) (\(shortcutHint))"))
+        .help(helpText)
+        .accessibilityLabel(Text(helpText))
         .onHover { isHovering = $0 }
     }
 }

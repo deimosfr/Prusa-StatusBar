@@ -23,6 +23,10 @@ public final class MenuBarController {
     /// defers go2rtc teardown while a popup is open.
     let cameraQuickLook: CameraQuickLookCoordinator
 
+    /// Owns the detached status window that the user can open via the
+    /// "Detach" footer button. Nil until first detach.
+    let detachedWindowController: DetachedStatusWindowController
+
     /// Drives the bounded 2-cycle "printing" burst on the menu bar. Owned
     /// by the controller so it can be cancelled when the state leaves
     /// `.printing` mid-burst.
@@ -79,6 +83,21 @@ public final class MenuBarController {
             onClose: { coordinator.keepalive.popoverDidClose() }
         )
         popover.delegate = popoverDelegate
+
+        detachedWindowController = DetachedStatusWindowController(
+            onShow: { [weak model] in
+                guard let model else { return }
+                // Unconditionally assert visible so cameras mount even if the
+                // async popoverDidClose Task ran before present() returned.
+                model.popoverShowToken &+= 1
+                model.popoverVisible = true
+            },
+            onClose: { [weak model, weak coordinator] in
+                model?.popoverVisible = false
+                model?.detachedWindowVisible = false
+                coordinator?.keepalive.detachedWindowDidClose()
+            }
+        )
 
         configureButton()
         scheduleRefresh()
@@ -281,6 +300,10 @@ public final class MenuBarController {
             openPreferences()
             return
         }
+        if model.detachedWindowVisible {
+            detachedWindowController.bringToFront()
+            return
+        }
         togglePopover(relativeTo: button)
     }
 
@@ -292,6 +315,18 @@ public final class MenuBarController {
             popover.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
             popover.contentViewController?.view.window?.makeKey()
         }
+    }
+
+    /// Closes the transient popover and opens the content in a persistent
+    /// floating `NSWindow`. Registers with the keepalive BEFORE closing
+    /// the popover so the popover-close path does not tear down go2rtc.
+    func detach() {
+        cameraQuickLook.keepalive.detachedWindowDidOpen()
+        // Set detachedWindowVisible BEFORE performClose so the async
+        // handlePopoverDidClose Task sees it and skips clearing popoverVisible.
+        model.detachedWindowVisible = true
+        popover.performClose(nil)
+        detachedWindowController.present(view: makeDropdownView(onDetach: nil))
     }
 }
 
@@ -343,7 +378,12 @@ final class MenuBarPopoverDelegate: NSObject, NSPopoverDelegate {
     /// injected `onClose` after flipping the visibility flag, so tests can
     /// observe the helper-stop call.
     func handlePopoverDidClose() {
-        model.popoverVisible = false
+        // When detaching, the window is already open and takes over the
+        // "visible" contract. Clearing popoverVisible would unmount camera
+        // tiles in the detached window and could crash AVPlayer cleanup.
+        if !model.detachedWindowVisible {
+            model.popoverVisible = false
+        }
         // SwiftUI dismantling the CameraTile pauses AVPlayer, but the
         // helper subprocess keeps the upstream RTSP session warm unless
         // we explicitly stop it. Doing it here means zero camera-side

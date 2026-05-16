@@ -217,6 +217,7 @@
 "footer.preferences"                      = "Ustawienia";
 "footer.quit"                             = "Zakończ";
 "footer.update.available"                 = "Dostępna nowa wersja";
+"footer.detach"                           = "Odepnij do okna";
 
 // Links row
 "links.prusalink.tooltip_enabled"         = "Otwórz PrusaLink w przeglądarce";

@@ -15,21 +15,34 @@
     struct CameraPlayerView: NSViewRepresentable {
         let url: URL
         let onFailureExhausted: (() -> Void)?
+        let onReady: (() -> Void)?
+        let onPresentationSize: ((CGSize) -> Void)?
 
-        init(url: URL, onFailureExhausted: (() -> Void)? = nil) {
+        init(
+            url: URL,
+            onFailureExhausted: (() -> Void)? = nil,
+            onReady: (() -> Void)? = nil,
+            onPresentationSize: ((CGSize) -> Void)? = nil
+        ) {
             self.url = url
             self.onFailureExhausted = onFailureExhausted
+            self.onReady = onReady
+            self.onPresentationSize = onPresentationSize
         }
 
         func makeNSView(context _: Context) -> PlayerNSView {
             let view = PlayerNSView()
             view.failureExhaustedHandler = onFailureExhausted
+            view.readyHandler = onReady
+            view.presentationSizeHandler = onPresentationSize
             view.load(url: url)
             return view
         }
 
         func updateNSView(_ nsView: PlayerNSView, context _: Context) {
             nsView.failureExhaustedHandler = onFailureExhausted
+            nsView.readyHandler = onReady
+            nsView.presentationSizeHandler = onPresentationSize
             nsView.load(url: url)
         }
 
@@ -43,12 +56,26 @@
         private var player: AVPlayer?
         private var loadedURL: URL?
         private var statusObservation: NSKeyValueObservation?
+        private var presentationSizeObservation: NSKeyValueObservation?
+        private var lastReportedPresentationSize: CGSize = .zero
         private var retryAttempt: Int = 0
         private var pendingRetry: Task<Void, Never>?
 
         /// Invoked once the retry budget exhausts without `.readyToPlay`.
         /// Used by `GenericCameraTile` to fall back to still-image polling.
         var failureExhaustedHandler: (() -> Void)?
+
+        /// Invoked the first time the underlying `AVPlayerItem` flips to
+        /// `.readyToPlay`. Tiles use it to hide their loading spinner and
+        /// expand to the real video height. Kept sticky on the caller side
+        /// so transient stalls do not flap the spinner back on.
+        var readyHandler: (() -> Void)?
+
+        /// Invoked when the underlying `AVPlayerItem` reports a non-zero
+        /// `presentationSize`, and again if that size changes. Tiles use it
+        /// to lock their aspect ratio to the actual video so AVPlayerLayer
+        /// does not add letterbox/pillarbox bars.
+        var presentationSizeHandler: ((CGSize) -> Void)?
 
         /// go2rtc is started on demand in the same runloop tick the popover
         /// opens, but its HTTP API takes a few hundred ms to a couple of
@@ -98,17 +125,24 @@
             pendingRetry = nil
             statusObservation?.invalidate()
             statusObservation = nil
+            presentationSizeObservation?.invalidate()
+            presentationSizeObservation = nil
+            lastReportedPresentationSize = .zero
             player?.pause()
             playerLayer.player = nil
             player = nil
             loadedURL = nil
             retryAttempt = 0
             failureExhaustedHandler = nil
+            readyHandler = nil
+            presentationSizeHandler = nil
         }
 
         private func installPlayer(url: URL) {
             statusObservation?.invalidate()
             statusObservation = nil
+            presentationSizeObservation?.invalidate()
+            presentationSizeObservation = nil
             let item = AVPlayerItem(url: url)
             let player = AVPlayer(playerItem: item)
             player.isMuted = true
@@ -127,7 +161,22 @@
                 }
             }
 
+            let opts: NSKeyValueObservingOptions = [.new, .initial]
+            presentationSizeObservation = item.observe(\.presentationSize, options: opts) { [weak self] item, _ in
+                let size = item.presentationSize
+                Task { @MainActor in
+                    self?.handle(presentationSize: size)
+                }
+            }
+
             player.play()
+        }
+
+        private func handle(presentationSize: CGSize) {
+            guard presentationSize.width > 0, presentationSize.height > 0 else { return }
+            if presentationSize == lastReportedPresentationSize { return }
+            lastReportedPresentationSize = presentationSize
+            presentationSizeHandler?(presentationSize)
         }
 
         private func handle(itemStatus: AVPlayerItem.Status, errorMessage _: String?) {
@@ -136,6 +185,7 @@
                 retryAttempt = 0
                 pendingRetry?.cancel()
                 pendingRetry = nil
+                readyHandler?()
             case .failed:
                 scheduleRetry()
             case .unknown:
