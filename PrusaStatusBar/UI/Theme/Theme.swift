@@ -74,6 +74,7 @@ public enum Theme {
 
         public static let statePrintingOrange = Color("BrandOrange")
         public static let statePrintingOrangeMuted = Color("BrandOrangeMuted")
+        public static let stateCoolingBlue = Color.blue
     }
 
     public enum Spacing {
