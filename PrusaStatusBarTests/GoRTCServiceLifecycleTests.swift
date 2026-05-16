@@ -24,11 +24,15 @@ struct GoRTCServiceLifecycleTests {
 
         service.stop()
 
-        // PID file is removed on stop.
-        #expect(FileManager.default.fileExists(atPath: paths.pidFileURL.path) == false)
-        // No pid leak in the C-level slot used by the atexit fallback.
-        // (We can only observe indirectly via stop being idempotent.)
+        // PID file is intentionally left in place after stopping a live
+        // process so killOrphanIfNeeded() can reap the (possibly still-
+        // terminating) process on the next applyStreams call.
+        #expect(FileManager.default.fileExists(atPath: paths.pidFileURL.path) == true)
+
+        // A second stop() (nil-process path) removes the stale file as a
+        // defensive cleanup and is idempotent.
         service.stop()
+        #expect(FileManager.default.fileExists(atPath: paths.pidFileURL.path) == false)
     }
 
     @Test

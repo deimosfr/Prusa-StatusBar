@@ -201,6 +201,10 @@ final class GoRTCService {
         // spinning, so callers (popoverDidClose) return immediately. Probe
         // liveness via `kill(pid, 0)` so we do not need to capture the
         // non-Sendable `Process`.
+        // The PID file is intentionally left in place here so that
+        // killOrphanIfNeeded() can find and kill this process on the next
+        // applyStreams call (fast reopen race). reapStaleHelper() handles
+        // cleanup on the next app launch if needed.
         let pid = proc.processIdentifier
         let escalationLogger = logger
         Task.detached {
@@ -215,7 +219,6 @@ final class GoRTCService {
                 _ = Darwin.kill(pid, SIGKILL)
             }
         }
-        removePIDFile()
     }
 
     /// Called by `AppDelegate.applicationDidFinishLaunching` before any UI
@@ -398,12 +401,23 @@ extension GoRTCService {
         guard
             let raw = try? String(contentsOf: dependencies.pidFileURL, encoding: .utf8),
             let pid = pid_t(raw.trimmingCharacters(in: .whitespacesAndNewlines)),
-            pid != process?.processIdentifier,
-            isProcessAlive(pid),
-            pidLooksLikeHelper(pid)
+            pid != process?.processIdentifier
         else { return }
+        guard isProcessAlive(pid) else {
+            removePIDFile()
+            return
+        }
+        guard pidLooksLikeHelper(pid) else {
+            removePIDFile()
+            return
+        }
         logger.warning("killing orphaned go2rtc pid=\(pid, privacy: .public)")
         Darwin.kill(pid, SIGKILL)
+        // Wait for the process to die so port 1984 is free before start().
+        let deadline = Date().addingTimeInterval(0.3)
+        while isProcessAlive(pid), Date() < deadline {
+            Thread.sleep(forTimeInterval: 0.02)
+        }
         removePIDFile()
     }
 
