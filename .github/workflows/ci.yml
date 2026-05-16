@@ -24,6 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify project.yml MARKETING_VERSION matches committed pbxproj
+        run: ./scripts/check-version-sync.sh
+
       - name: Read pinned Xcode version
         id: xcode-pin
         run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"

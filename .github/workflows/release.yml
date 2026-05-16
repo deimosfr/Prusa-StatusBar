@@ -41,6 +41,9 @@ jobs:
           fi
           echo "Version OK: ${TAG_VERSION}"
 
+      - name: Verify committed pbxproj is in sync with project.yml
+        run: ./scripts/check-version-sync.sh
+
       - name: Read pinned Xcode version
         id: xcode-pin
         run: echo "version=$(cat .xcode-version)" >> "$GITHUB_OUTPUT"

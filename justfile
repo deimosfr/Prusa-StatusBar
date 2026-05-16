@@ -17,6 +17,11 @@ _default:
 doctor:
     @./scripts/check-xcode-version.sh
 
+# Verify project.yml MARKETING_VERSION matches generated pbxproj. Run after
+# bumping the version, or to diagnose stale builds reporting old version.
+check-version:
+    @./scripts/check-version-sync.sh
+
 # Generate Xcode project from project.yml (idempotent)
 gen: doctor fetch-go2rtc
     @command -v xcodegen >/dev/null || { echo "xcodegen not found. Install: brew install xcodegen"; exit 1; }
