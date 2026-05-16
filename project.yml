@@ -17,7 +17,7 @@ settings:
   base:
     SWIFT_VERSION: "5.10"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
-    MARKETING_VERSION: "1.1.0"
+    MARKETING_VERSION: "1.1.1"
     # Default identity is ad-hoc ("-") so any contributor can build via Xcode
     # UI without provisioning a cert. The justfile recipes override
     # CODE_SIGN_IDENTITY / DEVELOPMENT_TEAM on the xcodebuild CLI: when an
