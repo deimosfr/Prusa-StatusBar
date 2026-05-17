@@ -166,7 +166,7 @@
 "common.help.tooltip"                     = "更多信息";
 "common.help.learn_more"                  = "了解更多";
 "printer.help.url.body"                   = "请输入打印机的 http://<ip> 或 http://<hostname>（例如 http://192.168.1.42 或 http://prusa-mk3.local）。先在浏览器中打开该地址，确认 PrusaLink 能够加载。";
-"printer.help.api_key.body"               = "可在 Prusa Connect 中找到此打印机的 API 密钥。";
+"printer.help.api_key.body"               = "可在 Prusa Connect 中找到此打印机的 PrusaLink API 密钥。";
 "printer.help.camera.body"                = "请输入 Buddy Camera 的 IP 或主机名（例如 192.168.1.42 或 buddy-cam.local）。\n\n重要：Buddy Camera 默认关闭 RTSP。请前往 PrusaConnect 的 Camera > Camera control 启用，否则相机方块将无法连接。";
 "printer.help.uuid.body"                  = "可以在 Prusa Connect 中此打印机的设置里找到该 UUID。可选：如果不使用 Prusa Connect，可留空。";
 "printer.test.connected"                  = "已连接";
