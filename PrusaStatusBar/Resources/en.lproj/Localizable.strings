@@ -84,7 +84,7 @@
 "common.help.tooltip"                     = "More info";
 "common.help.learn_more"                  = "Learn more";
 "printer.help.url.body"                   = "Enter http://<ip> or http://<hostname> of your printer (for example http://192.168.1.42 or http://prusa-mk3.local). Open it in your web browser first to confirm PrusaLink loads.";
-"printer.help.api_key.body"               = "Find the API key on Prusa Connect for this printer.";
+"printer.help.api_key.body"               = "Find the PrusaLink API key on Prusa Connect for this printer.";
 "printer.help.camera.body"                = "Enter the IP or hostname of the Buddy Camera (for example 192.168.1.42 or buddy-cam.local).\n\nImportant: RTSP is OFF by default on the Buddy Camera. Enable it in PrusaConnect under Camera > Camera control, otherwise the tile cannot connect.";
 "printer.help.uuid.body"                  = "Find this UUID in the printer's settings on Prusa Connect. Optional: leave blank if you do not use Prusa Connect.";
 "printer.test.connected"                  = "Connected";
