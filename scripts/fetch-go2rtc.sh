@@ -11,7 +11,7 @@ VERSION="v1.9.14"
 ARM64_ASSET="go2rtc_mac_arm64.zip"
 ARM64_SHA="6e5039d56d652d2d325cb3ce3f7cc20248a34db42fe8abf9bb13488494ac023e"
 AMD64_ASSET="go2rtc_mac_amd64.zip"
-AMD64_SHA=""
+AMD64_SHA="9beb1d730447729337dbe40218126cb41392aad94b427ec1099837c85fe1a4aa"
 
 # Resolve the destination relative to the repo root.
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -72,6 +72,21 @@ case "$ARCH" in
     x86_64) ASSET="$AMD64_ASSET"; SHA="$AMD64_SHA" ;;
     *) echo "Unsupported arch: $ARCH" >&2; exit 1 ;;
 esac
+
+# Arch-aware skip: if a binary is already on disk but for the wrong arch
+# (e.g. a prior `just gen` ran without ARCH, or a stale cache restored the
+# native-arch helper), drop it so the SHA check below re-downloads.
+if [[ -f "$DEST" ]]; then
+    have_arch="$(lipo -archs "$DEST" 2>/dev/null || file -b "$DEST")"
+    case "$ARCH" in
+        arm64)  expect="arm64" ;;
+        x86_64) expect="x86_64" ;;
+    esac
+    if [[ "$have_arch" != *"$expect"* ]]; then
+        echo "go2rtc on disk is '$have_arch', want $expect; re-downloading"
+        rm -f "$DEST"
+    fi
+fi
 
 if [[ -f "$DEST" && -n "$SHA" ]]; then
     actual="$(shasum -a 256 "$DEST" | awk '{print $1}')"

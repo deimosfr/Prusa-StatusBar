@@ -146,6 +146,9 @@ jobs:
           # Sanity check: confirm the main binary is single-arch for this matrix slice.
           lipo -info "build/Build/Products/Release/PrusaStatusBar.app/Contents/MacOS/PrusaStatusBar"
 
+      - name: Verify bundled go2rtc arch matches ${{ matrix.arch }}
+        run: ./scripts/verify-go2rtc-arch.sh "build/Build/Products/Release/PrusaStatusBar.app" "${{ matrix.arch }}"
+
       - name: Package, sign, notarize, staple DMG
         env:
           MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}

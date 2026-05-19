@@ -23,7 +23,7 @@ check-version:
     @./scripts/check-version-sync.sh
 
 # Generate Xcode project from project.yml (idempotent)
-gen: doctor fetch-go2rtc
+gen: doctor
     @command -v xcodegen >/dev/null || { echo "xcodegen not found. Install: brew install xcodegen"; exit 1; }
     {{rtk}} xcodegen generate
 
@@ -52,7 +52,7 @@ format: swift-tools-check
 check: lint format-check
 
 # Run the test suite
-test: gen
+test: gen fetch-go2rtc
     set -o pipefail; {{rtk}} xcodebuild test \
         -project {{project}} \
         -scheme {{scheme}} \
@@ -65,7 +65,7 @@ test: gen
             CODE_SIGNING_ALLOWED=NO
 
 # Debug build
-build: gen
+build: gen fetch-go2rtc
     if [ -f apple_sign.env ]; then set -a; . ./apple_sign.env; set +a; fi; \
     SIGN_ID="${MACOS_SIGN_IDENTITY:--}"; \
     TEAM_ID="${MACOS_TEAM_ID:-}"; \
@@ -79,7 +79,7 @@ build: gen
         DEVELOPMENT_TEAM="$TEAM_ID"
 
 # Prototype build (no real network calls; uses in-memory stub client)
-build-prototype: gen
+build-prototype: gen fetch-go2rtc
     if [ -f apple_sign.env ]; then set -a; . ./apple_sign.env; set +a; fi; \
     SIGN_ID="${MACOS_SIGN_IDENTITY:--}"; \
     TEAM_ID="${MACOS_TEAM_ID:-}"; \
@@ -93,7 +93,7 @@ build-prototype: gen
         DEVELOPMENT_TEAM="$TEAM_ID"
 
 # Release build (Developer ID from apple_sign.env if present, else ad-hoc)
-build-release: gen
+build-release: gen fetch-go2rtc
     if [ -f apple_sign.env ]; then set -a; . ./apple_sign.env; set +a; fi; \
     SIGN_ID="${MACOS_SIGN_IDENTITY:--}"; \
     TEAM_ID="${MACOS_TEAM_ID:-}"; \
