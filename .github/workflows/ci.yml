@@ -144,6 +144,9 @@ jobs:
             clean build
           lipo -info "build/Build/Products/Release/PrusaStatusBar.app/Contents/MacOS/PrusaStatusBar"
 
+      - name: Verify bundled go2rtc arch matches ${{ matrix.arch }}
+        run: ./scripts/verify-go2rtc-arch.sh "build/Build/Products/Release/PrusaStatusBar.app" "${{ matrix.arch }}"
+
       - name: Package DMG (ad-hoc signed)
         run: |
           set -euo pipefail
