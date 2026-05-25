@@ -4,8 +4,14 @@ import SwiftUI
 extension MenuBarController {
     /// Builds a fully wired `DropdownView`. Pass `onDetach` to show the
     /// "Detach" footer button (popover context); pass `nil` to hide it
-    /// (detached window context, where nesting would be circular).
-    func makeDropdownView(onDetach: (() -> Void)? = nil) -> DropdownView {
+    /// (detached window context, where nesting would be circular). Pass
+    /// `onContentResize` for the detached window so it re-fits when the
+    /// content height changes (issue #19); the popover leaves the no-op
+    /// default since it auto-sizes via `NSHostingController.sizingOptions`.
+    func makeDropdownView(
+        onDetach: (() -> Void)? = nil,
+        onContentResize: @escaping @MainActor () -> Void = {}
+    ) -> DropdownView {
         var view = DropdownView(
             model: model,
             onRefresh: { [weak self] in self?.coordinator.refreshNow() },
@@ -27,6 +33,7 @@ extension MenuBarController {
             self?.cameraQuickLook.open(kind: kind, source: source)
         }
         view.onDetach = onDetach
+        view.onContentResize = onContentResize
         return view
     }
 

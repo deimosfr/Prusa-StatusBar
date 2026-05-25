@@ -26,6 +26,14 @@ extension GoRTCService {
     ///
     /// The helper lifecycle (start, stop) is the caller's responsibility;
     /// this method just uses whichever helper happens to be running.
+    ///
+    /// Buddy callers SHOULD go through `snapshotBuddyJPEG(rtspURL:timeout:)`
+    /// instead, which canonicalises the source through `withTCPTransport`
+    /// so the snapshot request registers an identical `streams:` entry to
+    /// the one the live `CameraTile` registers via `hlsURL(forRTSP:)`. If
+    /// the strings diverge by `#transport=tcp`, `applyStreams` flags
+    /// `needsRestart` and tears down the running helper mid-stream, which
+    /// freezes the dropdown tile until the user closes and reopens it.
     func snapshotJPEG(
         streamName: String,
         source: String,
@@ -57,6 +65,22 @@ extension GoRTCService {
             throw SnapshotError.invalidURL
         }
         return try await pollMP4Frame(url: url, deadline: deadline, started: started)
+    }
+
+    /// Buddy-slot wrapper that pairs the canonical Buddy stream-name
+    /// constant with the `withTCPTransport` transform the live tile uses.
+    /// Keeps the "Buddy slot is registered with TCP transport" invariant
+    /// owned by `GoRTCService` instead of each caller, so a snapshot
+    /// during an active live stream is a no-op for `applyStreams`.
+    func snapshotBuddyJPEG(
+        rtspURL: String,
+        timeout: TimeInterval = 3.0
+    ) async throws -> Data {
+        try await snapshotJPEG(
+            streamName: Self.snapshotBuddyStreamName,
+            source: withTCPTransport(rtspURL),
+            timeout: timeout
+        )
     }
 
     /// Retries the MP4 download + decode until success or deadline. On a

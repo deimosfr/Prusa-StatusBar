@@ -28,9 +28,14 @@ struct BuddyCameraSnapshotProvider: CameraSnapshotProvider {
             "Buddy start; running=\(wasRunning, privacy: .public) t=\(timeout, privacy: .public)s"
         )
         do {
-            let data = try await GoRTCService.shared.snapshotJPEG(
-                streamName: GoRTCService.snapshotBuddyStreamName,
-                source: rtspURL,
+            // Route through the Buddy-specific helper so the snapshot
+            // request registers the same `streams:` source string
+            // (with `#transport=tcp`) the live CameraTile uses. Passing
+            // the raw RTSP URL here used to flip `applyStreams` into a
+            // restart, killing the live AVPlayer mid-print until the
+            // user closed and reopened the dropdown.
+            let data = try await GoRTCService.shared.snapshotBuddyJPEG(
+                rtspURL: rtspURL,
                 timeout: timeout
             )
             Log.cameraSnapshot.info("Buddy provider succeeded; bytes=\(data.count, privacy: .public)")

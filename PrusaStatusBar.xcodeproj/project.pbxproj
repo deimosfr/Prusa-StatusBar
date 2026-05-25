@@ -43,6 +43,7 @@
 		35975DB57C0F2315DB960E6F /* ProgressBarStylePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F490F5BC72EDF7C8E42D82 /* ProgressBarStylePreview.swift */; };
 		35FE62554F2D7E0B5C141A87 /* JobBackdropRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B037059349E8C2151A0F30 /* JobBackdropRenderer.swift */; };
 		360539A7C9FD2F0CD8C9C239 /* FieldValidationCaption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98BC8C8787FF5C5A879E043 /* FieldValidationCaption.swift */; };
+		374C41BFE40E321D6F783422 /* PollingCoordinatorJobIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5CD1FFD05A1DF0B8665CF8 /* PollingCoordinatorJobIdentityTests.swift */; };
 		37B645A9E57F74D3865BE7E5 /* CustomActionsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD03C88656C9307469ABB62 /* CustomActionsRow.swift */; };
 		385D0171E159EFFFDFFAF0BE /* HeroHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F5D13FCC5216930FC64DE7 /* HeroHeader.swift */; };
 		394CD875B62CAC03465FC1CE /* PrusaStatusBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B0400EE85F3DABF3548727 /* PrusaStatusBarApp.swift */; };
@@ -121,6 +122,7 @@
 		912F3B777DCBB3348FFD2FEA /* SemanticVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA64459A313499CD472179F /* SemanticVersion.swift */; };
 		94875CF3FA408DE4BB66971D /* CameraSnapshotProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92BE5989CA4A26FD7C81AA6 /* CameraSnapshotProvider.swift */; };
 		94BC313C832769CE6B61BC6A /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4526FE5ADC7EA3CB56022219 /* UserPreferences.swift */; };
+		9581662EA14D2345643BE9EB /* DetachedStatusWindowControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9916905DD6C79C30EC6AB9 /* DetachedStatusWindowControllerTests.swift */; };
 		95FCD2DB524D4A425CB0E712 /* CustomActionConfirmDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7CF1047D4B69AB79344E6C /* CustomActionConfirmDialog.swift */; };
 		9892F61C7B50D5C7750441C4 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796B7A9C12A1BD276619A187 /* PreferencesWindow.swift */; };
 		99B85BE321C085470AAA8E3A /* UserPreferences+CustomActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DAA7E6CB94AE41C7F7F1F4 /* UserPreferences+CustomActions.swift */; };
@@ -144,6 +146,7 @@
 		B09EDD67EB0806675A154C0F /* FooterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE76CF22C0FD564C030BFF6 /* FooterBar.swift */; };
 		B5C1FFE030E3C8981CC923A2 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47070FEC5E436443EFBE7A65 /* NotificationService.swift */; };
 		B6DC0419AD06204E8E265296 /* PrinterNotificationHintSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1507E96DA6DB70A88B90A132 /* PrinterNotificationHintSection.swift */; };
+		B7F688E901D926D61B152ECF /* DropdownContentHeightReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AF981EAF5C32CDE22452E2 /* DropdownContentHeightReporter.swift */; };
 		B88A57CF12CDB121D6384DDA /* PrinterTab+Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56E480080DDB6D31572A308 /* PrinterTab+Keychain.swift */; };
 		B94E1A2CE999DAD838DDED0F /* GenericCameraSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6C900410D28FA13A512271 /* GenericCameraSection.swift */; };
 		BADF66BA72FB74221270BD03 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C145F93387C418D7650EC7 /* UpdateChecker.swift */; };
@@ -222,9 +225,12 @@
 		15B02F4751AAAF8DC15616DD /* TempCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempCard.swift; sourceTree = "<group>"; };
 		16026281D1D3478F07405152 /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		18244F0F7CC4EBE6D3B11A1E /* UserPreferencesProgressBarStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesProgressBarStyleTests.swift; sourceTree = "<group>"; };
+		19AF981EAF5C32CDE22452E2 /* DropdownContentHeightReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownContentHeightReporter.swift; sourceTree = "<group>"; };
 		1AA64459A313499CD472179F /* SemanticVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticVersion.swift; sourceTree = "<group>"; };
 		1AEED496B206A04CA4624F10 /* SpoolThumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolThumb.swift; sourceTree = "<group>"; };
+		1B5CD1FFD05A1DF0B8665CF8 /* PollingCoordinatorJobIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollingCoordinatorJobIdentityTests.swift; sourceTree = "<group>"; };
 		1BB8DDF00E85C7426610E690 /* SemanticVersionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticVersionTests.swift; sourceTree = "<group>"; };
+		1C9916905DD6C79C30EC6AB9 /* DetachedStatusWindowControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetachedStatusWindowControllerTests.swift; sourceTree = "<group>"; };
 		1DF85DFCC98EB910E6288132 /* StubNotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubNotificationServiceTests.swift; sourceTree = "<group>"; };
 		216B96195B97D19C9A2ADFA4 /* RunningInstancesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningInstancesProvider.swift; sourceTree = "<group>"; };
 		246830651D2DF55BEFDE45B3 /* GoRTCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoRTCService.swift; sourceTree = "<group>"; };
@@ -411,6 +417,7 @@
 				E47401C33A9E6885BFF765E0 /* CustomActionSlotCard.swift */,
 				DCD03C88656C9307469ABB62 /* CustomActionsRow.swift */,
 				5F74880505D4E63902C3FBF7 /* DisconnectedIconStylePicker.swift */,
+				19AF981EAF5C32CDE22452E2 /* DropdownContentHeightReporter.swift */,
 				E98BC8C8787FF5C5A879E043 /* FieldValidationCaption.swift */,
 				DFE76CF22C0FD564C030BFF6 /* FooterBar.swift */,
 				EC7D035DB58E2A9E6B28BC72 /* FormCaptionRow.swift */,
@@ -593,6 +600,7 @@
 				9FBF70FB14FE78E30605FEC2 /* CustomActionRunnerTests.swift */,
 				9BFF41CEF90DA97FE483BB77 /* CustomActionSecretsStoreTests.swift */,
 				9A968828F6B57CE1CC1BD3EC /* CustomActionTests.swift */,
+				1C9916905DD6C79C30EC6AB9 /* DetachedStatusWindowControllerTests.swift */,
 				A132036C7DED65BA4492AA41 /* DropdownJobCardVisibilityTests.swift */,
 				D7FCE09AA55A9877E8DDA102 /* DropdownPrusaLinkButtonGateTests.swift */,
 				679B3A8A09BE04C93111B7D2 /* GenericCameraConfigTests.swift */,
@@ -606,6 +614,7 @@
 				0DF48E150DEE3575323D5D3F /* MJPEGFrameGrabberTests.swift */,
 				30E3FC2A623E22E09E74C73A /* PollingCoordinatorBurstTokenTests.swift */,
 				01E6CDDD0D76BB029B8825B7 /* PollingCoordinatorIntervalTests.swift */,
+				1B5CD1FFD05A1DF0B8665CF8 /* PollingCoordinatorJobIdentityTests.swift */,
 				40820872A7703EB26D27F4E6 /* PopoverLifecycleTests.swift */,
 				D192C2F790D169C82B974C4B /* PrinterBaseURLValidatorTests.swift */,
 				5587386878C425BB00FB8A88 /* PrinterStateTests.swift */,
@@ -816,6 +825,7 @@
 				2EA6241879AC089F2DEF88AC /* CustomActionRunnerTests.swift in Sources */,
 				EEB612D3A53B1D92F7375A96 /* CustomActionSecretsStoreTests.swift in Sources */,
 				90608A85E07F0484F3E8EFA8 /* CustomActionTests.swift in Sources */,
+				9581662EA14D2345643BE9EB /* DetachedStatusWindowControllerTests.swift in Sources */,
 				3C735DAC8253D833E1F2B341 /* DropdownJobCardVisibilityTests.swift in Sources */,
 				F2A1D32767A6DCA8A1133FB1 /* DropdownPrusaLinkButtonGateTests.swift in Sources */,
 				6D4583262C27ED5F3A5A51CF /* GenericCameraConfigTests.swift in Sources */,
@@ -829,6 +839,7 @@
 				1B95F420FA666EFDD43074C4 /* MJPEGFrameGrabberTests.swift in Sources */,
 				4B8C3CDD6FD50821F23176BF /* PollingCoordinatorBurstTokenTests.swift in Sources */,
 				8BD0D270D5E8F2A37C5C3C08 /* PollingCoordinatorIntervalTests.swift in Sources */,
+				374C41BFE40E321D6F783422 /* PollingCoordinatorJobIdentityTests.swift in Sources */,
 				34D25079A797278C3DFD579A /* PopoverLifecycleTests.swift in Sources */,
 				D1A1E47B0D8ADA00CD560AFC /* PrinterBaseURLValidatorTests.swift in Sources */,
 				E534F68B76F0FC7AF72C2F9C /* PrinterStateTests.swift in Sources */,
@@ -893,6 +904,7 @@
 				5BF470FA703D65D9BC9DAD5D /* CustomActionsSection.swift in Sources */,
 				9FC2324164CC9C9EE1FE1291 /* DetachedStatusWindowController.swift in Sources */,
 				A572439161C5663B19496F00 /* DisconnectedIconStylePicker.swift in Sources */,
+				B7F688E901D926D61B152ECF /* DropdownContentHeightReporter.swift in Sources */,
 				86B855EEA0F810E156D4B2B6 /* DropdownView+CustomActions.swift in Sources */,
 				ADB0C7E9F133CCDF2809B11C /* DropdownView.swift in Sources */,
 				360539A7C9FD2F0CD8C9C239 /* FieldValidationCaption.swift in Sources */,

@@ -75,6 +75,38 @@ struct GoRTCServiceLifecycleTests {
         #expect(isProcessAlive(pid) == true)
     }
 
+    /// Regression for the issue #20 follow-up freeze: a Buddy notification
+    /// snapshot captured while the live dropdown tile is streaming must
+    /// not restart the go2rtc helper. The bug was that the live tile
+    /// registered `rtsp://...#transport=tcp` while the snapshot path
+    /// registered the raw `rtsp://...`, so `applyStreams` saw two distinct
+    /// `streams:` dicts and tore the helper down at every print state
+    /// transition. AVPlayer's HLS endpoint URL did not change, so SwiftUI
+    /// never re-attached, and the tile froze on the last frame until the
+    /// user closed and reopened the dropdown.
+    @Test
+    func buddySnapshotDoesNotRestartHelperWhenLiveTileIsRunning() async throws {
+        let (service, paths) = makeService(matchSleep: true)
+        defer { try? FileManager.default.removeItem(at: paths.tmpDir) }
+
+        // Live tile spins up the helper with `#transport=tcp` appended.
+        let hlsURL = service.hlsURL(forRTSP: "rtsp://example/test")
+        #expect(hlsURL != nil)
+        let livePID = try readPID(at: paths.pidFileURL)
+
+        // Snapshot path now routes through the canonical Buddy entry. With
+        // an unreachable helper port the call times out at the API-readiness
+        // probe, which is exactly the assertion surface we want: the failure
+        // mode does NOT include restarting the helper subprocess.
+        _ = try? await service.snapshotBuddyJPEG(
+            rtspURL: "rtsp://example/test",
+            timeout: 0.2
+        )
+
+        let afterPID = try readPID(at: paths.pidFileURL)
+        #expect(afterPID == livePID, "snapshot must not restart helper while live tile is mounted")
+    }
+
     @Test
     func reapStaleHelperWithNoPIDFileIsNoOp() {
         let (service, paths) = makeService(matchSleep: true)
@@ -149,5 +181,14 @@ struct GoRTCServiceLifecycleTests {
     private func isProcessAlive(_ pid: pid_t) -> Bool {
         if Darwin.kill(pid, 0) == 0 { return true }
         return errno != ESRCH
+    }
+
+    private func readPID(at url: URL) throws -> pid_t {
+        let raw = try String(contentsOf: url, encoding: .utf8)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let pid = pid_t(raw) else {
+            throw POSIXError(.ESRCH)
+        }
+        return pid
     }
 }

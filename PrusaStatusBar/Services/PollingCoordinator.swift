@@ -170,7 +170,7 @@ public final class PollingCoordinator {
 
     private func applyStatus(_ status: PrinterStatus) async {
         let previous = previousState
-        let prevJobName = model.lastJob?.displayName
+        let prevJob = model.lastJob
 
         // Drive job/thumbnail refresh while a job is active, and on the
         // finished state so the popover can show the just-completed file when
@@ -178,9 +178,9 @@ public final class PollingCoordinator {
         // print finishes, so on `.finished` we preserve any cached job rather
         // than clearing it on a nil response.
         if status.state.isActive {
-            await refreshJobIfNeeded(previousFileName: prevJobName, clearWhenAbsent: true)
+            await refreshJobIfNeeded(previous: prevJob, clearWhenAbsent: true)
         } else if status.state == .finished {
-            await refreshJobIfNeeded(previousFileName: prevJobName, clearWhenAbsent: false)
+            await refreshJobIfNeeded(previous: prevJob, clearWhenAbsent: false)
         } else if status.state == .idle || status.state == .ready {
             // Drop the cached job when we're back to idle so the next active
             // print refetches the file detail / thumbnail.
@@ -198,7 +198,7 @@ public final class PollingCoordinator {
         previousState = status.state
     }
 
-    private func refreshJobIfNeeded(previousFileName: String?, clearWhenAbsent: Bool) async {
+    private func refreshJobIfNeeded(previous: PrintJob?, clearWhenAbsent: Bool) async {
         let result = await client.fetchJob()
         switch result {
         case let .success(job):
@@ -209,20 +209,46 @@ public final class PollingCoordinator {
                 }
                 return
             }
-            // Only download the thumbnail when the file changed.
-            let isSameFile = job.displayName == previousFileName
+            // Refetch the thumbnail only when the job identity changed.
+            // Identity is the upstream PrusaLink `id` when both sides have
+            // one (so a reprint of the same file gets a fresh thumbnail even
+            // though the displayName matches -- issue #20); otherwise falls
+            // back to the displayName.
+            let isSame = Self.isSameJob(lhs: previous, rhs: job)
             model.lastJob = job
-            if !isSameFile {
+            if !isSame {
                 model.lastThumbnail = nil
                 if let path = job.thumbnailPath {
                     let thumbResult = await client.fetchThumbnail(at: path)
-                    if case let .success(data) = thumbResult {
+                    // The await yields the main actor; a faster poll cycle can
+                    // have installed a new lastJob while we were fetching.
+                    // Drop the bytes when that happens so the stale fetch does
+                    // not overwrite the newer thumbnail.
+                    let stillCurrent = Self.isSameJob(lhs: model.lastJob, rhs: job)
+                    if case let .success(data) = thumbResult, stillCurrent {
                         model.lastThumbnail = data
                     }
                 }
             }
         case let .failure(error):
             Log.polling.notice("Job fetch failed (non-fatal): \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    /// Whether two `PrintJob` values describe the same print. Prefers the
+    /// upstream PrusaLink `id` when both sides have one; otherwise falls back
+    /// to `displayName` for firmware that does not surface an id.
+    /// `nonisolated static` so the identity rule is unit-testable without
+    /// standing up a coordinator.
+    nonisolated static func isSameJob(lhs: PrintJob?, rhs: PrintJob?) -> Bool {
+        switch (lhs, rhs) {
+        case (nil, nil):
+            return true
+        case let (l?, r?):
+            if let lid = l.id, let rid = r.id { return lid == rid }
+            return l.displayName == r.displayName
+        default:
+            return false
         }
     }
 

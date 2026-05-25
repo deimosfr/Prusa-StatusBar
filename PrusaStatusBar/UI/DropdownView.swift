@@ -38,6 +38,15 @@ struct DropdownView: View {
     /// circular detach).
     var onDetach: (() -> Void)?
 
+    /// Invoked when the rendered content height changes. `MenuBarController`
+    /// wires this only for the detached window, where it drives
+    /// `DetachedStatusWindowController.refit()` so the floating window
+    /// tracks content-height changes instead of freezing at its open-time
+    /// height (issue #19). The no-op default keeps the popover path -- which
+    /// already auto-sizes via `NSHostingController.sizingOptions` -- and
+    /// SwiftUI previews free of window plumbing.
+    var onContentResize: @MainActor () -> Void = {}
+
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State var customActionFeedback: [CustomActionSlot: CustomActionFeedback] = [:]
 
@@ -98,6 +107,10 @@ struct DropdownView: View {
             alignment: .topLeading
         )
         .background(.regularMaterial)
+        // Bubble the rendered content height up so the detached window can
+        // re-fit when a print transition changes it (issue #19). No-op for
+        // the popover, which auto-sizes via `sizingOptions`.
+        .reportingContentHeight(onChange: onContentResize)
         .environment(\.brandAccent, model.accent)
         .environment(\.brandCustomHex, model.customAccentHex)
         .animation(

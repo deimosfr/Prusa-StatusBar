@@ -326,7 +326,12 @@ public final class MenuBarController {
         // handlePopoverDidClose Task sees it and skips clearing popoverVisible.
         model.detachedWindowVisible = true
         popover.performClose(nil)
-        detachedWindowController.present(view: makeDropdownView(onDetach: nil))
+        detachedWindowController.present(
+            view: makeDropdownView(
+                onDetach: nil,
+                onContentResize: { [weak self] in self?.detachedWindowController.refit() }
+            )
+        )
     }
 }
 
