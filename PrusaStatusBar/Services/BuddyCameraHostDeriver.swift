@@ -37,6 +37,9 @@ public enum BuddyCameraHostDeriver {
         guard let url = URL(string: "rtsp://\(trimmed):554/live/") else {
             return .failure(.containsSchemeOrPort)
         }
+        guard URLHostValidator.isValid(host: trimmed) else {
+            return .failure(.containsSchemeOrPort)
+        }
         return .success(url)
     }
 

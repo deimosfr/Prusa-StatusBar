@@ -7,8 +7,8 @@ import SwiftUI
 struct GenericCameraSourcesCard: View {
     @Binding var streamURL: String
     @Binding var stillImageURL: String
-    let streamURLError: String?
-    let stillURLError: String?
+    let streamValidation: FieldValidationState
+    let stillValidation: FieldValidationState
     let isStreamTesting: Bool
     let isStillTesting: Bool
     let streamTestResult: PrinterTestResult?
@@ -23,9 +23,9 @@ struct GenericCameraSourcesCard: View {
                 systemImage: "antenna.radiowaves.left.and.right",
                 placeholder: "rtsp://192.168.1.50:554/stream1",
                 text: $streamURL,
-                error: streamURLError,
+                validation: streamValidation,
                 isTesting: isStreamTesting,
-                isTestDisabled: streamURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                isTestDisabled: !streamValidation.isValid,
                 testResult: streamTestResult,
                 onTest: onTestStream
             )
@@ -34,9 +34,9 @@ struct GenericCameraSourcesCard: View {
                 systemImage: "photo",
                 placeholder: "https://cam.local/snapshot.jpg",
                 text: $stillImageURL,
-                error: stillURLError,
+                validation: stillValidation,
                 isTesting: isStillTesting,
-                isTestDisabled: stillImageURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                isTestDisabled: !stillValidation.isValid,
                 testResult: stillTestResult,
                 onTest: onTestStill
             )
@@ -165,7 +165,7 @@ struct GenericCameraURLRow: View {
     let systemImage: String
     let placeholder: String
     @Binding var text: String
-    let error: String?
+    let validation: FieldValidationState
     let isTesting: Bool
     let isTestDisabled: Bool
     let testResult: PrinterTestResult?
@@ -201,11 +201,10 @@ struct GenericCameraURLRow: View {
                     .help(L10n.t("printer.url.test_help"))
                 }
             }
-            if let error {
-                Text(error)
-                    .font(.prusaCaption)
-                    .foregroundStyle(Theme.Palette.stateRed)
-                    .padding(.leading, connectionLabelWidth + Theme.Spacing.med)
+            HStack(spacing: 0) {
+                Spacer(minLength: 0)
+                FieldValidationCaption(state: validation)
+                    .frame(width: captionWidth, alignment: .leading)
             }
             if let testResult {
                 HStack(spacing: 0) {

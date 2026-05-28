@@ -163,6 +163,11 @@
 "printer.api_key.hide"                    = "APIキーを非表示";
 "printer.field.display_name"              = "表示名";
 "printer.url.test_help"                   = "このURLをテスト";
+"printer.field.validation.valid"          = "有効なURL";
+"printer.field.validation.valid_host"     = "有効なIPまたはホスト名";
+"printer.field.validation.invalid_url"    = "無効なURL";
+"printer.field.validation.invalid_host"   = "有効なIPまたはホスト名を入力してください";
+"printer.field.validation.click_to_test"  = "アイコンをクリックして接続を確認";
 "common.help.tooltip"                     = "詳細情報";
 "common.help.learn_more"                  = "詳しく見る";
 "printer.help.url.body"                   = "プリンターの http://<ip> または http://<hostname> を入力してください（例: http://192.168.1.42 または http://prusa-mk3.local）。先にブラウザでアドレスを開き、PrusaLink が表示されることを確認してください。";

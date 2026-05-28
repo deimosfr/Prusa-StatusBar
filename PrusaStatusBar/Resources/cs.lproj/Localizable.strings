@@ -163,6 +163,11 @@
 "printer.api_key.hide"                    = "Skrýt API klíč";
 "printer.field.display_name"              = "Zobrazované jméno";
 "printer.url.test_help"                   = "Otestovat tuto URL";
+"printer.field.validation.valid"          = "Platná URL";
+"printer.field.validation.valid_host"     = "Platná IP nebo název hostitele";
+"printer.field.validation.invalid_url"    = "Neplatná URL";
+"printer.field.validation.invalid_host"   = "Zadejte platnou IP nebo název hostitele";
+"printer.field.validation.click_to_test"  = "Klikněte na ikonu pro ověření připojení";
 "common.help.tooltip"                     = "Více informací";
 "common.help.learn_more"                  = "Zjistit více";
 "printer.help.url.body"                   = "Zadejte http://<ip> nebo http://<hostname> své tiskárny (například http://192.168.1.42 nebo http://prusa-mk3.local). Nejprve adresu otevřete ve webovém prohlížeči a ověřte, že se PrusaLink načte.";

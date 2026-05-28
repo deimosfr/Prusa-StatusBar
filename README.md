@@ -132,6 +132,63 @@ Auth credentials are stored in the Keychain. Nothing leaves your network.
 - **Hardened Runtime** enabled for Release builds.
 - For vulnerabilities, see [SECURITY.md](SECURITY.md). Please do not file public issues.
 
+## Why not Prusa Connect?
+
+Prusa Connect is Prusa's cloud dashboard; PrusaLink is the local HTTP API that
+runs on the printer itself. Prusa StatusBar talks to PrusaLink, not Connect,
+because Connect has no public API for third-party desktop apps, and cannot be authenticated cleanly when you sign in to your Prusa account with Google or Facebook SSO. If you need to reach your printer from outside your home network, use the **Fallback URL** field in
+*Preferences > Printer* (a VPN, WireGuard, or Tailscale address works well).
+
+<details>
+<summary><strong>Technical details (for contributors)</strong></summary>
+
+The undocumented mobile API at
+`https://connect-mobile-api.prusa3d.com/api/docs` was probed end to end. The
+OpenAPI spec is tagged `version: 0.0.1-dev` (no stability contract).
+
+**Authentication blockers**
+
+- Auth scheme is OAuth2 Authorization Code + PKCE against
+  `https://account.prusa3d.com/o/authorize/`. The only client_id exposed is the
+  Connect web app's (`MRHTlZhZqkNrrQ6FUPtjyusAz8nc59ErHXP8XkS4`), and its
+  registered redirect URIs only accept `https://connect.prusa3d.com/*`.
+- Loopback redirect (`http://127.0.0.1:<port>/callback`, RFC 8252) and custom
+  URL schemes both fail with
+  `invalid_request: Mismatching redirect URI`.
+- Resource Owner Password grant (ROPC) is enabled server-side, but unusable for
+  the majority of users who sign in with Google or Facebook SSO (the IdP flow
+  cannot be proxied through a password grant).
+- Device Authorization Grant (RFC 8628) is disabled (`invalid_client`).
+- Embedded WKWebView interception is blocked by Google with
+  `disallowed_useragent` ("this browser may not be secure"), and Facebook
+  behaves the same way.
+- There is no public developer portal to register an app-specific client_id.
+
+**Telemetry gaps**
+
+The `Telemetry-with-telemetry` schema returned by `/api/v1/printers/{uuid}`
+only carries:
+
+```
+temperatureNozzleCurrent, temperatureNozzleTarget,
+temperatureHeatbedCurrent, temperatureHeatbedTarget,
+axisZ, speed, lastOnline
+```
+
+No chamber temperature (relevant for Core One and XL), no MMU status, no fan
+speeds, no nozzle diameter, no accurate `time_remaining` (only
+`estimatedPrintTime` plus `startAt`).
+
+**Conclusion**
+
+Even ignoring the Terms of Service grey area of reusing the web client_id,
+there is no clean auth path for SSO users and no feature parity with the
+local PrusaLink API. The app stays on PrusaLink. Chamber temperature, if
+needed, should be added by reading it from PrusaLink's `/api/v1/status` on
+firmware that exposes it (Core One, XL).
+
+</details>
+
 ## Contributing
 
 PRs are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and

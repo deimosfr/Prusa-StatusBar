@@ -163,6 +163,11 @@
 "printer.api_key.hide"                    = "隐藏 API 密钥";
 "printer.field.display_name"              = "显示名称";
 "printer.url.test_help"                   = "测试此 URL";
+"printer.field.validation.valid"          = "有效的网址";
+"printer.field.validation.valid_host"     = "有效的 IP 或主机名";
+"printer.field.validation.invalid_url"    = "无效的网址";
+"printer.field.validation.invalid_host"   = "请输入有效的 IP 或主机名";
+"printer.field.validation.click_to_test"  = "点击图标以验证连接";
 "common.help.tooltip"                     = "更多信息";
 "common.help.learn_more"                  = "了解更多";
 "printer.help.url.body"                   = "请输入打印机的 http://<ip> 或 http://<hostname>（例如 http://192.168.1.42 或 http://prusa-mk3.local）。先在浏览器中打开该地址，确认 PrusaLink 能够加载。";

@@ -26,7 +26,8 @@ public enum GenericCameraURLValidator {
         }
         guard let url = URL(string: trimmed),
               let scheme = url.scheme?.lowercased(),
-              url.host?.isEmpty == false
+              let host = url.host,
+              !host.isEmpty
         else {
             return .invalid
         }
@@ -37,6 +38,9 @@ public enum GenericCameraURLValidator {
             ["http", "https"]
         }
         guard allowed.contains(scheme) else {
+            return .invalid
+        }
+        guard URLHostValidator.isValid(host: host) else {
             return .invalid
         }
         return .valid(url)

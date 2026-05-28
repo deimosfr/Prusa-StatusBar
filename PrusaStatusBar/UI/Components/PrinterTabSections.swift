@@ -17,6 +17,10 @@ let connectionTestButtonReservedWidth: CGFloat = 28
 /// trailing alignment. Sized for the 520pt Preferences window.
 let connectionFieldWidth: CGFloat = 240
 
+/// Width of the inline validation caption row, sized to match the
+/// TextField + trailing Test button slot.
+let captionWidth: CGFloat = connectionFieldWidth + Theme.Spacing.sml + connectionTestButtonReservedWidth
+
 /// Body-key + external URL pair for the inline help popover shown in the
 /// label column of a Printer-tab row. Nil means no `?` button is rendered
 /// (e.g. the fallback URL row reuses the primary URL guidance).
@@ -93,6 +97,8 @@ struct PrinterURLRow: View {
     let isFallbackTestDisabled: Bool
     let primaryTestResult: PrinterTestResult?
     let fallbackTestResult: PrinterTestResult?
+    let urlValidation: FieldValidationState
+    let fallbackValidation: FieldValidationState
     let onTestPrimary: () -> Void
     let onTestFallback: () -> Void
 
@@ -106,6 +112,7 @@ struct PrinterURLRow: View {
                 isTesting: isPrimaryTesting,
                 isTestDisabled: isPrimaryTestDisabled,
                 result: primaryTestResult,
+                validation: urlValidation,
                 onTest: onTestPrimary,
                 helpInfo: PrinterHelpInfo(
                     bodyKey: "printer.help.url.body",
@@ -142,6 +149,7 @@ struct PrinterURLRow: View {
                         isTesting: isFallbackTesting,
                         isTestDisabled: isFallbackTestDisabled,
                         result: fallbackTestResult,
+                        validation: fallbackValidation,
                         onTest: onTestFallback,
                         helpInfo: nil
                     )
@@ -174,6 +182,7 @@ private struct URLTestableRow: View {
     let isTesting: Bool
     let isTestDisabled: Bool
     let result: PrinterTestResult?
+    let validation: FieldValidationState
     let onTest: () -> Void
     let helpInfo: PrinterHelpInfo?
 
@@ -206,6 +215,11 @@ private struct URLTestableRow: View {
                     .disabled(isTestDisabled || isTesting)
                     .help(L10n.t("printer.url.test_help"))
                 }
+            }
+            HStack(spacing: 0) {
+                Spacer(minLength: 0)
+                FieldValidationCaption(state: validation)
+                    .frame(width: captionWidth, alignment: .leading)
             }
             if let result {
                 HStack(spacing: 0) {
