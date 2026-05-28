@@ -10,6 +10,7 @@ struct BuddyCameraSection: View {
     @Binding var enabled: Bool
     @Binding var cameraHost: String
     @Binding var cameraHostError: String?
+    let hostValidation: FieldValidationState
     let probe: RTSPProbing
     /// When false, the "Enable Buddy Camera" toggle is disabled and a tooltip
     /// explains why. The host row stays bound to the existing `enabled` flag,
@@ -53,7 +54,7 @@ struct BuddyCameraSection: View {
     }
 
     private var isTestDisabled: Bool {
-        trimmedHost.isEmpty || isTestingCamera
+        !hostValidation.isValid || isTestingCamera
     }
 
     private var enableToggleRow: some View {
@@ -75,7 +76,7 @@ struct BuddyCameraSection: View {
                 )
             } content: {
                 HStack(alignment: .center, spacing: Theme.Spacing.sml) {
-                    VStack(alignment: .trailing, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 4) {
                         TextField(
                             "",
                             text: $cameraHost,
@@ -87,18 +88,18 @@ struct BuddyCameraSection: View {
                         .font(.prusaBody)
                         .lineLimit(1)
                         .frame(width: connectionFieldWidth)
-                        if let cameraHostError {
-                            Text(cameraHostError)
-                                .font(.prusaCaption)
-                                .foregroundStyle(Theme.Palette.stateRed)
-                        } else if !trimmedHost.isEmpty {
+                        if hostValidation.isValid, !derivedCaption.isEmpty {
                             Text(derivedCaption)
                                 .font(.prusaCaption)
                                 .foregroundStyle(Theme.Palette.textSecondary)
                                 .textSelection(.enabled)
                         }
+                        FieldValidationCaption(
+                            state: hostValidation,
+                            validLabel: L10n.t("printer.field.validation.valid_host")
+                        )
                     }
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                     Button {
                         Task { await testCamera() }
                     } label: {

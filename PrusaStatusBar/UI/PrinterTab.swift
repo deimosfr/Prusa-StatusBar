@@ -20,8 +20,6 @@ struct PrinterTab: View {
     @State private var genericCameraFramerate: Int = UserPreferences.genericCameraFramerateDefault
     @State private var genericCameraVerifySSL: Bool = true
     @State private var genericCameraContentType: String = UserPreferences.genericCameraContentTypeDefault
-    @State private var genericCameraStreamURLError: String?
-    @State private var genericCameraStillURLError: String?
     @State var useKeychain: Bool = true
     /// Drives the keychain-toggle confirmation alert.
     @State var pendingKeychainToggle: Bool?
@@ -48,10 +46,12 @@ struct PrinterTab: View {
                     isFallbackExpanded: $isFallbackExpanded,
                     isPrimaryTesting: isPrimaryTesting,
                     isFallbackTesting: isFallbackTesting,
-                    isPrimaryTestDisabled: url.isEmpty || apiKey.isEmpty,
-                    isFallbackTestDisabled: fallbackURL.isEmpty || apiKey.isEmpty,
+                    isPrimaryTestDisabled: !urlValidation.isValid || apiKey.isEmpty,
+                    isFallbackTestDisabled: !fallbackURLValidation.isValid || apiKey.isEmpty,
                     primaryTestResult: primaryTestResult,
                     fallbackTestResult: fallbackTestResult,
+                    urlValidation: urlValidation,
+                    fallbackValidation: fallbackURLValidation,
                     onTestPrimary: { Task { await testPrimary() } },
                     onTestFallback: { Task { await testFallback() } }
                 )
@@ -71,6 +71,7 @@ struct PrinterTab: View {
                 enabled: $buddyCameraEnabled,
                 cameraHost: $cameraHost,
                 cameraHostError: $cameraHostError,
+                hostValidation: cameraHostValidation,
                 probe: services.rtspProbe,
                 isPrinterURLSet: isPrinterURLSet
             )
@@ -114,11 +115,58 @@ struct PrinterTab: View {
             framerate: $genericCameraFramerate,
             verifySSL: $genericCameraVerifySSL,
             contentType: $genericCameraContentType,
-            streamURLError: $genericCameraStreamURLError,
-            stillURLError: $genericCameraStillURLError,
+            streamValidation: genericCameraStreamValidation,
+            stillValidation: genericCameraStillValidation,
             probe: services.rtspProbe,
             isPrinterURLSet: isPrinterURLSet
         )
+    }
+
+    private var urlValidation: FieldValidationState {
+        Self.mapPrinterURL(PrinterBaseURLValidator.validate(url))
+    }
+
+    private var fallbackURLValidation: FieldValidationState {
+        Self.mapPrinterURL(PrinterBaseURLValidator.validate(fallbackURL))
+    }
+
+    private var cameraHostValidation: FieldValidationState {
+        let trimmed = cameraHost.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty { return .empty }
+        switch BuddyCameraHostDeriver.rtspURL(forHost: cameraHost) {
+        case .success: return .valid
+        case .failure(.empty): return .empty
+        case .failure(.containsSchemeOrPort):
+            return .invalid(L10n.t("printer.field.validation.invalid_host"))
+        }
+    }
+
+    private var genericCameraStreamValidation: FieldValidationState {
+        Self.mapGenericCameraURL(
+            GenericCameraURLValidator.validate(genericCameraStreamURL, field: .stream)
+        )
+    }
+
+    private var genericCameraStillValidation: FieldValidationState {
+        Self.mapGenericCameraURL(
+            GenericCameraURLValidator.validate(genericCameraStillURL, field: .still)
+        )
+    }
+
+    private static func mapPrinterURL(_ result: PrinterBaseURLValidator.Result) -> FieldValidationState {
+        switch result {
+        case .empty: .empty
+        case .valid: .valid
+        case .invalid: .invalid(L10n.t("printer.field.validation.invalid_url"))
+        }
+    }
+
+    private static func mapGenericCameraURL(_ result: GenericCameraURLValidator.Result) -> FieldValidationState {
+        switch result {
+        case .empty: .empty
+        case .valid: .valid
+        case .invalid: .invalid(L10n.t("printer.field.validation.invalid_url"))
+        }
     }
 
     /// Single equatable snapshot of every Generic Camera @State value.
@@ -218,8 +266,6 @@ private extension PrinterTab {
         genericCameraFramerate = services.settings.genericCameraFramerate
         genericCameraVerifySSL = services.settings.genericCameraVerifySSL
         genericCameraContentType = services.settings.genericCameraContentType
-        genericCameraStreamURLError = nil
-        genericCameraStillURLError = nil
         nameOverride = services.settings.printerNameOverride ?? ""
         cameraHostError = nil
     }
@@ -308,29 +354,17 @@ private extension PrinterTab {
 
     private func validateGenericStreamURL() -> String? {
         switch Self.validateGenericCameraURL(raw: genericCameraStreamURL, field: .stream) {
-        case .empty:
-            genericCameraStreamURLError = nil
-            return ""
-        case let .valid(value):
-            genericCameraStreamURLError = nil
-            return value
-        case .invalid:
-            genericCameraStreamURLError = L10n.t("printer.generic_camera.error.invalid_url")
-            return nil
+        case .empty: ""
+        case let .valid(value): value
+        case .invalid: nil
         }
     }
 
     private func validateGenericStillURL() -> String? {
         switch Self.validateGenericCameraURL(raw: genericCameraStillURL, field: .still) {
-        case .empty:
-            genericCameraStillURLError = nil
-            return ""
-        case let .valid(value):
-            genericCameraStillURLError = nil
-            return value
-        case .invalid:
-            genericCameraStillURLError = L10n.t("printer.generic_camera.error.invalid_url")
-            return nil
+        case .empty: ""
+        case let .valid(value): value
+        case .invalid: nil
         }
     }
 

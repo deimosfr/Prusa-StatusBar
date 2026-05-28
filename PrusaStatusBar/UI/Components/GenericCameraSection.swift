@@ -18,8 +18,8 @@ struct GenericCameraSection: View {
     @Binding var framerate: Int
     @Binding var verifySSL: Bool
     @Binding var contentType: String
-    @Binding var streamURLError: String?
-    @Binding var stillURLError: String?
+    let streamValidation: FieldValidationState
+    let stillValidation: FieldValidationState
     let probe: RTSPProbing
     let isPrinterURLSet: Bool
 
@@ -51,8 +51,8 @@ struct GenericCameraSection: View {
                 GenericCameraSourcesCard(
                     streamURL: $streamURL,
                     stillImageURL: $stillImageURL,
-                    streamURLError: streamURLError,
-                    stillURLError: stillURLError,
+                    streamValidation: streamValidation,
+                    stillValidation: stillValidation,
                     isStreamTesting: isStreamTesting,
                     isStillTesting: isStillTesting,
                     streamTestResult: streamTestResult,

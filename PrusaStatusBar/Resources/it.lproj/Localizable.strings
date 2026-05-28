@@ -163,6 +163,11 @@
 "printer.api_key.hide"                    = "Nascondi chiave API";
 "printer.field.display_name"              = "Nome";
 "printer.url.test_help"                   = "Prova questo URL";
+"printer.field.validation.valid"          = "URL valido";
+"printer.field.validation.valid_host"     = "IP o hostname valido";
+"printer.field.validation.invalid_url"    = "URL non valido";
+"printer.field.validation.invalid_host"   = "Inserisci un IP o un hostname valido";
+"printer.field.validation.click_to_test"  = "Fai clic sull'icona per verificare la connettività";
 "common.help.tooltip"                     = "Maggiori info";
 "common.help.learn_more"                  = "Scopri di più";
 "printer.help.url.body"                   = "Inserisci http://<ip> o http://<hostname> della tua stampante (per esempio http://192.168.1.42 o http://prusa-mk3.local). Aprilo prima nel browser web per verificare che PrusaLink si carichi.";
