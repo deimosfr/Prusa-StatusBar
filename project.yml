@@ -54,14 +54,16 @@ targets:
         excludes:
           - Resources/go2rtc
           - Resources/Fonts
-      - path: PrusaStatusBar/Resources/go2rtc
-        type: file
-        buildPhase: resources
-        attributes: [CodeSignOnCopy]
-        optional: true
       - path: PrusaStatusBar/Resources/Fonts
         type: folder
         buildPhase: resources
+    dependencies:
+      # Embedded libvlc engine (static build, ~80 MB). Fetched on demand by
+      # scripts/fetch-vlckit.sh into Vendor/ (gitignored). Embedded + signed
+      # on copy; the static framework loads no external plugin dylibs.
+      - framework: Vendor/VLCKit.xcframework
+        embed: true
+        codeSign: true
     info:
       path: PrusaStatusBar/Info.plist
       properties:

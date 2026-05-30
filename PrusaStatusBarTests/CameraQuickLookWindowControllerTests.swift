@@ -12,7 +12,7 @@ import Testing
 struct CameraQuickLookWindowControllerTests {
     @Test
     func presentRegistersWithKeepalive() {
-        let keepalive = CameraStreamKeepalive(stopGoRTC: {})
+        let keepalive = CameraStreamKeepalive(stopPlayers: {})
         let controller = CameraQuickLookWindowController(
             kind: .buddy,
             keepalive: keepalive,
@@ -33,7 +33,7 @@ struct CameraQuickLookWindowControllerTests {
 
     @Test
     func secondPresentDoesNotRegisterAgainAndUpdatesSource() {
-        let keepalive = CameraStreamKeepalive(stopGoRTC: {})
+        let keepalive = CameraStreamKeepalive(stopPlayers: {})
         let controller = CameraQuickLookWindowController(
             kind: .buddy,
             keepalive: keepalive,
@@ -57,7 +57,7 @@ struct CameraQuickLookWindowControllerTests {
 
     @Test
     func independentControllersTrackSeparateWindows() {
-        let keepalive = CameraStreamKeepalive(stopGoRTC: {})
+        let keepalive = CameraStreamKeepalive(stopPlayers: {})
         let buddy = CameraQuickLookWindowController(
             kind: .buddy,
             keepalive: keepalive,

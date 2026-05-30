@@ -128,7 +128,7 @@
 "about.coffee_link"                       = "Kup mi kávu";
 "about.source_link"                       = "Zdrojový kód";
 "about.issues_link"                       = "Nahlásit problém";
-"about.go2rtc_credit"                     = "Živý kamerový přenos zajišťuje go2rtc (MIT)";
+"about.go2rtc_credit"                     = "Živé video zajišťuje VLCKit (LGPL)";
 "about.community_notice"                  = "Komunitní aplikace, neoficiální produkt Prusa";
 
 // Misc

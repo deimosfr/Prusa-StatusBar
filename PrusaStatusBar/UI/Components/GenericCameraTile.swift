@@ -2,11 +2,11 @@ import AppKit
 import SwiftUI
 
 /// Second-camera tile rendered directly below the Buddy `CameraTile` in
-/// the dropdown. Picks between live stream playback (RTSP / HTTP MJPEG via
-/// the bundled go2rtc helper) and still-image polling based on which URL
-/// the user configured. On stream failure (after the player's retry
-/// budget exhausts) the tile auto-falls-back to still-image polling when
-/// a still URL is configured.
+/// the dropdown. Picks between live stream playback (RTSP / HTTP played
+/// directly by libvlc) and still-image polling based on which URL the user
+/// configured. On stream failure (after the player's retry budget
+/// exhausts) the tile auto-falls-back to still-image polling when a still
+/// URL is configured.
 struct GenericCameraTile: View {
     let config: GenericCameraConfig
     let model: AppModel
@@ -75,7 +75,7 @@ struct GenericCameraTile: View {
         #if PROTOTYPE_MODE
             return false
         #else
-            return shouldRenderStream && resolveStreamHLSURL() != nil && !isReady
+            return shouldRenderStream && resolveStreamRequest() != nil && !isReady
         #endif
     }
 
@@ -92,8 +92,8 @@ struct GenericCameraTile: View {
         #if PROTOTYPE_MODE
             return .prototype(label: L10n.t("dropdown.generic_camera.preview"), systemImage: "video.badge.plus")
         #else
-            if shouldRenderStream, let hlsURL = resolveStreamHLSURL() {
-                return .hls(hlsURL)
+            if shouldRenderStream, let request = resolveStreamRequest() {
+                return .stream(request)
             }
             if let stillURL = config.resolvedStillImageURL() {
                 return .still(stillURL, config)
@@ -121,9 +121,9 @@ struct GenericCameraTile: View {
     #if !PROTOTYPE_MODE
         @ViewBuilder
         private var liveContent: some View {
-            if shouldRenderStream, let hlsURL = resolveStreamHLSURL() {
+            if shouldRenderStream, let request = resolveStreamRequest() {
                 CameraPlayerView(
-                    url: hlsURL,
+                    request: request,
                     onFailureExhausted: handleStreamFailure,
                     onReady: { isReady = true },
                     onPresentationSize: { size in
@@ -146,9 +146,9 @@ struct GenericCameraTile: View {
             return false
         }
 
-        private func resolveStreamHLSURL() -> URL? {
+        private func resolveStreamRequest() -> CameraStreamRequest? {
             guard let resolved = config.resolvedStreamURL() else { return nil }
-            return GoRTCService.shared.hlsURL(forGenericStream: resolved.absoluteString)
+            return CameraStreamRequest(url: resolved, transport: config.rtspTransport)
         }
 
         @MainActor

@@ -1,7 +1,7 @@
 import AppKit
 
 /// Owns the per-kind `CameraQuickLookWindowController` instances and the
-/// shared `CameraStreamKeepalive` they use to gate go2rtc teardown.
+/// shared `CameraStreamKeepalive` they use to gate camera-player teardown.
 /// `MenuBarController` holds one of these and forwards tile zoom clicks
 /// here so the controller's own body stays focused on menu-bar surface
 /// concerns.
@@ -10,8 +10,8 @@ final class CameraQuickLookCoordinator {
     let keepalive: CameraStreamKeepalive
     private let controllers: [CameraTileKind: CameraQuickLookWindowController]
 
-    init(stopGoRTC: @escaping @MainActor () -> Void) {
-        let keepalive = CameraStreamKeepalive(stopGoRTC: stopGoRTC)
+    init(stopPlayers: @escaping @MainActor () -> Void) {
+        let keepalive = CameraStreamKeepalive(stopPlayers: stopPlayers)
         self.keepalive = keepalive
         controllers = [
             .buddy: CameraQuickLookWindowController(kind: .buddy, keepalive: keepalive),

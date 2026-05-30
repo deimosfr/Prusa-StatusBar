@@ -128,7 +128,7 @@
 "about.coffee_link"                       = "Spendiere mir einen Kaffee";
 "about.source_link"                       = "Quellcode";
 "about.issues_link"                       = "Problem melden";
-"about.go2rtc_credit"                     = "Live-Kamera-Transmuxing dank go2rtc (MIT)";
+"about.go2rtc_credit"                     = "Live-Video dank VLCKit (LGPL)";
 "about.community_notice"                  = "Community-Anwendung, kein offizielles Prusa-Produkt";
 
 // Misc

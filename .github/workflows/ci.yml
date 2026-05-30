@@ -49,11 +49,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-deriveddata-
 
-      - name: Cache go2rtc helper
+      - name: Cache VLCKit framework
         uses: actions/cache@v4
         with:
-          path: PrusaStatusBar/Resources/go2rtc
-          key: go2rtc-${{ hashFiles('scripts/fetch-go2rtc.sh') }}
+          path: Vendor/VLCKit.xcframework
+          key: vlckit-${{ hashFiles('scripts/fetch-vlckit.sh') }}
 
       - name: Generate Xcode project
         run: just gen
@@ -99,11 +99,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-deriveddata-
 
-      - name: Cache go2rtc helper
+      - name: Cache VLCKit framework
         uses: actions/cache@v4
         with:
-          path: PrusaStatusBar/Resources/go2rtc
-          key: go2rtc-${{ matrix.arch }}-${{ hashFiles('scripts/fetch-go2rtc.sh') }}
+          path: Vendor/VLCKit.xcframework
+          key: vlckit-${{ hashFiles('scripts/fetch-vlckit.sh') }}
 
       - name: Resolve metadata
         id: meta
@@ -117,11 +117,6 @@ jobs:
           echo "dmg_name=${DMG_NAME}" >> "$GITHUB_OUTPUT"
           echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
           echo "DMG_NAME=${DMG_NAME}" >> "$GITHUB_ENV"
-
-      - name: Fetch bundled go2rtc helper (${{ matrix.arch }})
-        env:
-          ARCH: ${{ matrix.arch }}
-        run: ./scripts/fetch-go2rtc.sh
 
       - name: Generate Xcode project
         run: just gen
@@ -143,9 +138,6 @@ jobs:
             DEVELOPMENT_TEAM="" \
             clean build
           lipo -info "build/Build/Products/Release/PrusaStatusBar.app/Contents/MacOS/PrusaStatusBar"
-
-      - name: Verify bundled go2rtc arch matches ${{ matrix.arch }}
-        run: ./scripts/verify-go2rtc-arch.sh "build/Build/Products/Release/PrusaStatusBar.app" "${{ matrix.arch }}"
 
       - name: Package DMG (ad-hoc signed)
         run: |

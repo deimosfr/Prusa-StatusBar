@@ -6,7 +6,6 @@
 # Signing is env-driven (inside-out, --deep is deprecated):
 #   SIGN_IDENTITY              codesign identity ("-" for ad-hoc, default)
 #   ENTITLEMENTS_PATH          app entitlements (default: PrusaStatusBar/PrusaStatusBar.entitlements)
-#   GO2RTC_ENTITLEMENTS_PATH   helper entitlements (default: PrusaStatusBar/go2rtc.entitlements)
 #   SIGN_DMG=1                 also sign the DMG itself (Developer ID only)
 #   NOTARIZE=1                 submit DMG to Apple notary + staple ticket
 #   NOTARY_PROFILE             notarytool keychain profile name (local dev)
@@ -43,7 +42,6 @@ trap 'rm -rf "$WORKDIR"' EXIT
 
 SIGN_IDENTITY="${SIGN_IDENTITY:--}"
 ENTITLEMENTS_PATH="${ENTITLEMENTS_PATH:-$REPO_ROOT/PrusaStatusBar/PrusaStatusBar.entitlements}"
-GO2RTC_ENTITLEMENTS_PATH="${GO2RTC_ENTITLEMENTS_PATH:-$REPO_ROOT/PrusaStatusBar/go2rtc.entitlements}"
 SIGN_DMG="${SIGN_DMG:-0}"
 NOTARIZE="${NOTARIZE:-0}"
 
@@ -56,25 +54,22 @@ if is_developer_id; then
     CODESIGN_FLAGS+=(--options=runtime --timestamp)
 fi
 
-# Sign nested binaries first (inside-out), helper with its own entitlements.
-GO2RTC_BIN="$APP/Contents/Resources/go2rtc"
-if [[ -f "$GO2RTC_BIN" ]]; then
-    HELPER_FLAGS=(--force --sign "$SIGN_IDENTITY")
-    if is_developer_id; then
-        HELPER_FLAGS+=(--options=runtime --timestamp --entitlements "$GO2RTC_ENTITLEMENTS_PATH")
-    fi
-    codesign "${HELPER_FLAGS[@]}" "$GO2RTC_BIN"
-fi
-
-# Sign every other nested Mach-O / dylib / executable, skipping the helper
-# (already signed with custom entitlements above) and the main bundle (last).
+# Sign nested Mach-O / dylib / so files first (inside-out), skipping the main
+# bundle executable (signed last). The static VLCKit build ships no plugin
+# dylibs, but this still covers any nested binaries that appear.
 while IFS= read -r -d '' f; do
     case "$f" in
-        "$GO2RTC_BIN") continue ;;
         "$APP/Contents/MacOS/"*) continue ;;
     esac
     codesign "${CODESIGN_FLAGS[@]}" "$f" 2>/dev/null || true
 done < <(find "$APP/Contents" \( -name '*.dylib' -o -name '*.so' \) -type f -print0)
+
+# Sign the embedded VLCKit framework bundle (after nested dylibs, before the
+# main executable and the app bundle).
+VLCKIT_FRAMEWORK="$APP/Contents/Frameworks/VLCKit.framework"
+if [[ -d "$VLCKIT_FRAMEWORK" ]]; then
+    codesign "${CODESIGN_FLAGS[@]}" "$VLCKIT_FRAMEWORK"
+fi
 
 # Sign main executable (without entitlements; bundle gets them).
 MAIN_BIN="$APP/Contents/MacOS/PrusaStatusBar"

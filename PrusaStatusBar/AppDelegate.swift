@@ -25,7 +25,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private var wired: Wired?
-    private var signalSources: [DispatchSourceSignal] = []
 
     func applicationWillFinishLaunching(_: Notification) {
         #if !PROTOTYPE_MODE
@@ -57,16 +56,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Log.lifecycle.info("App launched")
         // Menu-bar app, no Dock icon, no Cmd-Tab entry.
         NSApp.setActivationPolicy(.accessory)
-
-        // First thing on launch: kill any go2rtc helper left over from a
-        // prior run that exited without firing our normal cleanup paths
-        // (force-quit, crash, debugger stop). Without this the new helper
-        // would fail to bind 127.0.0.1:1984.
-        #if !PROTOTYPE_MODE
-            GoRTCService.shared.reapStaleHelper()
-            GoRTCService.registerAtexitFallback()
-            installSignalHandlers()
-        #endif
 
         let settings = UserPreferences()
         let services = buildServices(settings: settings)
@@ -139,8 +128,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// `.terminateLater`, so the helper is dead before the app actually
     /// exits. `applicationWillTerminate` keeps running as a backup.
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
-        Log.lifecycle.info("App should terminate, stopping helper synchronously")
-        GoRTCService.shared.stop()
+        Log.lifecycle.info("App should terminate")
+        ActiveCameraPlayers.shared.stopAll()
         return .terminateNow
     }
 
@@ -148,31 +137,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Log.lifecycle.info("App terminating")
         wired?.coordinator.stop()
         wired?.updateChecker.stop()
-        GoRTCService.shared.stop()
-    }
-
-    /// Catches POSIX terminations that bypass the AppKit lifecycle: Xcode's
-    /// stop button (SIGINT), `kill <pid>` (SIGTERM), terminal hangup
-    /// (SIGHUP). Each handler stops the helper, then `_exit(0)` so we do not
-    /// drop back into the runloop with a half-torn-down app state.
-    private func installSignalHandlers() {
-        let signals: [Int32] = [SIGTERM, SIGINT, SIGHUP]
-        for sig in signals {
-            // libdispatch only delivers if the default disposition is
-            // ignored, otherwise the kernel terminates the process before
-            // our handler runs.
-            signal(sig, SIG_IGN)
-            let source = DispatchSource.makeSignalSource(signal: sig, queue: .main)
-            source.setEventHandler {
-                Log.lifecycle.info("Received signal \(sig, privacy: .public), stopping helper")
-                MainActor.assumeIsolated {
-                    GoRTCService.shared.stop()
-                }
-                _exit(0)
-            }
-            source.resume()
-            signalSources.append(source)
-        }
+        ActiveCameraPlayers.shared.stopAll()
     }
 
     /// Pull the live `UNAuthorizationStatus` and mirror it onto the model so

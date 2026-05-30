@@ -4,15 +4,15 @@ import Testing
 
 /// Spec coverage:
 /// - `menu-bar-ui` Requirement: Camera tile opens dedicated zoomed window
-///   - Scenario "Last popup close stops go2rtc"
-///   - Scenario "Popover close with popup open does not stop go2rtc"
+///   - Scenario "Last popup close stops the player"
+///   - Scenario "Popover close with popup open does not stop the player"
 ///   - Scenario "Popup persists after popover dismissal"
 @MainActor
 struct CameraStreamKeepaliveTests {
     @Test
     func popoverCloseWithNoPopupsCallsStop() {
         let stopper = StopSpy()
-        let keepalive = CameraStreamKeepalive(stopGoRTC: stopper.record)
+        let keepalive = CameraStreamKeepalive(stopPlayers: stopper.record)
 
         keepalive.popoverDidShow()
         keepalive.popoverDidClose()
@@ -23,7 +23,7 @@ struct CameraStreamKeepaliveTests {
     @Test
     func popoverCloseWithPopupOpenSkipsStop() {
         let stopper = StopSpy()
-        let keepalive = CameraStreamKeepalive(stopGoRTC: stopper.record)
+        let keepalive = CameraStreamKeepalive(stopPlayers: stopper.record)
 
         keepalive.popoverDidShow()
         keepalive.register(.buddy)
@@ -36,7 +36,7 @@ struct CameraStreamKeepaliveTests {
     @Test
     func lastPopupCloseAfterPopoverClosedStopsGoRTC() {
         let stopper = StopSpy()
-        let keepalive = CameraStreamKeepalive(stopGoRTC: stopper.record)
+        let keepalive = CameraStreamKeepalive(stopPlayers: stopper.record)
 
         keepalive.popoverDidShow()
         keepalive.register(.buddy)
@@ -56,7 +56,7 @@ struct CameraStreamKeepaliveTests {
     @Test
     func popupCloseWhilePopoverVisibleDoesNotStop() {
         let stopper = StopSpy()
-        let keepalive = CameraStreamKeepalive(stopGoRTC: stopper.record)
+        let keepalive = CameraStreamKeepalive(stopPlayers: stopper.record)
 
         keepalive.popoverDidShow()
         keepalive.register(.buddy)
@@ -68,7 +68,7 @@ struct CameraStreamKeepaliveTests {
     @Test
     func registerIsIdempotent() {
         let stopper = StopSpy()
-        let keepalive = CameraStreamKeepalive(stopGoRTC: stopper.record)
+        let keepalive = CameraStreamKeepalive(stopPlayers: stopper.record)
 
         keepalive.register(.buddy)
         keepalive.register(.buddy)
@@ -84,5 +84,51 @@ private final class StopSpy {
     var calls: Int = 0
     func record() {
         calls += 1
+    }
+}
+
+/// Backs the keepalive's `stopPlayers` hook. Verifies `stopAll` invokes every
+/// registered stopper exactly once and clears the registry so a repeat call is
+/// a no-op (no stale handlers, no double-stop).
+@MainActor
+struct ActiveCameraPlayersTests {
+    @Test
+    func stopAllInvokesEveryRegisteredStopper() {
+        let registry = ActiveCameraPlayers()
+        let a = NSObject()
+        let b = NSObject()
+        var calls = 0
+        registry.register(ObjectIdentifier(a)) { calls += 1 }
+        registry.register(ObjectIdentifier(b)) { calls += 1 }
+
+        registry.stopAll()
+
+        #expect(calls == 2)
+    }
+
+    @Test
+    func stopAllClearsRegistrySoRepeatIsNoOp() {
+        let registry = ActiveCameraPlayers()
+        let a = NSObject()
+        var calls = 0
+        registry.register(ObjectIdentifier(a)) { calls += 1 }
+
+        registry.stopAll()
+        registry.stopAll()
+
+        #expect(calls == 1)
+    }
+
+    @Test
+    func deregisterRemovesStopperBeforeStopAll() {
+        let registry = ActiveCameraPlayers()
+        let a = NSObject()
+        var calls = 0
+        registry.register(ObjectIdentifier(a)) { calls += 1 }
+        registry.deregister(ObjectIdentifier(a))
+
+        registry.stopAll()
+
+        #expect(calls == 0)
     }
 }

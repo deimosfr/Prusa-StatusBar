@@ -218,7 +218,7 @@
 "about.coffee_help"                       = "Support the developer";
 "about.source_link"                       = "Source code";
 "about.issues_link"                       = "Report an issue";
-"about.go2rtc_credit"                     = "Live camera transmuxing powered by go2rtc (MIT)";
+"about.go2rtc_credit"                     = "Live video powered by VLCKit (LGPL)";
 "about.community_notice"                  = "Community application, Non Prusa Official";
 "about.version"                           = "Version %@ (%@)";
 

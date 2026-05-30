@@ -10,5 +10,8 @@ assets/prusa_status_bar.mp4
 # Bundled go2rtc helper, fetched on-demand by scripts/fetch-go2rtc.sh.
 PrusaStatusBar/Resources/go2rtc
 
+# Embedded VLCKit framework, fetched on-demand by scripts/fetch-vlckit.sh.
+Vendor/
+
 # Local Claude Code hook configs (machine-specific paths).
 .github/hooks/

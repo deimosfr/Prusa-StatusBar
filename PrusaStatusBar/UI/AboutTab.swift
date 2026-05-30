@@ -65,8 +65,8 @@ struct AboutTab: View {
                 Text(L10n.t("about.go2rtc_credit"))
                     .font(.prusaCaption)
                     .foregroundStyle(Theme.Palette.textTertiary)
-                if let go2rtcURL = URL(string: "https://github.com/AlexxIT/go2rtc") {
-                    Link("github.com/AlexxIT/go2rtc", destination: go2rtcURL)
+                if let vlckitURL = URL(string: "https://code.videolan.org/videolan/VLCKit") {
+                    Link("code.videolan.org/videolan/VLCKit", destination: vlckitURL)
                         .font(.prusaCaption)
                 }
             }

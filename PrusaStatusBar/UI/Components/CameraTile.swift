@@ -1,12 +1,10 @@
-import AVFoundation
-import AVKit
 import SwiftUI
 
 /// Embedded camera preview shown in the dropdown when an RTSP URL is
-/// configured. AVKit cannot speak RTSP directly, so a bundled `go2rtc`
-/// subprocess transmuxes the RTSP feed into HLS on `127.0.0.1:1984` and
-/// AVPlayer plays the HLS endpoint. Production and prototype builds share
-/// the same SwiftUI surface; prototype renders a static placeholder.
+/// configured. libvlc (VLCKit) decodes the RTSP feed directly in-process,
+/// so there is no transmux helper and no localhost server. Production and
+/// prototype builds share the same SwiftUI surface; prototype renders a
+/// static placeholder.
 ///
 /// The tile is clickable across its full bounds: clicking invokes
 /// `onZoom`, which the dropdown wires to a `CameraQuickLookWindowController`
@@ -64,7 +62,7 @@ struct CameraTile: View {
             .allowsHitTesting(false)
     }
 
-    /// Only show the spinner while we are actively waiting for an HLS
+    /// Only show the spinner while we are actively waiting for the live
     /// stream. In prototype mode and in the "invalid URL" branch, the
     /// content view already conveys state, so a spinner on top would be
     /// noise.
@@ -72,7 +70,7 @@ struct CameraTile: View {
         #if PROTOTYPE_MODE
             return false
         #else
-            return resolveHLSURL() != nil && !isReady
+            return resolveRequest() != nil && !isReady
         #endif
     }
 
@@ -88,9 +86,9 @@ struct CameraTile: View {
                     .foregroundStyle(.white.opacity(0.7))
             }
         #else
-            if let hlsURL = resolveHLSURL() {
+            if let request = resolveRequest() {
                 CameraPlayerView(
-                    url: hlsURL,
+                    request: request,
                     onReady: { isReady = true },
                     onPresentationSize: { size in
                         guard size.height > 0 else { return }
@@ -118,16 +116,18 @@ struct CameraTile: View {
         #if PROTOTYPE_MODE
             return .prototype(label: L10n.t("dropdown.camera.preview"), systemImage: "video")
         #else
-            return resolveHLSURL().map(CameraQuickLookSource.hls)
+            return resolveRequest().map(CameraQuickLookSource.stream)
         #endif
     }
 
     #if !PROTOTYPE_MODE
-        private func resolveHLSURL() -> URL? {
+        private func resolveRequest() -> CameraStreamRequest? {
             guard case let .valid(rtspURL) = RTSPURLValidator.validate(urlString) else {
                 return nil
             }
-            return GoRTCService.shared.hlsURL(forRTSP: rtspURL.absoluteString)
+            // Buddy camera always forces RTSP-over-TCP: the firmware's UDP
+            // path is unreliable on restricted networks.
+            return CameraStreamRequest(url: rtspURL, transport: .tcp)
         }
     #endif
 }
@@ -155,18 +155,43 @@ struct CameraTileFrame: ViewModifier {
     /// height when nil.
     var videoAspect: CGFloat?
 
+    /// Container width measured in the aspect branch. Used to derive the
+    /// tile height as `width / aspect` so the tile is always pinned to full
+    /// width instead of being shrunk and centered by `.aspectRatio(.fit)`
+    /// when the popover squeezes the available height.
+    @State private var measuredWidth: CGFloat?
+
     func body(content: Content) -> some View {
         if !isReady {
             content.frame(maxWidth: .infinity, minHeight: cameraTilePlaceholderMinHeight)
         } else if let aspect = videoAspect, aspect > 0 {
             content
                 .frame(maxWidth: .infinity)
-                .aspectRatio(aspect, contentMode: .fit)
+                .frame(height: aspectHeight(for: aspect))
+                .background(
+                    GeometryReader { geo in
+                        Color.clear.preference(
+                            key: CameraTileWidthPreference.self,
+                            value: geo.size.width
+                        )
+                    }
+                )
+                .onPreferenceChange(CameraTileWidthPreference.self) { measuredWidth = $0 }
         } else if let cached = model.cameraTileHeights[kind] {
             content.frame(maxWidth: .infinity, minHeight: cached, maxHeight: cached)
         } else {
             content.frame(maxWidth: .infinity, minHeight: cameraTilePlaceholderMinHeight)
         }
+    }
+
+    /// Height for the aspect branch. Before the width is measured, fall back
+    /// to the cached or placeholder height so the tile does not collapse to
+    /// zero on the first layout pass.
+    private func aspectHeight(for aspect: CGFloat) -> CGFloat {
+        guard let width = measuredWidth, width > 0 else {
+            return model.cameraTileHeights[kind] ?? cameraTilePlaceholderMinHeight
+        }
+        return (width / aspect).rounded()
     }
 }
 
@@ -176,6 +201,17 @@ struct CameraTileFrame: ViewModifier {
 /// loading spinner branch never sets the preference, so the cache only
 /// records real-frame heights.
 struct CameraTileHeightPreference: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        let next = nextValue()
+        if next > 0 { value = next }
+    }
+}
+
+/// Carries the camera tile's measured container width up to `CameraTileFrame`
+/// so the aspect branch can derive height as `width / aspect`, pinning the
+/// tile to full width instead of letting `.aspectRatio(.fit)` shrink it.
+struct CameraTileWidthPreference: PreferenceKey {
     static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         let next = nextValue()

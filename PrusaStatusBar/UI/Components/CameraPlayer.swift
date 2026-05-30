@@ -1,102 +1,88 @@
 #if !PROTOTYPE_MODE
-    import AVFoundation
-    import AVKit
+    import AppKit
     import SwiftUI
+    import VLCKit
 
-    /// Thin AVPlayerLayer-backed view used by both `CameraTile` (Buddy) and
-    /// `GenericCameraTile`. AVKit's stock `VideoPlayer` adds a playback
-    /// chrome row we don't want for a status-bar tile, so we drop to
-    /// `AVPlayerLayer` and render the bare video.
+    /// Embedded camera preview used by both `CameraTile` (Buddy) and
+    /// `GenericCameraTile`. libvlc decodes the camera's RTSP/HTTP stream
+    /// directly in-process and renders it into a `VLCVideoView`, so there is no
+    /// transmux helper, no localhost server, and no child process. Production
+    /// and prototype builds share the SwiftUI surface; prototype renders a
+    /// static placeholder (this whole file is excluded from prototype builds).
     ///
-    /// Lifecycle: `makeNSView` and `updateNSView` load the URL into the
-    /// underlying `PlayerNSView`. `dismantleNSView` tears down the player
-    /// (pause + clear) so SwiftUI removing the view from the hierarchy
-    /// stops upstream traffic immediately.
+    /// The view keeps the same callback contract the AVPlayer version exposed:
+    /// `onReady` (first decoded frame), `onPresentationSize` (native video
+    /// size, for aspect locking), and `onFailureExhausted` (the reconnect
+    /// budget ran out without playback, used to fall back to still images).
     struct CameraPlayerView: NSViewRepresentable {
-        let url: URL
+        let request: CameraStreamRequest
         let onFailureExhausted: (() -> Void)?
         let onReady: (() -> Void)?
         let onPresentationSize: ((CGSize) -> Void)?
 
         init(
-            url: URL,
+            request: CameraStreamRequest,
             onFailureExhausted: (() -> Void)? = nil,
             onReady: (() -> Void)? = nil,
             onPresentationSize: ((CGSize) -> Void)? = nil
         ) {
-            self.url = url
+            self.request = request
             self.onFailureExhausted = onFailureExhausted
             self.onReady = onReady
             self.onPresentationSize = onPresentationSize
         }
 
-        func makeNSView(context _: Context) -> PlayerNSView {
-            let view = PlayerNSView()
+        func makeNSView(context _: Context) -> VLCPlayerNSView {
+            let view = VLCPlayerNSView()
             view.failureExhaustedHandler = onFailureExhausted
             view.readyHandler = onReady
             view.presentationSizeHandler = onPresentationSize
-            view.load(url: url)
+            view.load(request: request)
             return view
         }
 
-        func updateNSView(_ nsView: PlayerNSView, context _: Context) {
+        func updateNSView(_ nsView: VLCPlayerNSView, context _: Context) {
             nsView.failureExhaustedHandler = onFailureExhausted
             nsView.readyHandler = onReady
             nsView.presentationSizeHandler = onPresentationSize
-            nsView.load(url: url)
+            nsView.load(request: request)
         }
 
-        static func dismantleNSView(_ nsView: PlayerNSView, coordinator _: ()) {
+        static func dismantleNSView(_ nsView: VLCPlayerNSView, coordinator _: ()) {
             nsView.tearDown()
         }
     }
 
-    final class PlayerNSView: NSView {
-        private let playerLayer = AVPlayerLayer()
-        private var player: AVPlayer?
-        private var loadedURL: URL?
-        private var statusObservation: NSKeyValueObservation?
-        private var presentationSizeObservation: NSKeyValueObservation?
-        private var lastReportedPresentationSize: CGSize = .zero
-        private var retryAttempt: Int = 0
+    final class VLCPlayerNSView: NSView, VLCMediaPlayerDelegate {
+        private let videoView = VLCVideoView()
+        private var player: VLCMediaPlayer?
+        private var loadedRequest: CameraStreamRequest?
+        private var retry = StreamRetryPolicy()
         private var pendingRetry: Task<Void, Never>?
+        private var readyWatch: Task<Void, Never>?
+        private var hasReportedReady = false
+        private var lastReportedSize: CGSize = .zero
 
-        /// Invoked once the retry budget exhausts without `.readyToPlay`.
-        /// Used by `GenericCameraTile` to fall back to still-image polling.
+        /// Invoked once the reconnect budget exhausts without a first frame.
+        /// `GenericCameraTile` uses it to fall back to still-image polling.
         var failureExhaustedHandler: (() -> Void)?
-
-        /// Invoked the first time the underlying `AVPlayerItem` flips to
-        /// `.readyToPlay`. Tiles use it to hide their loading spinner and
-        /// expand to the real video height. Kept sticky on the caller side
-        /// so transient stalls do not flap the spinner back on.
+        /// Invoked the first time a frame is decoded (non-zero video size).
+        /// Tiles use it to hide the loading spinner. Kept sticky caller-side.
         var readyHandler: (() -> Void)?
-
-        /// Invoked when the underlying `AVPlayerItem` reports a non-zero
-        /// `presentationSize`, and again if that size changes. Tiles use it
-        /// to lock their aspect ratio to the actual video so AVPlayerLayer
-        /// does not add letterbox/pillarbox bars.
+        /// Invoked with the native video size once known, and again if it
+        /// changes. Tiles lock their aspect ratio to it so there are no bars.
         var presentationSizeHandler: ((CGSize) -> Void)?
-
-        /// go2rtc is started on demand in the same runloop tick the popover
-        /// opens, but its HTTP API takes a few hundred ms to a couple of
-        /// seconds before the m3u8 endpoint serves a parseable playlist. If
-        /// AVPlayer hits it during that window the AVPlayerItem flips to
-        /// .failed and never retries on its own, leaving a dark tile. We
-        /// re-attempt with linear backoff up to a short cap.
-        ///
-        /// Extended to cover cameras with slow RTSP keyframe intervals: go2rtc
-        /// needs at least one keyframe before generating the first HLS segment.
-        /// With a 2-5s keyframe interval plus RTSP connection time, the
-        /// original 8.1s budget was too tight. 23s covers most real cameras.
-        private let retryBackoffs: [TimeInterval] = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0]
 
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
-            layer = CALayer()
-            playerLayer.videoGravity = .resizeAspect
-            playerLayer.backgroundColor = NSColor.black.cgColor
-            layer?.addSublayer(playerLayer)
+            layer?.backgroundColor = NSColor.black.cgColor
+            videoView.frame = bounds
+            videoView.autoresizingMask = [.width, .height]
+            // Preserve aspect inside the view; the tile sizes itself to the
+            // reported video aspect so no letterbox/pillarbox bars appear.
+            videoView.fillScreen = false
+            addSubview(videoView)
         }
 
         @available(*, unavailable)
@@ -104,120 +90,178 @@
             fatalError("init(coder:) is unsupported")
         }
 
-        override func layout() {
-            super.layout()
-            playerLayer.frame = bounds
-        }
-
         override func hitTest(_: NSPoint) -> NSView? {
             nil
         }
 
-        func load(url: URL) {
-            guard url != loadedURL else { return }
-            loadedURL = url
-            retryAttempt = 0
-            installPlayer(url: url)
+        /// libvlc's video output binds to the view's window-backed layer. When
+        /// the view is hosted in an `NSPopover`, SwiftUI mounts this view (and
+        /// the old code started playback) before the popover attaches it to its
+        /// transient window, so the vout latched onto a surface the popover then
+        /// invalidated: one decoded frame flashed, then the tile went black for
+        /// good. A stable `NSWindow` (the detached / Quick Look popup) never had
+        /// that gap, which is why windowed playback worked. We therefore drive
+        /// the actual start from here, once the view is in its final window, and
+        /// rebuild against whatever window it lands in.
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            guard let request = loadedRequest else { return }
+            if window != nil {
+                installPlayer(request: request)
+            } else {
+                // Left its window (popover closing or re-parenting): stop
+                // upstream so libvlc is not decoding into a dead surface.
+                // Re-entering a window reinstalls; SwiftUI dismantle still
+                // routes teardown through `tearDown`.
+                stopPlayback()
+            }
+        }
+
+        func load(request: CameraStreamRequest) {
+            guard request != loadedRequest else { return }
+            loadedRequest = request
+            retry.reset()
+            hasReportedReady = false
+            lastReportedSize = .zero
+            // Only start if we are already in a window; otherwise defer to
+            // `viewDidMoveToWindow` so the vout binds to a live surface.
+            if window != nil {
+                installPlayer(request: request)
+            }
         }
 
         func tearDown() {
+            ActiveCameraPlayers.shared.deregister(ObjectIdentifier(self))
             pendingRetry?.cancel()
             pendingRetry = nil
-            statusObservation?.invalidate()
-            statusObservation = nil
-            presentationSizeObservation?.invalidate()
-            presentationSizeObservation = nil
-            lastReportedPresentationSize = .zero
-            player?.pause()
-            playerLayer.player = nil
-            player = nil
-            loadedURL = nil
-            retryAttempt = 0
+            readyWatch?.cancel()
+            readyWatch = nil
+            teardownPlayer()
+            loadedRequest = nil
+            hasReportedReady = false
+            lastReportedSize = .zero
             failureExhaustedHandler = nil
             readyHandler = nil
             presentationSizeHandler = nil
         }
 
-        private func installPlayer(url: URL) {
-            statusObservation?.invalidate()
-            statusObservation = nil
-            presentationSizeObservation?.invalidate()
-            presentationSizeObservation = nil
-            let item = AVPlayerItem(url: url)
-            let player = AVPlayer(playerItem: item)
-            player.isMuted = true
-            // Keep playback live: if the HLS stream momentarily stalls
-            // (e.g. go2rtc is still warming up), let AVPlayer wait rather
-            // than freezing on the first decoded frame.
-            player.automaticallyWaitsToMinimizeStalling = true
-            playerLayer.player = player
+        private func teardownPlayer() {
+            player?.delegate = nil
+            player?.stop()
+            player?.drawable = nil
+            player = nil
+        }
+
+        private func installPlayer(request: CameraStreamRequest) {
+            readyWatch?.cancel()
+            teardownPlayer()
+            guard let media = VLCMediaFactory.makeMedia(for: request) else {
+                scheduleRetry()
+                return
+            }
+            let player = VLCMediaPlayer(options: VLCMediaFactory.playerOptions(for: request))
+            player.drawable = videoView
+            player.delegate = self
+            player.media = media
             self.player = player
-
-            statusObservation = item.observe(\.status, options: [.new]) { [weak self] item, _ in
-                let status = item.status
-                let errorMessage = item.error?.localizedDescription
-                Task { @MainActor in
-                    self?.handle(itemStatus: status, errorMessage: errorMessage)
-                }
+            ActiveCameraPlayers.shared.register(ObjectIdentifier(self)) { [weak self] in
+                self?.stopPlayback()
             }
-
-            let opts: NSKeyValueObservingOptions = [.new, .initial]
-            presentationSizeObservation = item.observe(\.presentationSize, options: opts) { [weak self] item, _ in
-                let size = item.presentationSize
-                Task { @MainActor in
-                    self?.handle(presentationSize: size)
-                }
-            }
-
             player.play()
+            if !hasReportedReady {
+                startReadyWatch()
+            }
         }
 
-        private func handle(presentationSize: CGSize) {
-            guard presentationSize.width > 0, presentationSize.height > 0 else { return }
-            if presentationSize == lastReportedPresentationSize { return }
-            lastReportedPresentationSize = presentationSize
-            presentationSizeHandler?(presentationSize)
+        /// Stops upstream playback without tearing the view down. Called by the
+        /// keepalive registry; the SwiftUI dismantle path calls `tearDown`.
+        private func stopPlayback() {
+            pendingRetry?.cancel()
+            pendingRetry = nil
+            readyWatch?.cancel()
+            readyWatch = nil
+            player?.stop()
         }
 
-        private func handle(itemStatus: AVPlayerItem.Status, errorMessage _: String?) {
-            switch itemStatus {
-            case .readyToPlay:
-                retryAttempt = 0
+        // MARK: - VLCMediaPlayerDelegate (called on a libvlc thread)
+
+        nonisolated func mediaPlayerStateChanged(_ aNotification: Notification) {
+            let state = (aNotification.object as? VLCMediaPlayer)?.state ?? .error
+            Task { @MainActor [weak self] in
+                self?.handle(state: state)
+            }
+        }
+
+        private func handle(state: VLCMediaPlayerState) {
+            switch state {
+            case .playing, .esAdded:
+                retry.reset()
                 pendingRetry?.cancel()
                 pendingRetry = nil
-                readyHandler?()
-            case .failed:
+                checkReady()
+            case .error, .ended:
+                // .stopped is intentional (teardown / keepalive) so it is not
+                // treated as a failure; only real errors and unexpected ends
+                // trigger a reconnect.
                 scheduleRetry()
-            case .unknown:
+            default:
                 break
-            @unknown default:
-                break
+            }
+        }
+
+        private func checkReady() {
+            guard let player else { return }
+            let size = player.videoSize
+            guard size.width > 0, size.height > 0 else { return }
+            reportSize(size)
+            if !hasReportedReady {
+                hasReportedReady = true
+                readyHandler?()
+            }
+            // A frame is showing: cancel any scheduled reconnect so a pending
+            // retry does not tear the playing stream down (which caused the
+            // video to flash then go black).
+            pendingRetry?.cancel()
+            pendingRetry = nil
+            readyWatch?.cancel()
+            readyWatch = nil
+        }
+
+        private func reportSize(_ size: CGSize) {
+            guard size.width > 0, size.height > 0, size != lastReportedSize else { return }
+            lastReportedSize = size
+            presentationSizeHandler?(size)
+        }
+
+        /// Polls `videoSize` until the first frame is decoded (VLCKit 3.x has no
+        /// size-changed delegate). Keeps polling as long as the player stays
+        /// connected: this camera's keyframe interval is long, and forcing a
+        /// reconnect early does not help (it will not accept a quick re-SETUP and
+        /// the stream churns). A genuine failure arrives as a `.error` / `.ended`
+        /// state and is handled separately by `scheduleRetry`.
+        private func startReadyWatch() {
+            readyWatch?.cancel()
+            readyWatch = Task { @MainActor [weak self] in
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 100_000_000)
+                    guard let self, !Task.isCancelled else { return }
+                    checkReady()
+                    if hasReportedReady { return }
+                }
             }
         }
 
         private func scheduleRetry() {
-            guard let url = loadedURL else { return }
-            let delay: TimeInterval
-            if retryAttempt < retryBackoffs.count {
-                delay = retryBackoffs[retryAttempt]
-                retryAttempt += 1
-            } else {
-                // Fast budget exhausted. Notify the fallback handler exactly
-                // once, then switch to a slow 10s periodic retry so the tile
-                // self-heals when go2rtc eventually delivers the stream
-                // (e.g. camera with a very long keyframe interval).
-                // tearDown() cancels pendingRetry, so retries stop on close.
-                if retryAttempt == retryBackoffs.count {
-                    failureExhaustedHandler?()
-                    retryAttempt += 1
-                }
-                delay = 10.0
+            guard let request = loadedRequest else { return }
+            let delay = retry.nextDelay { [weak self] in
+                guard let self, !hasReportedReady else { return }
+                failureExhaustedHandler?()
             }
             pendingRetry?.cancel()
             pendingRetry = Task { @MainActor [weak self] in
                 try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-                guard let self, !Task.isCancelled, loadedURL == url else { return }
-                installPlayer(url: url)
+                guard let self, !Task.isCancelled, loadedRequest == request else { return }
+                installPlayer(request: request)
             }
         }
     }

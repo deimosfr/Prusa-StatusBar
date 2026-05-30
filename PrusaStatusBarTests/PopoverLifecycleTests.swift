@@ -53,13 +53,13 @@ struct PopoverLifecycleTests {
         #expect(stopper.calls == 1)
     }
 
-    /// Spec: "Popover close with popup open does not stop go2rtc".
+    /// Spec: "Popover close with popup open does not stop the player".
     /// When the keepalive sees an open popup, its close hook MUST NOT
     /// invoke the stop closure.
     @Test
     func keepaliveDefersStopWhilePopupOpen() {
         let stopper = StopperSpy()
-        let keepalive = CameraStreamKeepalive(stopGoRTC: stopper.record)
+        let keepalive = CameraStreamKeepalive(stopPlayers: stopper.record)
         let model = AppModel()
         let delegate = MenuBarPopoverDelegate(
             model: model,

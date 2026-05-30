@@ -128,7 +128,7 @@
 "about.coffee_link"                       = "コーヒーをおごる";
 "about.source_link"                       = "ソースコード";
 "about.issues_link"                       = "問題を報告";
-"about.go2rtc_credit"                     = "ライブカメラ伝送はgo2rtc (MIT)を使用";
+"about.go2rtc_credit"                     = "ライブ映像は VLCKit (LGPL) を使用";
 "about.community_notice"                  = "コミュニティアプリ、Prusa非公式";
 
 // Misc
