@@ -57,9 +57,18 @@
         private var loadedURL: URL?
         private var statusObservation: NSKeyValueObservation?
         private var presentationSizeObservation: NSKeyValueObservation?
+        private var timeControlObservation: NSKeyValueObservation?
         private var lastReportedPresentationSize: CGSize = .zero
         private var retryAttempt: Int = 0
         private var pendingRetry: Task<Void, Never>?
+        private var stallRecoveryTask: Task<Void, Never>?
+
+        /// Maximum time AVPlayer is allowed to dwell in
+        /// `.waitingToPlayAtSpecifiedRate` before we treat the HLS
+        /// pipeline as stalled and rebuild the player. Covers the cold
+        /// go2rtc warm-up window (3-5s) and the longest Buddy keyframe
+        /// interval seen on MK4-class printers (~5-7s) with margin.
+        private let stallRecoveryDelay: TimeInterval = 8.0
 
         /// Invoked once the retry budget exhausts without `.readyToPlay`.
         /// Used by `GenericCameraTile` to fall back to still-image polling.
@@ -123,10 +132,14 @@
         func tearDown() {
             pendingRetry?.cancel()
             pendingRetry = nil
+            stallRecoveryTask?.cancel()
+            stallRecoveryTask = nil
             statusObservation?.invalidate()
             statusObservation = nil
             presentationSizeObservation?.invalidate()
             presentationSizeObservation = nil
+            timeControlObservation?.invalidate()
+            timeControlObservation = nil
             lastReportedPresentationSize = .zero
             player?.pause()
             playerLayer.player = nil
@@ -143,6 +156,10 @@
             statusObservation = nil
             presentationSizeObservation?.invalidate()
             presentationSizeObservation = nil
+            timeControlObservation?.invalidate()
+            timeControlObservation = nil
+            stallRecoveryTask?.cancel()
+            stallRecoveryTask = nil
             let item = AVPlayerItem(url: url)
             let player = AVPlayer(playerItem: item)
             player.isMuted = true
@@ -169,6 +186,22 @@
                 }
             }
 
+            // AVPlayer can park in `.waitingToPlayAtSpecifiedRate` without
+            // ever flipping the item to `.failed` when go2rtc serves a
+            // sparse HLS playlist (e.g. one segment with a long Buddy
+            // keyframe interval). The status observer above only catches
+            // the explicit-failure path, so a silent stall would leave
+            // the tile frozen on its first decoded frame indefinitely.
+            // Watch `timeControlStatus` and rebuild the player if the
+            // waiting state persists past `stallRecoveryDelay`.
+            timeControlObservation = player
+                .observe(\.timeControlStatus, options: [.new]) { [weak self] player, _ in
+                    let status = player.timeControlStatus
+                    Task { @MainActor in
+                        self?.handle(timeControl: status)
+                    }
+                }
+
             player.play()
         }
 
@@ -192,6 +225,28 @@
                 break
             @unknown default:
                 break
+            }
+        }
+
+        /// Schedules a silent player rebuild when AVPlayer parks in
+        /// `.waitingToPlayAtSpecifiedRate` for longer than
+        /// `stallRecoveryDelay`. Cancels itself the moment the player
+        /// resumes playback (`.playing`) or the user pauses it
+        /// (`.paused`). Reuses `installPlayer(url:)` so the recovery path
+        /// matches what `scheduleRetry` does for explicit failures.
+        @MainActor
+        private func handle(timeControl: AVPlayer.TimeControlStatus) {
+            stallRecoveryTask?.cancel()
+            stallRecoveryTask = nil
+            guard timeControl == .waitingToPlayAtSpecifiedRate else { return }
+            guard let url = loadedURL else { return }
+            let delayNanos = UInt64(stallRecoveryDelay * 1_000_000_000)
+            stallRecoveryTask = Task { @MainActor [weak self] in
+                try? await Task.sleep(nanoseconds: delayNanos)
+                guard let self, !Task.isCancelled else { return }
+                guard loadedURL == url else { return }
+                guard player?.timeControlStatus == .waitingToPlayAtSpecifiedRate else { return }
+                installPlayer(url: url)
             }
         }
 
