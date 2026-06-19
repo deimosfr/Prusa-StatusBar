@@ -6,10 +6,10 @@ import SwiftUI
 /// tile itself uses, so the popup mirrors whatever the tile is currently
 /// showing.
 public enum CameraQuickLookSource: Equatable {
-    /// Live HLS stream. In prototype builds the tile passes
-    /// `.prototype(...)` instead, so this case never reaches non-network
-    /// code paths in prototype mode.
-    case hls(URL)
+    /// Live stream played directly by libvlc. In prototype builds the tile
+    /// passes `.prototype(...)` instead, so this case never reaches
+    /// non-network code paths in prototype mode.
+    case stream(CameraStreamRequest)
     #if !PROTOTYPE_MODE
         case still(URL, GenericCameraConfig)
     #endif
@@ -33,11 +33,11 @@ struct CameraQuickLookView: View {
     @ViewBuilder
     private var content: some View {
         switch source {
-        case let .hls(url):
+        case let .stream(request):
             #if PROTOTYPE_MODE
                 placeholder(label: L10n.t("dropdown.camera.preview"), systemImage: "video")
             #else
-                CameraPlayerView(url: url)
+                CameraPlayerView(request: request)
             #endif
         #if !PROTOTYPE_MODE
             case let .still(url, config):

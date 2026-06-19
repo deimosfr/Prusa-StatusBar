@@ -23,13 +23,13 @@ check-version:
     @./scripts/check-version-sync.sh
 
 # Generate Xcode project from project.yml (idempotent)
-gen: doctor
+gen: doctor fetch-vlckit
     @command -v xcodegen >/dev/null || { echo "xcodegen not found. Install: brew install xcodegen"; exit 1; }
     {{rtk}} xcodegen generate
 
-# Download the bundled go2rtc helper if missing locally (~18 MB, MIT)
-fetch-go2rtc:
-    {{rtk}} ./scripts/fetch-go2rtc.sh
+# Download the embedded VLCKit framework if missing locally (~80 MB, LGPL)
+fetch-vlckit:
+    {{rtk}} ./scripts/fetch-vlckit.sh
 
 # Verify SwiftLint and SwiftFormat are installed
 swift-tools-check:
@@ -52,7 +52,7 @@ format: swift-tools-check
 check: lint format-check
 
 # Run the test suite
-test: gen fetch-go2rtc
+test: gen
     set -o pipefail; {{rtk}} xcodebuild test \
         -project {{project}} \
         -scheme {{scheme}} \
@@ -65,7 +65,7 @@ test: gen fetch-go2rtc
             CODE_SIGNING_ALLOWED=NO
 
 # Debug build
-build: gen fetch-go2rtc
+build: gen
     if [ -f apple_sign.env ]; then set -a; . ./apple_sign.env; set +a; fi; \
     SIGN_ID="${MACOS_SIGN_IDENTITY:--}"; \
     TEAM_ID="${MACOS_TEAM_ID:-}"; \
@@ -79,7 +79,7 @@ build: gen fetch-go2rtc
         DEVELOPMENT_TEAM="$TEAM_ID"
 
 # Prototype build (no real network calls; uses in-memory stub client)
-build-prototype: gen fetch-go2rtc
+build-prototype: gen
     if [ -f apple_sign.env ]; then set -a; . ./apple_sign.env; set +a; fi; \
     SIGN_ID="${MACOS_SIGN_IDENTITY:--}"; \
     TEAM_ID="${MACOS_TEAM_ID:-}"; \
@@ -93,7 +93,7 @@ build-prototype: gen fetch-go2rtc
         DEVELOPMENT_TEAM="$TEAM_ID"
 
 # Release build (Developer ID from apple_sign.env if present, else ad-hoc)
-build-release: gen fetch-go2rtc
+build-release: gen
     if [ -f apple_sign.env ]; then set -a; . ./apple_sign.env; set +a; fi; \
     SIGN_ID="${MACOS_SIGN_IDENTITY:--}"; \
     TEAM_ID="${MACOS_TEAM_ID:-}"; \
@@ -130,7 +130,7 @@ dmg-x86_64:
 # Internal: build + package a single-arch DMG. ARG = arm64 | x86_64
 _dmg ARCH: gen
     @command -v create-dmg >/dev/null || { echo "create-dmg not found. Install: brew install create-dmg"; exit 1; }
-    ARCH={{ARCH}} ./scripts/fetch-go2rtc.sh
+    ./scripts/fetch-vlckit.sh
     {{rtk}} xcodebuild \
         -project {{project}} \
         -scheme {{scheme}} \
@@ -153,7 +153,7 @@ _dmg ARCH: gen
 dmg-signed ARCH:
     @command -v create-dmg >/dev/null || { echo "create-dmg not found. Install: brew install create-dmg"; exit 1; }
     @test -n "${DEVELOPER_ID:-}" || { echo "DEVELOPER_ID env var is required (e.g. 'Developer ID Application: Name (TEAMID)')"; exit 1; }
-    ARCH={{ARCH}} ./scripts/fetch-go2rtc.sh
+    ./scripts/fetch-vlckit.sh
     {{rtk}} xcodebuild \
         -project {{project}} \
         -scheme {{scheme}} \
@@ -184,7 +184,7 @@ notarize DMG:
 # One-shot: build signed DMG and notarize it. Local equivalent of release.yml.
 dmg-release ARCH:
     @test -n "${DEVELOPER_ID:-}" || { echo "DEVELOPER_ID env var is required"; exit 1; }
-    ARCH={{ARCH}} ./scripts/fetch-go2rtc.sh
+    ./scripts/fetch-vlckit.sh
     {{rtk}} xcodebuild \
         -project {{project}} \
         -scheme {{scheme}} \
@@ -213,7 +213,7 @@ verify-dmg DMG:
     @MOUNT=$(hdiutil attach -nobrowse -readonly "{{DMG}}" | tail -1 | awk '{print $NF}'); \
     APP=$(find "$MOUNT" -maxdepth 2 -name '*.app' -print -quit); \
     codesign --verify --deep --strict --verbose=4 "$APP"; \
-    codesign -dv --entitlements - "$APP/Contents/Resources/go2rtc" 2>&1 | head -40; \
+    codesign -dv --verbose=2 "$APP/Contents/Frameworks/VLCKit.framework" 2>&1 | head -20; \
     hdiutil detach "$MOUNT" -quiet
 
 # Remove derived data and generated project

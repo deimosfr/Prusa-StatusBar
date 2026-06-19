@@ -68,11 +68,6 @@ jobs:
           echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
           echo "DMG_NAME=${DMG_NAME}" >> "$GITHUB_ENV"
 
-      - name: Fetch bundled go2rtc helper (${{ matrix.arch }})
-        env:
-          ARCH: ${{ matrix.arch }}
-        run: ./scripts/fetch-go2rtc.sh
-
       - name: Generate Xcode project
         run: just gen
 
@@ -145,9 +140,6 @@ jobs:
             clean build
           # Sanity check: confirm the main binary is single-arch for this matrix slice.
           lipo -info "build/Build/Products/Release/PrusaStatusBar.app/Contents/MacOS/PrusaStatusBar"
-
-      - name: Verify bundled go2rtc arch matches ${{ matrix.arch }}
-        run: ./scripts/verify-go2rtc-arch.sh "build/Build/Products/Release/PrusaStatusBar.app" "${{ matrix.arch }}"
 
       - name: Package, sign, notarize, staple DMG
         env:

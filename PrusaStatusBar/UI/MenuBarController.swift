@@ -73,10 +73,10 @@ public final class MenuBarController {
         // to the body's intrinsic size as soon as the view is installed.
         popover.contentSize = NSSize(width: 360, height: 1)
 
-        let coordinator = CameraQuickLookCoordinator(stopGoRTC: { GoRTCService.shared.stop() })
+        let coordinator = CameraQuickLookCoordinator(stopPlayers: { ActiveCameraPlayers.shared.stopAll() })
         cameraQuickLook = coordinator
-        // Route popover show/close into the keepalive so go2rtc only
-        // tears down when no popup window is still streaming.
+        // Route popover show/close into the keepalive so the camera players
+        // only stop when no popup window is still streaming.
         popoverDelegate = MenuBarPopoverDelegate(
             model: model,
             onShow: { coordinator.keepalive.popoverDidShow() },
@@ -345,7 +345,7 @@ final class MenuBarPopoverDelegate: NSObject, NSPopoverDelegate {
     init(
         model: AppModel,
         onShow: @escaping () -> Void = {},
-        onClose: @escaping () -> Void = { GoRTCService.shared.stop() }
+        onClose: @escaping () -> Void = { ActiveCameraPlayers.shared.stopAll() }
     ) {
         self.model = model
         self.onShow = onShow

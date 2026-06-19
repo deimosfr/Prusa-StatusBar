@@ -16,10 +16,9 @@ public protocol CameraSnapshotService: Sendable {
 #if !PROTOTYPE_MODE
     /// Production snapshot orchestrator. Reads the model on the main actor,
     /// builds non-actor-isolated providers, and races them inside a task
-    /// group with a hard deadline. The default budget is 8 seconds: cold
-    /// `go2rtc` start plus first-frame RTSP negotiation routinely lands
-    /// near 2-3 seconds, and a tighter budget would force most cold-helper
-    /// snapshots to fall back to the gcode thumbnail.
+    /// group with a hard deadline. First-frame RTSP negotiation via libvlc
+    /// routinely lands near 1-3 seconds; the budget leaves headroom for a
+    /// slow camera before falling back to the gcode thumbnail.
     public final class LiveCameraSnapshotService: CameraSnapshotService, @unchecked Sendable {
         private let model: AppModel
         private let timeout: TimeInterval
@@ -88,20 +87,11 @@ public protocol CameraSnapshotService: Sendable {
         /// your buddy camera, or the thumbnail, never the wrong camera".
         @MainActor
         private func buildProviders() -> [CameraSnapshotProvider] {
-            let popoverFlag: @Sendable @MainActor () -> Bool = { [weak model] in
-                model?.popoverVisible ?? false
-            }
             if model.buddyCameraEnabled, !model.rtspURL.isEmpty {
-                return [BuddyCameraSnapshotProvider(
-                    rtspURL: model.rtspURL,
-                    popoverIsVisible: popoverFlag
-                )]
+                return [BuddyCameraSnapshotProvider(rtspURL: model.rtspURL)]
             }
             if model.genericCameraConfig.enabled, model.genericCameraConfig.hasUsableSource {
-                return [GenericCameraSnapshotProvider(
-                    config: model.genericCameraConfig,
-                    popoverIsVisible: popoverFlag
-                )]
+                return [GenericCameraSnapshotProvider(config: model.genericCameraConfig)]
             }
             return []
         }
@@ -110,7 +100,7 @@ public protocol CameraSnapshotService: Sendable {
 
 /// Stub used by prototype mode and tests. Always returns `nil` so the
 /// notification path falls back to the cached gcode thumbnail without
-/// touching the network or the go2rtc helper.
+/// touching the network.
 public final class StubCameraSnapshotService: CameraSnapshotService, @unchecked Sendable {
     public var stubResult: Data?
 

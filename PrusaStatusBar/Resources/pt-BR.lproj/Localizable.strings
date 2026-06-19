@@ -128,7 +128,7 @@
 "about.coffee_link"                       = "Me pague um café";
 "about.source_link"                       = "Código-fonte";
 "about.issues_link"                       = "Relatar um problema";
-"about.go2rtc_credit"                     = "Transmuxing de câmera ao vivo via go2rtc (MIT)";
+"about.go2rtc_credit"                     = "Vídeo ao vivo via VLCKit (LGPL)";
 "about.community_notice"                  = "Aplicativo da comunidade, não oficial Prusa";
 
 // Misc

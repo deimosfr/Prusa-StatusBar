@@ -128,7 +128,7 @@
 "about.coffee_link"                       = "请我喝杯咖啡";
 "about.source_link"                       = "源代码";
 "about.issues_link"                       = "报告问题";
-"about.go2rtc_credit"                     = "实时摄像头转流由 go2rtc (MIT) 提供";
+"about.go2rtc_credit"                     = "实时视频由 VLCKit (LGPL) 提供";
 "about.community_notice"                  = "社区应用，非 Prusa 官方";
 
 // Misc
