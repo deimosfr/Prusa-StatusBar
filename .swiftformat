@@ -1,3 +1,4 @@
 --swiftversion 5.10
 --commas inline
 --disable trailingCommas
+--exclude build,.build,DerivedData,Vendor

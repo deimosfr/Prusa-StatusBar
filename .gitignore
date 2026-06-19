@@ -1,4 +1,6 @@
 .DS_Store
+# Xcode derived data (xcodebuild -derivedDataPath build, justfile recipes + CI).
+build/
 openspec/
 CLAUDE.md
 .claude/
@@ -15,3 +17,6 @@ Vendor/
 
 # Local Claude Code hook configs (machine-specific paths).
 .github/hooks/
+
+# VLC
+VLCKit

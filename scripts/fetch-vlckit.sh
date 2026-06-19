@@ -25,12 +25,31 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="$REPO_ROOT/Vendor/VLCKit.xcframework"
 STAMP="$REPO_ROOT/Vendor/.vlckit-version"
 
+# Reconcile the xcframework Info.plist with our dSYM-stripped layout. The
+# upstream xcframework declares `DebugSymbolsPath = dSYMs` per library, but we
+# delete the .dSYM bundles above (and the empty `dSYMs` container does not
+# survive git, which cannot track empty directories). Xcode 26+ hard-errors
+# when that path is missing, so drop the now-dangling key and the empty dir.
+# Idempotent: safe to run whether or not the key/dir is still present.
+strip_debug_symbols_path() {
+    local plist="$DEST/Info.plist"
+    [[ -f "$plist" ]] || return 0
+    local i=0
+    while /usr/libexec/PlistBuddy -c "Print :AvailableLibraries:$i" "$plist" >/dev/null 2>&1; do
+        /usr/libexec/PlistBuddy -c "Delete :AvailableLibraries:$i:DebugSymbolsPath" "$plist" >/dev/null 2>&1 || true
+        i=$((i + 1))
+    done
+    rm -rf "$DEST"/macos-*/dSYMs 2>/dev/null || true
+}
+
 # Idempotent skip: a matching stamp means the framework on disk is the pinned
 # build, so there is nothing to do (the common case on warm CI caches and
-# incremental local builds).
+# incremental local builds). Still reconcile the Info.plist on the skip path so
+# previously fetched/cached copies get the dangling DebugSymbolsPath removed.
 if [[ -f "$DEST/Info.plist" && -f "$STAMP" ]]; then
     if [[ "$(cat "$STAMP" 2>/dev/null)" == "${VERSION} ${TARBALL_SHA}" ]]; then
         echo "VLCKit ${VERSION} already present, skipping download"
+        strip_debug_symbols_path
         exit 0
     fi
 fi
@@ -63,6 +82,10 @@ find "$SRC_XC" -type d -name '*.dSYM' -prune -exec rm -rf {} + 2>/dev/null || tr
 # Atomically replace any prior copy.
 rm -rf "$DEST"
 mv "$SRC_XC" "$DEST"
+
+# Drop the dangling DebugSymbolsPath key now that the .dSYM bundles are gone.
+strip_debug_symbols_path
+
 printf '%s %s\n' "$VERSION" "$TARBALL_SHA" > "$STAMP"
 
 echo "VLCKit ${VERSION} fetched to $DEST"

@@ -1,6 +1,7 @@
 excluded:
   - PrusaStatusBar.xcodeproj
   - .build
+  - build
   - DerivedData
 
 nesting:
