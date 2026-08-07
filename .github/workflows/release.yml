@@ -23,7 +23,7 @@ jobs:
         arch: [arm64, x86_64]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Verify tag matches project.yml MARKETING_VERSION
         run: |
@@ -55,6 +55,7 @@ jobs:
 
       - name: Install Homebrew tooling
         run: |
+          brew untap aws/tap 2>/dev/null || true
           brew update
           brew install just xcodegen swiftlint swiftformat create-dmg
 
@@ -171,7 +172,7 @@ jobs:
           echo "sha256(${DMG_NAME})=${SHA256}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload DMG artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dmg-${{ matrix.arch }}
           path: |
@@ -193,7 +194,7 @@ jobs:
       sha256_x86_64: ${{ steps.meta.outputs.sha256_x86_64 }}
     steps:
       - name: Download DMG artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist
           pattern: dmg-*
@@ -233,12 +234,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout app repo (for cask template)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: app
 
       - name: Checkout tap repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: deimosfr/homebrew-tap
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
