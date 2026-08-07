@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "Mostrar velocidad de impresión";
 "content.metrics.z_height.label"          = "Mostrar altura Z";
 "content.metrics.nozzle_diameter.label"   = "Mostrar diámetro de boquilla";
+"content.metrics.nozzle_setup.label"      = "Configuración de boquillas";
+"content.metrics.nozzle_setup.automatic"  = "Automático (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld herramientas";
+"content.metrics.nozzle_tool.label"       = "Herramienta %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink solo informa de la herramienta 1 en impresoras multiherramienta. Introduce el diámetro de la boquilla de cada herramienta para mostrarlos por separado.";
 "content.metrics.filament_type.label"     = "Mostrar tipo de filamento";
 "content.metrics.mmu.label"               = "Mostrar MMU";
 "content.job_control.header"              = "Control de impresión";
@@ -271,6 +276,7 @@
 "dropdown.metrics.speed"                  = "Velocidad";
 "dropdown.metrics.z_height"               = "Altura Z";
 "dropdown.metrics.nozzle_diameter"        = "Diámetro de boquilla";
+"dropdown.metrics.nozzle_diameter.tool"   = "Boquilla herramienta %lld";
 "dropdown.metrics.filament_type"          = "Filamento";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Activado";

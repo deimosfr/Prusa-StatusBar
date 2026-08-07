@@ -55,6 +55,11 @@
 "content.metrics.speed.label"             = "Show printing speed";
 "content.metrics.z_height.label"          = "Show Z-height";
 "content.metrics.nozzle_diameter.label"   = "Show nozzle diameter";
+"content.metrics.nozzle_setup.label"      = "Nozzle setup";
+"content.metrics.nozzle_setup.automatic"  = "Automatic (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld tools";
+"content.metrics.nozzle_tool.label"       = "Tool %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink reports only Tool 1 on multi-tool printers. Enter each tool's nozzle diameter to show them separately.";
 "content.metrics.filament_type.label"     = "Show filament type";
 "content.metrics.mmu.label"               = "Show MMU";
 "content.job_control.header"              = "Job control";
@@ -185,6 +190,7 @@
 "dropdown.metrics.speed"                  = "Speed";
 "dropdown.metrics.z_height"               = "Z-height";
 "dropdown.metrics.nozzle_diameter"        = "Nozzle diameter";
+"dropdown.metrics.nozzle_diameter.tool"   = "Tool %lld nozzle";
 "dropdown.metrics.filament_type"          = "Filament";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Enabled";

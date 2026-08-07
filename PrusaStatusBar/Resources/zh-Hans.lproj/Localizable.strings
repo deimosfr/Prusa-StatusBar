@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "显示打印速度";
 "content.metrics.z_height.label"          = "显示 Z 轴高度";
 "content.metrics.nozzle_diameter.label"   = "显示喷嘴直径";
+"content.metrics.nozzle_setup.label"      = "喷嘴配置";
+"content.metrics.nozzle_setup.automatic"  = "自动 (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld 个工具";
+"content.metrics.nozzle_tool.label"       = "工具 %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink 在多工具打印机上仅报告工具 1。输入每个工具的喷嘴直径即可分别显示。";
 "content.metrics.filament_type.label"     = "显示耗材类型";
 "content.metrics.mmu.label"               = "显示 MMU";
 "content.job_control.header"              = "打印控制";
@@ -271,6 +276,7 @@
 "dropdown.metrics.speed"                  = "速度";
 "dropdown.metrics.z_height"               = "Z 轴高度";
 "dropdown.metrics.nozzle_diameter"        = "喷嘴直径";
+"dropdown.metrics.nozzle_diameter.tool"   = "工具 %lld 喷嘴";
 "dropdown.metrics.filament_type"          = "耗材";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "已启用";

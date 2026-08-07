@@ -20,6 +20,7 @@
 		1126B362A751DFC125C8B18E /* GeneralTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D413B5006C1449975021ED6 /* GeneralTab.swift */; };
 		117D1A1B7F0C01A66ED42BF2 /* VLCMediaFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38CDDCD6AD8BD9A6D1D1865 /* VLCMediaFactory.swift */; };
 		121DB9311EA05DC2B4920D69 /* URLSessionPrusaLinkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DBFFE12DA3580F371C929B /* URLSessionPrusaLinkClient.swift */; };
+		13223287FA587A2B76862F7B /* MenuContentTab+Nozzles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8135BA7D019988B31AEE6354 /* MenuContentTab+Nozzles.swift */; };
 		14E8FFB0948F4F62EB59A0EF /* URLSessionPrusaLinkClient+Diagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A827FB9BFAF37F8B7F9A7 /* URLSessionPrusaLinkClient+Diagnostics.swift */; };
 		15059BD04B8CCB1E45677093 /* PrinterTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147D8923B6615745AF78BBA5 /* PrinterTab.swift */; };
 		153F2B1E47E861CC1CB2C3A4 /* GenericCameraStillFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CC7AF58A303C88B79BC3CC /* GenericCameraStillFetcher.swift */; };
@@ -161,6 +162,7 @@
 		BCDF2FCF8554104242D4BF32 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EB20800998290BD35E5563 /* Log.swift */; };
 		BD7BEA1F1D8A237A0C9EB35C /* BuddyCameraHostDeriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC508959AAD00D6DB613034E /* BuddyCameraHostDeriverTests.swift */; };
 		BF4529BD4AAC0D9124205D56 /* TempCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B02F4751AAAF8DC15616DD /* TempCard.swift */; };
+		C10B76EC0B8595EAB79B93D6 /* UserPreferences+Nozzles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E179C0EB12A316EE2A092C48 /* UserPreferences+Nozzles.swift */; };
 		C16232FC2D59A5C38CE12A1D /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16026281D1D3478F07405152 /* L10n.swift */; };
 		C335F30B69848D54D99B2D26 /* ProgressBarPremium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDF6247719EB661D35E2F75 /* ProgressBarPremium.swift */; };
 		C5984F3355F846704B772032 /* MJPEGFrameGrabber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035D1BED27D7FD86EA045139 /* MJPEGFrameGrabber.swift */; };
@@ -325,6 +327,7 @@
 		7D413B5006C1449975021ED6 /* GeneralTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTab.swift; sourceTree = "<group>"; };
 		7F6F8110A622470926C247DE /* TempCardArrowStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempCardArrowStateTests.swift; sourceTree = "<group>"; };
 		80E437CA0200D1D803623DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8135BA7D019988B31AEE6354 /* MenuContentTab+Nozzles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuContentTab+Nozzles.swift"; sourceTree = "<group>"; };
 		816C9EDB1DDC6DCFD7C7E377 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = PrusaStatusBar/Resources/Fonts; sourceTree = SOURCE_ROOT; };
 		83451F1C94F8CD12C7449A73 /* CustomActionSlotBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActionSlotBody.swift; sourceTree = "<group>"; };
 		84D8B0B7A174DDABDDF05031 /* VLCSnapshotGrabber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCSnapshotGrabber.swift; sourceTree = "<group>"; };
@@ -398,6 +401,7 @@
 		DF1CD8B1C2B5DE32CBB38E94 /* CameraQuickLookCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraQuickLookCoordinator.swift; sourceTree = "<group>"; };
 		DFE76CF22C0FD564C030BFF6 /* FooterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterBar.swift; sourceTree = "<group>"; };
 		E012958219D387974AE1ED2E /* StubLoginItemServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubLoginItemServiceTests.swift; sourceTree = "<group>"; };
+		E179C0EB12A316EE2A092C48 /* UserPreferences+Nozzles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserPreferences+Nozzles.swift"; sourceTree = "<group>"; };
 		E1DAA7E6CB94AE41C7F7F1F4 /* UserPreferences+CustomActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserPreferences+CustomActions.swift"; sourceTree = "<group>"; };
 		E38CDDCD6AD8BD9A6D1D1865 /* VLCMediaFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCMediaFactory.swift; sourceTree = "<group>"; };
 		E47401C33A9E6885BFF765E0 /* CustomActionSlotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActionSlotCard.swift; sourceTree = "<group>"; };
@@ -539,6 +543,7 @@
 				7268D1B7D2597036B4B8629F /* UserPreferences+Appearance.swift */,
 				E1DAA7E6CB94AE41C7F7F1F4 /* UserPreferences+CustomActions.swift */,
 				7BE88BE985A1446B62541F26 /* UserPreferences+GenericCamera.swift */,
+				E179C0EB12A316EE2A092C48 /* UserPreferences+Nozzles.swift */,
 				A13ED48F8B7892A0CF720795 /* UserPreferences+StartedNotification.swift */,
 				6FC002ACD12B11348739B8C9 /* UserPreferences+UpdateCheck.swift */,
 				E38CDDCD6AD8BD9A6D1D1865 /* VLCMediaFactory.swift */,
@@ -585,6 +590,7 @@
 				EF197CE19922CEA59FDA6051 /* MenuBarController+PrintingIcon.swift */,
 				4749B3AFCE39425667A3FBC2 /* MenuBarTab.swift */,
 				5E4D3BC5163899148D192BAB /* MenuContentTab.swift */,
+				8135BA7D019988B31AEE6354 /* MenuContentTab+Nozzles.swift */,
 				796B7A9C12A1BD276619A187 /* PreferencesWindow.swift */,
 				147D8923B6615745AF78BBA5 /* PrinterTab.swift */,
 				9FBA2F2955E1A5636F65FFFB /* PrinterTab+GenericCamera.swift */,
@@ -996,6 +1002,7 @@
 				A9CFEC1E0D44281FECFE40A7 /* MenuBarController+PrintingIcon.swift in Sources */,
 				42AAA9655AAFBD70431775E3 /* MenuBarController.swift in Sources */,
 				F1C017114FCD9FD9BB1BD504 /* MenuBarTab.swift in Sources */,
+				13223287FA587A2B76862F7B /* MenuContentTab+Nozzles.swift in Sources */,
 				E1BDB186EBC6D8E63E15205A /* MenuContentTab.swift in Sources */,
 				9E01EB023DBAC132FB582F76 /* NotificationImage.swift in Sources */,
 				B5C1FFE030E3C8981CC923A2 /* NotificationService.swift in Sources */,
@@ -1051,6 +1058,7 @@
 				59C94F8E1BF4DEB5F575CDCE /* UserPreferences+Appearance.swift in Sources */,
 				99B85BE321C085470AAA8E3A /* UserPreferences+CustomActions.swift in Sources */,
 				5D7FE52CE2FE1B5FB31B332A /* UserPreferences+GenericCamera.swift in Sources */,
+				C10B76EC0B8595EAB79B93D6 /* UserPreferences+Nozzles.swift in Sources */,
 				D4C34F96438E472C7D50BAFA /* UserPreferences+StartedNotification.swift in Sources */,
 				72F00E8D93982E7D64DF7B02 /* UserPreferences+UpdateCheck.swift in Sources */,
 				94BC313C832769CE6B61BC6A /* UserPreferences.swift in Sources */,
@@ -1187,7 +1195,7 @@
 					"zh-Hans",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1317,7 +1325,7 @@
 					"zh-Hans",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1417,7 +1425,7 @@
 					"zh-Hans",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

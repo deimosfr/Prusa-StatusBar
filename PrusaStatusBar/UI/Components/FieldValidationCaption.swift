@@ -8,7 +8,9 @@ enum FieldValidationState: Equatable {
     case invalid(String)
 
     var isValid: Bool {
-        if case .valid = self { return true }
+        if case .valid = self {
+            return true
+        }
         return false
     }
 }

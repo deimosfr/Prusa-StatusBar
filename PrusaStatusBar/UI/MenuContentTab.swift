@@ -30,6 +30,31 @@ struct MenuContentTab: View {
                 Toggle(isOn: showNozzleDiameterBinding) {
                     Label(L10n.t("content.metrics.nozzle_diameter.label"), systemImage: "circle.dotted")
                 }
+                if model.showNozzleDiameter {
+                    Picker(selection: nozzleToolCountBinding) {
+                        Text(L10n.t("content.metrics.nozzle_setup.automatic")).tag(0)
+                        ForEach(2 ... UserPreferences.nozzleToolCountMax, id: \.self) { count in
+                            Text(L10n.t("content.metrics.nozzle_setup.tools", Int64(count))).tag(count)
+                        }
+                    } label: {
+                        Label(L10n.t("content.metrics.nozzle_setup.label"), systemImage: "wrench.adjustable")
+                    }
+                    ForEach(model.configuredNozzleDiameters.indices, id: \.self) { index in
+                        Stepper(
+                            value: nozzleDiameterBinding(at: index),
+                            in: UserPreferences.nozzleDiameterMin ... UserPreferences.nozzleDiameterMax,
+                            step: 0.05
+                        ) {
+                            HStack {
+                                Text(L10n.t("content.metrics.nozzle_tool.label", Int64(index + 1)))
+                                Spacer()
+                                Text(String(format: "%.2f mm", model.configuredNozzleDiameters[index]))
+                                    .font(.prusaBody.monospacedDigit())
+                                    .foregroundStyle(Theme.Palette.textSecondary)
+                            }
+                        }
+                    }
+                }
                 Toggle(isOn: showFilamentTypeBinding) {
                     Label(L10n.t("content.metrics.filament_type.label"), systemImage: "drop.fill")
                 }
@@ -45,7 +70,12 @@ struct MenuContentTab: View {
             } header: {
                 Text(L10n.t("content.metrics.header"))
             } footer: {
-                FormFooterText(L10n.t("content.metrics.footer"))
+                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                    FormFooterText(L10n.t("content.metrics.footer"))
+                    if model.showNozzleDiameter, !model.configuredNozzleDiameters.isEmpty {
+                        FormFooterText(L10n.t("content.metrics.nozzle_setup.footer"))
+                    }
+                }
             }
 
             Section {
@@ -88,7 +118,9 @@ struct MenuContentTab: View {
         .onAppear { reloadFromStorage() }
         .onDisappear {
             saveTask?.cancel()
-            if hasUUIDChange { savePrusaConnectUUID() }
+            if hasUUIDChange {
+                savePrusaConnectUUID()
+            }
         }
         .onChange(of: prusaConnectUUID) { _, _ in scheduleAutoSave() }
     }
@@ -106,13 +138,19 @@ struct MenuContentTab: View {
     }
 
     private func scheduleAutoSave() {
-        if isReloading { return }
+        if isReloading {
+            return
+        }
         saveTask?.cancel()
         saveTask = Task {
             try? await Task.sleep(nanoseconds: 600_000_000)
-            if Task.isCancelled { return }
+            if Task.isCancelled {
+                return
+            }
             await MainActor.run {
-                if hasUUIDChange { savePrusaConnectUUID() }
+                if hasUUIDChange {
+                    savePrusaConnectUUID()
+                }
             }
         }
     }

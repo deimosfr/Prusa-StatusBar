@@ -141,8 +141,12 @@ struct GenericCameraTile: View {
         }
 
         private var shouldRenderStream: Bool {
-            if fallbackToStill, config.resolvedStillImageURL() != nil { return false }
-            if case .stream = config.preferredMode { return true }
+            if fallbackToStill, config.resolvedStillImageURL() != nil {
+                return false
+            }
+            if case .stream = config.preferredMode {
+                return true
+            }
             return false
         }
 

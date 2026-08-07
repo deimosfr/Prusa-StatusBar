@@ -122,10 +122,16 @@ struct CustomActionSlotCard: View {
 
     private var enableBlockedReason: String {
         var items: [String] = []
-        if !hasURL { items.append(L10n.t("prefs.actions.toggle.requirement.url")) }
+        if !hasURL {
+            items.append(L10n.t("prefs.actions.toggle.requirement.url"))
+        }
         if slot.isHeader {
-            if !hasSymbol { items.append(L10n.t("prefs.actions.toggle.requirement.icon")) }
-            if !hasName { items.append(L10n.t("prefs.actions.toggle.requirement.name")) }
+            if !hasSymbol {
+                items.append(L10n.t("prefs.actions.toggle.requirement.icon"))
+            }
+            if !hasName {
+                items.append(L10n.t("prefs.actions.toggle.requirement.name"))
+            }
         } else if !hasSymbol, !hasName {
             items.append(L10n.t("prefs.actions.toggle.requirement.name_or_icon"))
         }

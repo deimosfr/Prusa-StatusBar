@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "Mostrar velocidade de impressão";
 "content.metrics.z_height.label"          = "Mostrar altura Z";
 "content.metrics.nozzle_diameter.label"   = "Mostrar diâmetro do bico";
+"content.metrics.nozzle_setup.label"      = "Configuração dos bicos";
+"content.metrics.nozzle_setup.automatic"  = "Automático (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld ferramentas";
+"content.metrics.nozzle_tool.label"       = "Ferramenta %lld";
+"content.metrics.nozzle_setup.footer"     = "O PrusaLink informa apenas a ferramenta 1 em impressoras multiferramenta. Informe o diâmetro do bico de cada ferramenta para exibi-los separadamente.";
 "content.metrics.filament_type.label"     = "Mostrar tipo de filamento";
 "content.metrics.mmu.label"               = "Mostrar MMU";
 "content.job_control.header"              = "Controle de impressão";
@@ -271,6 +276,7 @@
 "dropdown.metrics.speed"                  = "Velocidade";
 "dropdown.metrics.z_height"               = "Altura Z";
 "dropdown.metrics.nozzle_diameter"        = "Diâmetro do bico";
+"dropdown.metrics.nozzle_diameter.tool"   = "Bico da ferramenta %lld";
 "dropdown.metrics.filament_type"          = "Filamento";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Ativado";

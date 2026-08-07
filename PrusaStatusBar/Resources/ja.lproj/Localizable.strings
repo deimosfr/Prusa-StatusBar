@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "印刷速度を表示";
 "content.metrics.z_height.label"          = "Z軸高さを表示";
 "content.metrics.nozzle_diameter.label"   = "ノズル径を表示";
+"content.metrics.nozzle_setup.label"      = "ノズル構成";
+"content.metrics.nozzle_setup.automatic"  = "自動 (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld ツール";
+"content.metrics.nozzle_tool.label"       = "ツール %lld";
+"content.metrics.nozzle_setup.footer"     = "マルチツールプリンターでは、PrusaLink はツール1のノズルのみ報告します。各ツールのノズル径を入力すると個別に表示できます。";
 "content.metrics.filament_type.label"     = "フィラメントの種類を表示";
 "content.metrics.mmu.label"               = "MMUを表示";
 "content.job_control.header"              = "印刷制御";
@@ -271,6 +276,7 @@
 "dropdown.metrics.speed"                  = "速度";
 "dropdown.metrics.z_height"               = "Z軸高さ";
 "dropdown.metrics.nozzle_diameter"        = "ノズル径";
+"dropdown.metrics.nozzle_diameter.tool"   = "ツール%lldのノズル";
 "dropdown.metrics.filament_type"          = "フィラメント";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "有効";

@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "Druckgeschwindigkeit anzeigen";
 "content.metrics.z_height.label"          = "Z-Höhe anzeigen";
 "content.metrics.nozzle_diameter.label"   = "Düsendurchmesser anzeigen";
+"content.metrics.nozzle_setup.label"      = "Düsenkonfiguration";
+"content.metrics.nozzle_setup.automatic"  = "Automatisch (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld Werkzeuge";
+"content.metrics.nozzle_tool.label"       = "Werkzeug %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink meldet bei Multi-Tool-Druckern nur Werkzeug 1. Gib den Düsendurchmesser für jedes Werkzeug ein, um sie einzeln anzuzeigen.";
 "content.metrics.filament_type.label"     = "Filamenttyp anzeigen";
 "content.metrics.mmu.label"               = "MMU anzeigen";
 "content.job_control.header"              = "Auftragssteuerung";
@@ -271,6 +276,7 @@
 "dropdown.metrics.speed"                  = "Geschwindigkeit";
 "dropdown.metrics.z_height"               = "Z-Höhe";
 "dropdown.metrics.nozzle_diameter"        = "Düsendurchmesser";
+"dropdown.metrics.nozzle_diameter.tool"   = "Düse Werkzeug %lld";
 "dropdown.metrics.filament_type"          = "Filament";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Aktiviert";

@@ -55,7 +55,7 @@ https://github.com/user-attachments/assets/85046996-f5a1-4bcb-9e79-58f294655967
 - **Job details in the dropdown**: thumbnail of the current print, elapsed time, remaining time, and ETA.
 - **Two progress bar styles**: filament *Spool* or *Classic*, your call.
 - **Temperatures**: nozzle and bed, current vs target, with ring gauges.
-- **Optional extras**: show print speed, Z height, nozzle diameter, MMU status, and filament type in the dropdown when you want them.
+- **Optional extras**: show print speed, Z height, nozzle diameter, MMU status, and filament type in the dropdown when you want them. Multi-tool printers such as the XL and INDX can display a manually configured diameter for each of their tools.
 - **Job controls** without leaving the menu bar: pause, resume, stop.
 - **Detach to a floating window**: pop the dropdown out into a dedicated, always-available window with the same content. Useful for a second monitor or keeping the print visible while another app has focus.
 - **Quick links** to open PrusaLink (the local web UI) or PrusaConnect (the cloud dashboard). Buttons dim when the printer is unreachable or the link is not configured, and either button can be hidden if you do not use it.
