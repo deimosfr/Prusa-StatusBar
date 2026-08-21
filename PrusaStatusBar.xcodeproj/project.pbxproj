@@ -96,6 +96,7 @@
 		721A502072BB59CD44CCCC78 /* RefreshIntervalEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3EDC5E5EBFA483A7875E77 /* RefreshIntervalEditor.swift */; };
 		72F00E8D93982E7D64DF7B02 /* UserPreferences+UpdateCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC002ACD12B11348739B8C9 /* UserPreferences+UpdateCheck.swift */; };
 		730CB22E8162A9FA1E0EF999 /* CustomAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138D2A6AEDB3D67E20300D9C /* CustomAction.swift */; };
+		7431CBD353CA1B539B85E57A /* PrinterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2D27DF5E6A6436D01AE912 /* PrinterModel.swift */; };
 		750FA76702D7C8E524A384FE /* CameraStreamKeepaliveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55BAC4904D12A9C4A979CE5 /* CameraStreamKeepaliveTests.swift */; };
 		75B664A00BB4C2CB3FE562B2 /* SpoolIntervalSliderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE02258F89072BD7D058854D /* SpoolIntervalSliderTests.swift */; };
 		760731AEA152A7AE081298E3 /* BuddyCameraSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F6516AE61D85FA85269CA5 /* BuddyCameraSection.swift */; };
@@ -373,6 +374,7 @@
 		BEEADA2D885A1C93185925EA /* ThemeAccentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeAccentTests.swift; sourceTree = "<group>"; };
 		C30D7B0247E18C91AEFE4A25 /* AppServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppServicesTests.swift; sourceTree = "<group>"; };
 		C8B62CEA9034D1A5AAF8624E /* RTSPProbeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTSPProbeTests.swift; sourceTree = "<group>"; };
+		CA2D27DF5E6A6436D01AE912 /* PrinterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterModel.swift; sourceTree = "<group>"; };
 		CB72F57A1677554A863F510D /* LiveMetricsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveMetricsCard.swift; sourceTree = "<group>"; };
 		CDBC80AD46C08C88F1B440AD /* PrinterTabSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterTabSections.swift; sourceTree = "<group>"; };
 		CE586F52EE91EB854CC28633 /* PrusaLinkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrusaLinkClient.swift; sourceTree = "<group>"; };
@@ -606,6 +608,7 @@
 			children = (
 				F8F863D770F0400FFB503ECC /* AppModel.swift */,
 				138D2A6AEDB3D67E20300D9C /* CustomAction.swift */,
+				CA2D27DF5E6A6436D01AE912 /* PrinterModel.swift */,
 				BACFE82E6EBD93556DB19C0F /* PrinterState.swift */,
 				4E178E275FBDA2FE99D38C46 /* PrinterStatus.swift */,
 				8EB26612ACE4C9B1A50BA980 /* PrusaLinkError.swift */,
@@ -994,6 +997,7 @@
 				9892F61C7B50D5C7750441C4 /* PreferencesWindow.swift in Sources */,
 				B02A47E4C2A239E6B714B088 /* PrinterBaseURLValidator.swift in Sources */,
 				A830BC1C0BBF81CCFA125484 /* PrinterKeychainConfirmation.swift in Sources */,
+				7431CBD353CA1B539B85E57A /* PrinterModel.swift in Sources */,
 				B6DC0419AD06204E8E265296 /* PrinterNotificationHintSection.swift in Sources */,
 				5CE3B29D074AE5B898FE1E73 /* PrinterState.swift in Sources */,
 				5A2C9E4A14AC487E2FEF490B /* PrinterStatus.swift in Sources */,

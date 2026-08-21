@@ -55,6 +55,7 @@
 // Printer tab
 "printer.connection.header"               = "Připojení PrusaLink";
 "printer.display_name.footer"             = "Zobrazované jméno je volitelné. Ponechte prázdné pro jméno hlášené tiskárnou.";
+"printer.model.label"                     = "Model tiskárny";
 "printer.connect_uuid.header"             = "Prusa Connect";
 "printer.connect_uuid.field_label"        = "UUID";
 "printer.connect_uuid.footer"             = "Volitelné. Aktivuje vyhrazené tlačítko Prusa Connect v nabídce.";
