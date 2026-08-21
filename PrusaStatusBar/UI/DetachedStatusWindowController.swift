@@ -93,7 +93,9 @@ final class DetachedStatusWindowController: NSObject, NSWindowDelegate {
                 if delay > 0 {
                     try? await Task.sleep(nanoseconds: delay * 1_000_000)
                 }
-                if Task.isCancelled { return }
+                if Task.isCancelled {
+                    return
+                }
                 guard let self, let w = window, host === hosting else { return }
                 let fitted = hosting.sizeThatFits(in: NSSize(width: 360, height: 10000))
                 guard fitted.height > 50 else { continue }

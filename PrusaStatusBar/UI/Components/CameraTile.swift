@@ -204,7 +204,9 @@ struct CameraTileHeightPreference: PreferenceKey {
     static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         let next = nextValue()
-        if next > 0 { value = next }
+        if next > 0 {
+            value = next
+        }
     }
 }
 
@@ -215,7 +217,9 @@ struct CameraTileWidthPreference: PreferenceKey {
     static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         let next = nextValue()
-        if next > 0 { value = next }
+        if next > 0 {
+            value = next
+        }
     }
 }
 
@@ -227,7 +231,9 @@ struct CameraTileWidthPreference: PreferenceKey {
 enum CameraTileSizeCache {
     static func commit(model: AppModel, kind: CameraTileKind, height: CGFloat) {
         guard height > 0 else { return }
-        if model.cameraTileHeights[kind] == height { return }
+        if model.cameraTileHeights[kind] == height {
+            return
+        }
         model.cameraTileHeights[kind] = height
     }
 }

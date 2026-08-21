@@ -60,7 +60,9 @@ struct CustomActionsSection: View {
         saveTask?.cancel()
         saveTask = Task { @MainActor in
             try? await Task.sleep(nanoseconds: 500_000_000)
-            if Task.isCancelled { return }
+            if Task.isCancelled {
+                return
+            }
             persistImmediately()
         }
     }
