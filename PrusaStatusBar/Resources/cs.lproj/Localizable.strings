@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "Podpoř vývojáře";
 "about.version"                           = "Verze %@ (%@)";
+"about.diagnostics.title"                 = "Diagnostika podpory";
+"about.diagnostics.description"           = "Tiskárna musí být zapnutá a dostupná. Před vytvořením reportu se ověří přístup k API.";
+"about.diagnostics.copy"                  = "Kopírovat diagnostický report";
+"about.diagnostics.checking"              = "Kontrola tiskárny…";
+"about.diagnostics.copied"                = "Report zkopírován. Vložte ho do issue na GitHubu.";
+"about.diagnostics.privacy"               = "Report nikdy neobsahuje API klíč, adresu ani osobní identifikátory.";
+"about.diagnostics.close"                 = "Hotovo";
+"about.diagnostics.invalid_response"      = "Tiskárna vrátila neplatnou diagnostickou odpověď.";
 
 // Footer
 "footer.preferences"                      = "Nastavení";

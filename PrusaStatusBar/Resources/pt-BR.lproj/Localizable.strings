@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "Apoiar o desenvolvedor";
 "about.version"                           = "Versão %@ (%@)";
+"about.diagnostics.title"                 = "Diagnóstico de suporte";
+"about.diagnostics.description"           = "A impressora deve estar ligada e acessível. O acesso à API é verificado antes de criar o relatório.";
+"about.diagnostics.copy"                  = "Copiar relatório de diagnóstico";
+"about.diagnostics.checking"              = "Verificando a impressora…";
+"about.diagnostics.copied"                = "Relatório copiado. Cole-o em uma issue do GitHub.";
+"about.diagnostics.privacy"               = "O relatório nunca inclui sua chave de API, endereço ou identificadores pessoais.";
+"about.diagnostics.close"                 = "Concluído";
+"about.diagnostics.invalid_response"      = "A impressora retornou uma resposta de diagnóstico inválida.";
 
 // Footer
 "footer.preferences"                      = "Ajustes";

@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "Apoyar al desarrollador";
 "about.version"                           = "Versión %@ (%@)";
+"about.diagnostics.title"                 = "Diagnóstico de asistencia";
+"about.diagnostics.description"           = "La impresora debe estar encendida y accesible. El acceso a la API se verifica antes de crear el informe.";
+"about.diagnostics.copy"                  = "Copiar informe de diagnóstico";
+"about.diagnostics.checking"              = "Comprobando impresora…";
+"about.diagnostics.copied"                = "Informe copiado. Péguelo en una incidencia de GitHub.";
+"about.diagnostics.privacy"               = "El informe nunca incluye su clave API, dirección ni identificadores personales.";
+"about.diagnostics.close"                 = "Listo";
+"about.diagnostics.invalid_response"      = "La impresora devolvió una respuesta de diagnóstico no válida.";
 
 // Footer
 "footer.preferences"                      = "Ajustes";

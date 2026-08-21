@@ -221,6 +221,14 @@
 "about.go2rtc_credit"                     = "Live video powered by VLCKit (LGPL)";
 "about.community_notice"                  = "Community application, Non Prusa Official";
 "about.version"                           = "Version %@ (%@)";
+"about.diagnostics.title"                 = "Support diagnostics";
+"about.diagnostics.description"           = "The printer must be on and reachable. API access is verified before the report is created.";
+"about.diagnostics.copy"                  = "Copy diagnostic report";
+"about.diagnostics.checking"              = "Checking printer…";
+"about.diagnostics.copied"                = "Report copied. Paste it into a GitHub issue.";
+"about.diagnostics.privacy"               = "The report never includes your API key, address, or personal identifiers.";
+"about.diagnostics.close"                 = "Done";
+"about.diagnostics.invalid_response"      = "The printer returned an invalid diagnostic response.";
 
 // Misc
 "misc.refresh_interval.custom"            = "Custom";

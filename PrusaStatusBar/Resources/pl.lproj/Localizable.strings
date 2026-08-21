@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "Wesprzyj dewelopera";
 "about.version"                           = "Wersja %@ (%@)";
+"about.diagnostics.title"                 = "Diagnostyka pomocy";
+"about.diagnostics.description"           = "Drukarka musi być włączona i dostępna. Dostęp do API jest sprawdzany przed utworzeniem raportu.";
+"about.diagnostics.copy"                  = "Kopiuj raport diagnostyczny";
+"about.diagnostics.checking"              = "Sprawdzanie drukarki…";
+"about.diagnostics.copied"                = "Raport skopiowany. Wklej go do zgłoszenia GitHub.";
+"about.diagnostics.privacy"               = "Raport nigdy nie zawiera klucza API, adresu ani danych identyfikujących.";
+"about.diagnostics.close"                 = "Gotowe";
+"about.diagnostics.invalid_response"      = "Drukarka zwróciła nieprawidłową odpowiedź diagnostyczną.";
 
 // Footer
 "footer.preferences"                      = "Ustawienia";

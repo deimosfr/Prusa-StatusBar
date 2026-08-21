@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "Soutenir le développeur";
 "about.version"                           = "Version %@ (%@)";
+"about.diagnostics.title"                 = "Diagnostic d’assistance";
+"about.diagnostics.description"           = "L’imprimante doit être allumée et accessible. L’accès à l’API est vérifié avant de créer le rapport.";
+"about.diagnostics.copy"                  = "Copier le rapport de diagnostic";
+"about.diagnostics.checking"              = "Vérification de l’imprimante…";
+"about.diagnostics.copied"                = "Rapport copié. Collez-le dans une issue GitHub.";
+"about.diagnostics.privacy"               = "Le rapport ne contient ni clé API, ni adresse, ni identifiant personnel.";
+"about.diagnostics.close"                 = "Terminé";
+"about.diagnostics.invalid_response"      = "L’imprimante a renvoyé une réponse de diagnostic invalide.";
 
 // Footer
 "footer.preferences"                      = "Préférences";

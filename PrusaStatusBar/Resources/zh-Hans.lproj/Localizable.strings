@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "支持开发者";
 "about.version"                           = "版本 %@ (%@)";
+"about.diagnostics.title"                 = "支持诊断";
+"about.diagnostics.description"           = "打印机必须已开机且可访问。创建报告前会验证 API 访问权限。";
+"about.diagnostics.copy"                  = "复制诊断报告";
+"about.diagnostics.checking"              = "正在检查打印机…";
+"about.diagnostics.copied"                = "报告已复制。请粘贴到 GitHub Issue 中。";
+"about.diagnostics.privacy"               = "报告绝不会包含您的 API 密钥、地址或个人标识信息。";
+"about.diagnostics.close"                 = "完成";
+"about.diagnostics.invalid_response"      = "打印机返回了无效的诊断响应。";
 
 // Footer
 "footer.preferences"                      = "偏好设置";

@@ -1,6 +1,11 @@
 import SwiftUI
 
 struct AboutTab: View {
+    @Bindable var model: AppModel
+    let services: AppServices
+
+    @State private var isShowingDiagnostics = false
+
     var body: some View {
         VStack(spacing: Theme.Spacing.lrg) {
             Spacer(minLength: Theme.Spacing.lrg)
@@ -59,6 +64,12 @@ struct AboutTab: View {
                 }
             }
 
+            Button {
+                isShowingDiagnostics = true
+            } label: {
+                Label(L10n.t("about.diagnostics.title"), systemImage: "stethoscope")
+            }
+
             Spacer()
 
             VStack(spacing: 4) {
@@ -85,6 +96,11 @@ struct AboutTab: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
+        .sheet(isPresented: $isShowingDiagnostics) {
+            SupportDiagnosticsSheet(model: model, services: services) {
+                isShowingDiagnostics = false
+            }
+        }
     }
 
     private var versionString: String {

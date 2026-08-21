@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "開発者を応援する";
 "about.version"                           = "バージョン %@ (%@)";
+"about.diagnostics.title"                 = "サポート診断";
+"about.diagnostics.description"           = "プリンターの電源を入れ、アクセス可能にしてください。レポート作成前に API アクセスを確認します。";
+"about.diagnostics.copy"                  = "診断レポートをコピー";
+"about.diagnostics.checking"              = "プリンターを確認中…";
+"about.diagnostics.copied"                = "レポートをコピーしました。GitHub Issue に貼り付けてください。";
+"about.diagnostics.privacy"               = "レポートに API キー、アドレス、個人を特定する情報は含まれません。";
+"about.diagnostics.close"                 = "完了";
+"about.diagnostics.invalid_response"      = "プリンターから無効な診断応答が返されました。";
 
 // Footer
 "footer.preferences"                      = "環境設定";

@@ -217,6 +217,14 @@
 // About additions
 "about.coffee_help"                       = "Den Entwickler unterstützen";
 "about.version"                           = "Version %@ (%@)";
+"about.diagnostics.title"                 = "Supportdiagnose";
+"about.diagnostics.description"           = "Der Drucker muss eingeschaltet und erreichbar sein. Der API-Zugriff wird vor der Berichterstellung geprüft.";
+"about.diagnostics.copy"                  = "Diagnosebericht kopieren";
+"about.diagnostics.checking"              = "Drucker wird geprüft…";
+"about.diagnostics.copied"                = "Bericht kopiert. Fügen Sie ihn in ein GitHub-Issue ein.";
+"about.diagnostics.privacy"               = "Der Bericht enthält niemals Ihren API-Schlüssel, Ihre Adresse oder persönliche Kennungen.";
+"about.diagnostics.close"                 = "Fertig";
+"about.diagnostics.invalid_response"      = "Der Drucker hat eine ungültige Diagnoseantwort zurückgegeben.";
 
 // Footer
 "footer.preferences"                      = "Einstellungen";
