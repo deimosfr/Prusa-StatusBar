@@ -145,7 +145,7 @@ struct PreferencesView: View {
             case .printer:
                 PrinterTab(model: model, services: services)
             case .about:
-                AboutTab()
+                AboutTab(model: model, services: services)
             }
         }
         .frame(minWidth: 560, minHeight: 620)
