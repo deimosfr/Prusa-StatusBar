@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "Mostra velocità di stampa";
 "content.metrics.z_height.label"          = "Mostra altezza Z";
 "content.metrics.nozzle_diameter.label"   = "Mostra diametro ugello";
+"content.metrics.nozzle_setup.label"      = "Configurazione ugelli";
+"content.metrics.nozzle_setup.automatic"  = "Automatico (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld strumenti";
+"content.metrics.nozzle_tool.label"       = "Strumento %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink segnala solo lo strumento 1 sulle stampanti multistrumento. Inserisci il diametro dell'ugello di ogni strumento per mostrarli separatamente.";
 "content.metrics.filament_type.label"     = "Mostra tipo di filamento";
 "content.metrics.mmu.label"               = "Mostra MMU";
 "content.job_control.header"              = "Controllo stampa";
@@ -217,6 +222,14 @@
 // About additions
 "about.coffee_help"                       = "Sostieni lo sviluppatore";
 "about.version"                           = "Versione %@ (%@)";
+"about.diagnostics.title"                 = "Diagnostica assistenza";
+"about.diagnostics.description"           = "La stampante deve essere accesa e raggiungibile. L’accesso API viene verificato prima di creare il rapporto.";
+"about.diagnostics.copy"                  = "Copia rapporto diagnostico";
+"about.diagnostics.checking"              = "Verifica della stampante…";
+"about.diagnostics.copied"                = "Rapporto copiato. Incollalo in una segnalazione GitHub.";
+"about.diagnostics.privacy"               = "Il rapporto non include mai chiave API, indirizzo o identificativi personali.";
+"about.diagnostics.close"                 = "Fine";
+"about.diagnostics.invalid_response"      = "La stampante ha restituito una risposta diagnostica non valida.";
 
 // Footer
 "footer.preferences"                      = "Impostazioni";
@@ -263,6 +276,7 @@
 "dropdown.metrics.speed"                  = "Velocità";
 "dropdown.metrics.z_height"               = "Altezza Z";
 "dropdown.metrics.nozzle_diameter"        = "Diametro ugello";
+"dropdown.metrics.nozzle_diameter.tool"   = "Ugello strumento %lld";
 "dropdown.metrics.filament_type"          = "Filamento";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Attivato";

@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "显示打印速度";
 "content.metrics.z_height.label"          = "显示 Z 轴高度";
 "content.metrics.nozzle_diameter.label"   = "显示喷嘴直径";
+"content.metrics.nozzle_setup.label"      = "喷嘴配置";
+"content.metrics.nozzle_setup.automatic"  = "自动 (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld 个工具";
+"content.metrics.nozzle_tool.label"       = "工具 %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink 在多工具打印机上仅报告工具 1。输入每个工具的喷嘴直径即可分别显示。";
 "content.metrics.filament_type.label"     = "显示耗材类型";
 "content.metrics.mmu.label"               = "显示 MMU";
 "content.job_control.header"              = "打印控制";
@@ -217,6 +222,14 @@
 // About additions
 "about.coffee_help"                       = "支持开发者";
 "about.version"                           = "版本 %@ (%@)";
+"about.diagnostics.title"                 = "支持诊断";
+"about.diagnostics.description"           = "打印机必须已开机且可访问。创建报告前会验证 API 访问权限。";
+"about.diagnostics.copy"                  = "复制诊断报告";
+"about.diagnostics.checking"              = "正在检查打印机…";
+"about.diagnostics.copied"                = "报告已复制。请粘贴到 GitHub Issue 中。";
+"about.diagnostics.privacy"               = "报告绝不会包含您的 API 密钥、地址或个人标识信息。";
+"about.diagnostics.close"                 = "完成";
+"about.diagnostics.invalid_response"      = "打印机返回了无效的诊断响应。";
 
 // Footer
 "footer.preferences"                      = "偏好设置";
@@ -263,6 +276,7 @@
 "dropdown.metrics.speed"                  = "速度";
 "dropdown.metrics.z_height"               = "Z 轴高度";
 "dropdown.metrics.nozzle_diameter"        = "喷嘴直径";
+"dropdown.metrics.nozzle_diameter.tool"   = "工具 %lld 喷嘴";
 "dropdown.metrics.filament_type"          = "耗材";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "已启用";

@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "Pokaż prędkość druku";
 "content.metrics.z_height.label"          = "Pokaż wysokość Z";
 "content.metrics.nozzle_diameter.label"   = "Pokaż średnicę dyszy";
+"content.metrics.nozzle_setup.label"      = "Konfiguracja dysz";
+"content.metrics.nozzle_setup.automatic"  = "Automatycznie (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld narzędzi";
+"content.metrics.nozzle_tool.label"       = "Narzędzie %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink zgłasza tylko narzędzie 1 w drukarkach wielonarzędziowych. Wprowadź średnicę dyszy każdego narzędzia, aby wyświetlać je oddzielnie.";
 "content.metrics.filament_type.label"     = "Pokaż typ filamentu";
 "content.metrics.mmu.label"               = "Pokaż MMU";
 "content.job_control.header"              = "Sterowanie drukiem";
@@ -217,6 +222,14 @@
 // About additions
 "about.coffee_help"                       = "Wesprzyj dewelopera";
 "about.version"                           = "Wersja %@ (%@)";
+"about.diagnostics.title"                 = "Diagnostyka pomocy";
+"about.diagnostics.description"           = "Drukarka musi być włączona i dostępna. Dostęp do API jest sprawdzany przed utworzeniem raportu.";
+"about.diagnostics.copy"                  = "Kopiuj raport diagnostyczny";
+"about.diagnostics.checking"              = "Sprawdzanie drukarki…";
+"about.diagnostics.copied"                = "Raport skopiowany. Wklej go do zgłoszenia GitHub.";
+"about.diagnostics.privacy"               = "Raport nigdy nie zawiera klucza API, adresu ani danych identyfikujących.";
+"about.diagnostics.close"                 = "Gotowe";
+"about.diagnostics.invalid_response"      = "Drukarka zwróciła nieprawidłową odpowiedź diagnostyczną.";
 
 // Footer
 "footer.preferences"                      = "Ustawienia";
@@ -263,6 +276,7 @@
 "dropdown.metrics.speed"                  = "Prędkość";
 "dropdown.metrics.z_height"               = "Wysokość Z";
 "dropdown.metrics.nozzle_diameter"        = "Średnica dyszy";
+"dropdown.metrics.nozzle_diameter.tool"   = "Dysza narzędzia %lld";
 "dropdown.metrics.filament_type"          = "Filament";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Włączone";

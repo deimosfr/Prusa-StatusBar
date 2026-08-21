@@ -67,7 +67,9 @@ import SwiftUI
                     image = nsImage
                     lastError = nil
                 case let .failure(reason):
-                    if image == nil { lastError = reason }
+                    if image == nil {
+                        lastError = reason
+                    }
                 }
             }
             fetcher = new

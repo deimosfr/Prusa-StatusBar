@@ -177,7 +177,7 @@ public final class URLSessionPrusaLinkClient: PrusaLinkClient, @unchecked Sendab
     /// returns `.unreachable`, the request is retried once against the
     /// alternate URL. Retry is gated to `.unreachable` so a 401/404/5xx
     /// from one URL is not silently re-tried against the other.
-    private func perform<T>(
+    func perform<T>(
         path: String,
         method: String = "GET",
         decode: (_ status: Int, _ data: Data) -> Result<T, PrusaLinkError>

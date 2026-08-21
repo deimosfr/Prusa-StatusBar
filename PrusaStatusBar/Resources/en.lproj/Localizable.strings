@@ -55,6 +55,11 @@
 "content.metrics.speed.label"             = "Show printing speed";
 "content.metrics.z_height.label"          = "Show Z-height";
 "content.metrics.nozzle_diameter.label"   = "Show nozzle diameter";
+"content.metrics.nozzle_setup.label"      = "Nozzle setup";
+"content.metrics.nozzle_setup.automatic"  = "Automatic (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld tools";
+"content.metrics.nozzle_tool.label"       = "Tool %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink reports only Tool 1 on multi-tool printers. Enter each tool's nozzle diameter to show them separately.";
 "content.metrics.filament_type.label"     = "Show filament type";
 "content.metrics.mmu.label"               = "Show MMU";
 "content.job_control.header"              = "Job control";
@@ -185,6 +190,7 @@
 "dropdown.metrics.speed"                  = "Speed";
 "dropdown.metrics.z_height"               = "Z-height";
 "dropdown.metrics.nozzle_diameter"        = "Nozzle diameter";
+"dropdown.metrics.nozzle_diameter.tool"   = "Tool %lld nozzle";
 "dropdown.metrics.filament_type"          = "Filament";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Enabled";
@@ -221,6 +227,14 @@
 "about.go2rtc_credit"                     = "Live video powered by VLCKit (LGPL)";
 "about.community_notice"                  = "Community application, Non Prusa Official";
 "about.version"                           = "Version %@ (%@)";
+"about.diagnostics.title"                 = "Support diagnostics";
+"about.diagnostics.description"           = "The printer must be on and reachable. API access is verified before the report is created.";
+"about.diagnostics.copy"                  = "Copy diagnostic report";
+"about.diagnostics.checking"              = "Checking printer…";
+"about.diagnostics.copied"                = "Report copied. Paste it into a GitHub issue.";
+"about.diagnostics.privacy"               = "The report never includes your API key, address, or personal identifiers.";
+"about.diagnostics.close"                 = "Done";
+"about.diagnostics.invalid_response"      = "The printer returned an invalid diagnostic response.";
 
 // Misc
 "misc.refresh_interval.custom"            = "Custom";

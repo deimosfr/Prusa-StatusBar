@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "Afficher vitesse d'impression";
 "content.metrics.z_height.label"          = "Afficher hauteur Z";
 "content.metrics.nozzle_diameter.label"   = "Afficher diamètre de buse";
+"content.metrics.nozzle_setup.label"      = "Configuration des buses";
+"content.metrics.nozzle_setup.automatic"  = "Automatique (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld outils";
+"content.metrics.nozzle_tool.label"       = "Outil %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink ne remonte que l’outil 1 sur les imprimantes multi-outils. Renseignez le diamètre de chaque buse pour les afficher séparément.";
 "content.metrics.filament_type.label"     = "Afficher type de filament";
 "content.metrics.mmu.label"               = "Afficher MMU";
 "content.job_control.header"              = "Contrôle d'impression";
@@ -217,6 +222,14 @@
 // About additions
 "about.coffee_help"                       = "Soutenir le développeur";
 "about.version"                           = "Version %@ (%@)";
+"about.diagnostics.title"                 = "Diagnostic d’assistance";
+"about.diagnostics.description"           = "L’imprimante doit être allumée et accessible. L’accès à l’API est vérifié avant de créer le rapport.";
+"about.diagnostics.copy"                  = "Copier le rapport de diagnostic";
+"about.diagnostics.checking"              = "Vérification de l’imprimante…";
+"about.diagnostics.copied"                = "Rapport copié. Collez-le dans une issue GitHub.";
+"about.diagnostics.privacy"               = "Le rapport ne contient ni clé API, ni adresse, ni identifiant personnel.";
+"about.diagnostics.close"                 = "Terminé";
+"about.diagnostics.invalid_response"      = "L’imprimante a renvoyé une réponse de diagnostic invalide.";
 
 // Footer
 "footer.preferences"                      = "Préférences";
@@ -263,6 +276,7 @@
 "dropdown.metrics.speed"                  = "Vitesse";
 "dropdown.metrics.z_height"               = "Hauteur Z";
 "dropdown.metrics.nozzle_diameter"        = "Diamètre buse";
+"dropdown.metrics.nozzle_diameter.tool"   = "Buse outil %lld";
 "dropdown.metrics.filament_type"          = "Filament";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Activé";

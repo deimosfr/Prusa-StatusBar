@@ -110,6 +110,31 @@ struct UserPreferencesTests {
     }
 
     @Test
+    func configuredNozzleDiametersDefaultToAutomatic() {
+        let (prefs, _) = makePreferences()
+        #expect(prefs.configuredNozzleDiameters.isEmpty)
+    }
+
+    @Test
+    func configuredNozzleDiametersRoundTripAndClamp() {
+        let (prefs, _) = makePreferences()
+        prefs.configuredNozzleDiameters = [0.05, 0.6, 2.0, 0.25, 0.4, 0.8, 0.15, 0.5, 1.0]
+        #expect(prefs.configuredNozzleDiameters == [0.1, 0.6, 1.8, 0.25, 0.4, 0.8, 0.15, 0.5])
+        prefs.configuredNozzleDiameters = []
+        #expect(prefs.configuredNozzleDiameters.isEmpty)
+    }
+
+    @MainActor
+    @Test
+    func configuredNozzlesOverridePrusaLinkDiameter() {
+        let model = AppModel()
+        model.printerInfo = PrinterInfo(nozzleDiameter: 0.6)
+        #expect(model.effectiveNozzleDiameters == [0.6])
+        model.configuredNozzleDiameters = [0.6, 0.4]
+        #expect(model.effectiveNozzleDiameters == [0.6, 0.4])
+    }
+
+    @Test
     func prusaConnectUUIDIsNilWhenUnset() {
         let (prefs, _) = makePreferences()
         #expect(prefs.prusaConnectUUID == nil)

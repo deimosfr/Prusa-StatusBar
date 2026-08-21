@@ -8,6 +8,9 @@ public protocol PrusaLinkClient: Sendable {
     func fetchJob() async -> Result<PrintJob?, PrusaLinkError>
     func fetchThumbnail(at path: String) async -> Result<Data, PrusaLinkError>
     func fetchInfo() async -> Result<PrinterInfo, PrusaLinkError>
+    /// Collects sanitized raw API responses for a support report. Requires an
+    /// active or paused print so the current job can be inspected.
+    func fetchDiagnosticSnapshot() async -> Result<PrinterDiagnosticSnapshot, PrinterDiagnosticsError>
     /// Reads the OctoPrint-compatible `/api/printer` endpoint for the
     /// `telemetry.material` field. PrusaLink's own `/api/v1/status` does not
     /// surface the loaded filament material on most firmware (MK3.5, MK4,

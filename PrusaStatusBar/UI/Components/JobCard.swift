@@ -210,29 +210,28 @@ struct JobCard: View {
         return StatusPresenter.formatEtaPill(eta: eta)
     }
 
+    @ViewBuilder
     private var thumbnailView: some View {
-        Group {
-            if let image = nsImage {
-                Image(nsImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: Theme.Layout.heroThumbnail, height: Theme.Layout.heroThumbnail)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.thumbnail, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: Theme.Radius.thumbnail, style: .continuous)
-                            .strokeBorder(Theme.Palette.hairline, lineWidth: Theme.Hairline.width)
-                    )
-            } else {
-                RoundedRectangle(cornerRadius: Theme.Radius.thumbnail, style: .continuous)
-                    .fill(Theme.Palette.brandMuted(accent, customHex: customHex))
-                    .frame(width: Theme.Layout.heroThumbnail, height: Theme.Layout.heroThumbnail)
-                    .overlay(
-                        Image(systemName: "cube")
-                            .font(.system(size: 24, weight: .ultraLight))
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(Theme.Palette.brand(accent, customHex: customHex))
-                    )
-            }
+        if let image = nsImage {
+            Image(nsImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: Theme.Layout.heroThumbnail, height: Theme.Layout.heroThumbnail)
+                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.thumbnail, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Theme.Radius.thumbnail, style: .continuous)
+                        .strokeBorder(Theme.Palette.hairline, lineWidth: Theme.Hairline.width)
+                )
+        } else {
+            RoundedRectangle(cornerRadius: Theme.Radius.thumbnail, style: .continuous)
+                .fill(Theme.Palette.brandMuted(accent, customHex: customHex))
+                .frame(width: Theme.Layout.heroThumbnail, height: Theme.Layout.heroThumbnail)
+                .overlay(
+                    Image(systemName: "cube")
+                        .font(.system(size: 24, weight: .ultraLight))
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(Theme.Palette.brand(accent, customHex: customHex))
+                )
         }
     }
 

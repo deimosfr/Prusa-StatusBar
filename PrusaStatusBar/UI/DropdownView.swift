@@ -174,9 +174,15 @@ struct DropdownView: View {
     }
 
     private var presentation: Presentation {
-        if !model.isConfigured { return .unconfigured }
-        if model.isDisconnected { return .disconnected }
-        if let status = model.lastStatus { return .content(status) }
+        if !model.isConfigured {
+            return .unconfigured
+        }
+        if model.isDisconnected {
+            return .disconnected
+        }
+        if let status = model.lastStatus {
+            return .content(status)
+        }
         return .loading
     }
 
@@ -207,49 +213,6 @@ struct DropdownView: View {
                 TempCard(heater: .bed, temperature: bed)
             }
         }
-    }
-
-    private func extraRows(for status: PrinterStatus) -> [LiveMetricsCard.Row] {
-        var rows: [LiveMetricsCard.Row] = []
-        if model.showNozzleDiameter, let diameter = model.printerInfo?.nozzleDiameter {
-            rows.append(.init(
-                symbol: "circle.dotted",
-                label: L10n.t("dropdown.metrics.nozzle_diameter"),
-                value: String(format: "%.2f mm", diameter)
-            ))
-        }
-        if model.showFilamentType, let material = status.activeFilamentMaterial {
-            rows.append(.init(
-                symbol: "drop.fill",
-                label: L10n.t("dropdown.metrics.filament_type"),
-                value: material
-            ))
-        }
-        if model.showSpeed, let speed = status.speed {
-            rows.append(.init(
-                symbol: "gauge.medium",
-                label: L10n.t("dropdown.metrics.speed"),
-                value: "\(Int(speed.rounded()))%"
-            ))
-        }
-        if model.showZHeight, let zHeight = status.zHeight {
-            rows.append(.init(
-                symbol: "arrow.up.and.down",
-                label: L10n.t("dropdown.metrics.z_height"),
-                value: String(format: "%.2f mm", zHeight)
-            ))
-        }
-        if model.showMMU, let mmuEnabled = model.printerInfo?.mmuEnabled {
-            let valueKey = mmuEnabled
-                ? "dropdown.metrics.mmu.enabled"
-                : "dropdown.metrics.mmu.disabled"
-            rows.append(.init(
-                symbol: "square.stack.3d.up",
-                label: L10n.t("dropdown.metrics.mmu"),
-                value: L10n.t(valueKey)
-            ))
-        }
-        return rows
     }
 
     /// Returns the `PrinterState` used to drive the Actions section, or
@@ -316,6 +279,55 @@ struct DropdownView: View {
 }
 
 extension DropdownView {
+    private func extraRows(for status: PrinterStatus) -> [LiveMetricsCard.Row] {
+        var rows: [LiveMetricsCard.Row] = []
+        if model.showNozzleDiameter {
+            let diameters = model.effectiveNozzleDiameters
+            for (index, diameter) in diameters.enumerated() {
+                let label = diameters.count == 1
+                    ? L10n.t("dropdown.metrics.nozzle_diameter")
+                    : L10n.t("dropdown.metrics.nozzle_diameter.tool", Int64(index + 1))
+                rows.append(.init(
+                    symbol: "circle.dotted",
+                    label: label,
+                    value: String(format: "%.2f mm", diameter)
+                ))
+            }
+        }
+        if model.showFilamentType, let material = status.activeFilamentMaterial {
+            rows.append(.init(
+                symbol: "drop.fill",
+                label: L10n.t("dropdown.metrics.filament_type"),
+                value: material
+            ))
+        }
+        if model.showSpeed, let speed = status.speed {
+            rows.append(.init(
+                symbol: "gauge.medium",
+                label: L10n.t("dropdown.metrics.speed"),
+                value: "\(Int(speed.rounded()))%"
+            ))
+        }
+        if model.showZHeight, let zHeight = status.zHeight {
+            rows.append(.init(
+                symbol: "arrow.up.and.down",
+                label: L10n.t("dropdown.metrics.z_height"),
+                value: String(format: "%.2f mm", zHeight)
+            ))
+        }
+        if model.showMMU, let mmuEnabled = model.printerInfo?.mmuEnabled {
+            let valueKey = mmuEnabled
+                ? "dropdown.metrics.mmu.enabled"
+                : "dropdown.metrics.mmu.disabled"
+            rows.append(.init(
+                symbol: "square.stack.3d.up",
+                label: L10n.t("dropdown.metrics.mmu"),
+                value: L10n.t(valueKey)
+            ))
+        }
+        return rows
+    }
+
     /// Resolves the URL the PrusaConnect button should open. With a non-empty
     /// trimmed UUID, deep-links to the printer's dashboard; otherwise falls
     /// back to the generic cloud entry point. Carved out as `nonisolated`

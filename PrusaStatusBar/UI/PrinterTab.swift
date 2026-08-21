@@ -85,7 +85,9 @@ struct PrinterTab: View {
         .onAppear { reloadFromStorage() }
         .onDisappear {
             saveTask?.cancel()
-            if hasChanges { save() }
+            if hasChanges {
+                save()
+            }
         }
         .onChange(of: url) { _, _ in scheduleAutoSave() }
         .onChange(of: fallbackURL) { _, _ in scheduleAutoSave() }
@@ -132,7 +134,9 @@ struct PrinterTab: View {
 
     private var cameraHostValidation: FieldValidationState {
         let trimmed = cameraHost.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty { return .empty }
+        if trimmed.isEmpty {
+            return .empty
+        }
         switch BuddyCameraHostDeriver.rtspURL(forHost: cameraHost) {
         case .success: return .valid
         case .failure(.empty): return .empty
@@ -202,7 +206,9 @@ struct PrinterTab: View {
 
     private var derivedRTSPForSave: String {
         let trimmed = cameraHost.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty { return "" }
+        if trimmed.isEmpty {
+            return ""
+        }
         switch BuddyCameraHostDeriver.rtspURL(forHost: cameraHost) {
         case let .success(url): return url.absoluteString
         case .failure: return services.settings.rtspURL ?? ""
@@ -275,13 +281,19 @@ private extension PrinterTab {
     /// repopulating @State, and short-circuited when nothing actually
     /// changed against persisted values.
     private func scheduleAutoSave() {
-        if isReloading { return }
+        if isReloading {
+            return
+        }
         saveTask?.cancel()
         saveTask = Task {
             try? await Task.sleep(nanoseconds: 600_000_000)
-            if Task.isCancelled { return }
+            if Task.isCancelled {
+                return
+            }
             await MainActor.run {
-                if hasChanges { save() }
+                if hasChanges {
+                    save()
+                }
             }
         }
     }

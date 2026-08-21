@@ -56,6 +56,28 @@ public actor StubPrusaLinkClient: PrusaLinkClient {
         ))
     }
 
+    public func fetchDiagnosticSnapshot() async -> Result<PrinterDiagnosticSnapshot, PrinterDiagnosticsError> {
+        let info = Data(#"{"nozzle_diameter":0.4,"serial":"STUB-0001","hostname":"stub.local"}"#.utf8)
+        let status = Data(#"{"printer":{"state":"PRINTING","temp_nozzle":215}}"#.utf8)
+        let job: Data? = if case .idle = phase {
+            nil
+        } else {
+            Data(#"{"file":{"display_name":"Spice_Harvester.gcode","path":"/usb/Spice_Harvester.gcode"}}"#.utf8)
+        }
+        let version = Data(#"{"firmware":"6.4.2","printer":"17.0.0"}"#.utf8)
+        let printer = Data(#"{"telemetry":{"material":"PLA"},"state":{"text":"Printing"}}"#.utf8)
+        return Result {
+            try PrinterDiagnosticSnapshot(
+                info: info,
+                status: status,
+                job: job,
+                version: version,
+                printer: printer
+            )
+        }
+        .mapError { _ in .invalidResponse }
+    }
+
     public func fetchLegacyMaterial() async -> Result<String?, PrusaLinkError> {
         switch phase {
         case .printing, .attention:

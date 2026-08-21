@@ -56,6 +56,7 @@ public final class AppModel {
     public var showSpeed: Bool = false
     public var showZHeight: Bool = false
     public var showNozzleDiameter: Bool = false
+    public var configuredNozzleDiameters: [Double] = []
     public var showFilamentType: Bool = true
     public var showMMU: Bool = false
     public var showTemperatures: Bool = true
@@ -157,6 +158,18 @@ public final class AppModel {
         !printerBaseURL.isEmpty && apiKeyConfigured
     }
 
+    /// Manual multi-tool diameters take precedence. With no manual setup the
+    /// single value reported by PrusaLink keeps the existing behavior.
+    public var effectiveNozzleDiameters: [Double] {
+        if configuredNozzleDiameters.count >= 2 {
+            return configuredNozzleDiameters
+        }
+        guard let diameter = printerInfo?.nozzleDiameter, diameter.isFinite, diameter > 0 else {
+            return []
+        }
+        return [diameter]
+    }
+
     /// Refreshes every setting mirror from the injected services so views
     /// observing the model see the same values as on-disk preferences. The
     /// prototype-mode override that fakes "configured" stays in `AppDelegate`
@@ -178,6 +191,7 @@ public final class AppModel {
         showSpeed = services.settings.showSpeed
         showZHeight = services.settings.showZHeight
         showNozzleDiameter = services.settings.showNozzleDiameter
+        configuredNozzleDiameters = services.settings.configuredNozzleDiameters
         showFilamentType = services.settings.showFilamentType
         showMMU = services.settings.showMMU
         showTemperatures = services.settings.showTemperatures

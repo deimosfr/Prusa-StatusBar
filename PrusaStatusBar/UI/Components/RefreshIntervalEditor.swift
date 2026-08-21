@@ -80,7 +80,9 @@ struct RefreshIntervalEditor: View {
                     .padding(.horizontal, 6)
                     .onSubmit { commitCustom() }
                     .onChange(of: customFieldFocused) { _, isFocused in
-                        if !isFocused { commitCustom() }
+                        if !isFocused {
+                            commitCustom()
+                        }
                     }
                 #if os(macOS)
                     .onExitCommand { commitCustom() }

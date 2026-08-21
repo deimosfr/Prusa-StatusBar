@@ -47,6 +47,11 @@
 "content.metrics.speed.label"             = "Zobrazit rychlost tisku";
 "content.metrics.z_height.label"          = "Zobrazit výšku Z";
 "content.metrics.nozzle_diameter.label"   = "Zobrazit průměr trysky";
+"content.metrics.nozzle_setup.label"      = "Nastavení trysek";
+"content.metrics.nozzle_setup.automatic"  = "Automaticky (PrusaLink)";
+"content.metrics.nozzle_setup.tools"      = "%lld nástrojů";
+"content.metrics.nozzle_tool.label"       = "Nástroj %lld";
+"content.metrics.nozzle_setup.footer"     = "PrusaLink u vícenástrojových tiskáren hlásí pouze nástroj 1. Zadejte průměr trysky každého nástroje, aby se zobrazovaly samostatně.";
 "content.metrics.filament_type.label"     = "Zobrazit typ filamentu";
 "content.metrics.mmu.label"               = "Zobrazit MMU";
 "content.job_control.header"              = "Ovládání tisku";
@@ -217,6 +222,14 @@
 // About additions
 "about.coffee_help"                       = "Podpoř vývojáře";
 "about.version"                           = "Verze %@ (%@)";
+"about.diagnostics.title"                 = "Diagnostika podpory";
+"about.diagnostics.description"           = "Tiskárna musí být zapnutá a dostupná. Před vytvořením reportu se ověří přístup k API.";
+"about.diagnostics.copy"                  = "Kopírovat diagnostický report";
+"about.diagnostics.checking"              = "Kontrola tiskárny…";
+"about.diagnostics.copied"                = "Report zkopírován. Vložte ho do issue na GitHubu.";
+"about.diagnostics.privacy"               = "Report nikdy neobsahuje API klíč, adresu ani osobní identifikátory.";
+"about.diagnostics.close"                 = "Hotovo";
+"about.diagnostics.invalid_response"      = "Tiskárna vrátila neplatnou diagnostickou odpověď.";
 
 // Footer
 "footer.preferences"                      = "Nastavení";
@@ -263,6 +276,7 @@
 "dropdown.metrics.speed"                  = "Rychlost";
 "dropdown.metrics.z_height"               = "Výška Z";
 "dropdown.metrics.nozzle_diameter"        = "Průměr trysky";
+"dropdown.metrics.nozzle_diameter.tool"   = "Tryska nástroje %lld";
 "dropdown.metrics.filament_type"          = "Filament";
 "dropdown.metrics.mmu"                    = "MMU";
 "dropdown.metrics.mmu.enabled"            = "Povoleno";

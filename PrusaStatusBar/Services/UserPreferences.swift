@@ -19,6 +19,7 @@ enum UserPreferencesKey {
     static let showSpeed = "showSpeed"
     static let showZHeight = "showZHeight"
     static let showNozzleDiameter = "showNozzleDiameter"
+    static let configuredNozzleDiameters = "configuredNozzleDiameters"
     static let showFilamentType = "showFilamentType"
     static let showMMU = "showMMU"
     static let showTemperatures = "showTemperatures"
@@ -86,6 +87,12 @@ public final class UserPreferences: @unchecked Sendable {
     public static let disconnectedRefreshIntervalDefault = 300
     public static let disconnectedRefreshIntervalMin = 5
     public static let disconnectedRefreshIntervalMax = 3600
+
+    public static let nozzleDiameterDefault = 0.4
+    public static let nozzleDiameterMin = 0.1
+    public static let nozzleDiameterMax = 1.8
+    /// Covers XL (up to 5 tools) and INDX (up to 8 tools).
+    public static let nozzleToolCountMax = 8
 
     private let defaults: UserDefaults
 

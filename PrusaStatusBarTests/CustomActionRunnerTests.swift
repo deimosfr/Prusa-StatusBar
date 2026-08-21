@@ -190,7 +190,9 @@ private extension InputStream {
         var buffer = [UInt8](repeating: 0, count: bufferSize)
         while hasBytesAvailable {
             let read = read(&buffer, maxLength: bufferSize)
-            if read <= 0 { break }
+            if read <= 0 {
+                break
+            }
             data.append(buffer, count: read)
         }
         return data
