@@ -24,6 +24,7 @@ struct PrinterTab: View {
     /// Drives the keychain-toggle confirmation alert.
     @State var pendingKeychainToggle: Bool?
     @State private var nameOverride: String = ""
+    @State private var printerModel: PrinterModel = .coreOne
     @State private var isApiKeyVisible: Bool = false
     @State var primaryTestResult: PrinterTestResult?
     @State private var fallbackTestResult: PrinterTestResult?
@@ -39,6 +40,19 @@ struct PrinterTab: View {
         Form {
             PrinterSecuritySection(useKeychain: $useKeychain, onChange: requestKeychainToggle)
             Section {
+                Picker(L10n.t("printer.model.label"), selection: $printerModel) {
+                    ForEach(PrinterModel.allCases, id: \.self) { printerModel in
+                        Label {
+                            Text(printerModel.displayName)
+                        } icon: {
+                            Image(printerModel.assetName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                        }
+                        .tag(printerModel)
+                    }
+                }
                 PrinterApiKeyRow(apiKey: $apiKey, isApiKeyVisible: $isApiKeyVisible)
                 PrinterURLRow(
                     url: $url,
@@ -85,7 +99,9 @@ struct PrinterTab: View {
         .onAppear { reloadFromStorage() }
         .onDisappear {
             saveTask?.cancel()
-            if hasChanges { save() }
+            if hasChanges {
+                save()
+            }
         }
         .onChange(of: url) { _, _ in scheduleAutoSave() }
         .onChange(of: fallbackURL) { _, _ in scheduleAutoSave() }
@@ -94,6 +110,7 @@ struct PrinterTab: View {
         .onChange(of: buddyCameraEnabled) { _, _ in scheduleAutoSave() }
         .onChange(of: genericCameraSnapshot) { _, _ in scheduleAutoSave() }
         .onChange(of: nameOverride) { _, _ in scheduleAutoSave() }
+        .onChange(of: printerModel) { _, _ in scheduleAutoSave() }
         .keychainConfirmationAlert(
             pending: $pendingKeychainToggle,
             onConfirm: confirmPendingKeychainToggle,
@@ -132,7 +149,9 @@ struct PrinterTab: View {
 
     private var cameraHostValidation: FieldValidationState {
         let trimmed = cameraHost.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty { return .empty }
+        if trimmed.isEmpty {
+            return .empty
+        }
         switch BuddyCameraHostDeriver.rtspURL(forHost: cameraHost) {
         case .success: return .valid
         case .failure(.empty): return .empty
@@ -202,7 +221,9 @@ struct PrinterTab: View {
 
     private var derivedRTSPForSave: String {
         let trimmed = cameraHost.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty { return "" }
+        if trimmed.isEmpty {
+            return ""
+        }
         switch BuddyCameraHostDeriver.rtspURL(forHost: cameraHost) {
         case let .success(url): return url.absoluteString
         case .failure: return services.settings.rtspURL ?? ""
@@ -217,6 +238,7 @@ struct PrinterTab: View {
             || buddyCameraEnabled != services.settings.buddyCameraEnabled
             || hasGenericCameraChanges
             || normalisedNameOverride != (services.settings.printerNameOverride ?? "")
+            || printerModel != services.settings.printerModel
     }
 
     private var hasGenericCameraChanges: Bool {
@@ -267,6 +289,7 @@ private extension PrinterTab {
         genericCameraVerifySSL = services.settings.genericCameraVerifySSL
         genericCameraContentType = services.settings.genericCameraContentType
         nameOverride = services.settings.printerNameOverride ?? ""
+        printerModel = services.settings.printerModel
         cameraHostError = nil
     }
 
@@ -275,13 +298,19 @@ private extension PrinterTab {
     /// repopulating @State, and short-circuited when nothing actually
     /// changed against persisted values.
     private func scheduleAutoSave() {
-        if isReloading { return }
+        if isReloading {
+            return
+        }
         saveTask?.cancel()
         saveTask = Task {
             try? await Task.sleep(nanoseconds: 600_000_000)
-            if Task.isCancelled { return }
+            if Task.isCancelled {
+                return
+            }
             await MainActor.run {
-                if hasChanges { save() }
+                if hasChanges {
+                    save()
+                }
             }
         }
     }
@@ -302,6 +331,8 @@ private extension PrinterTab {
             try runGenericCameraPersist()
             services.settings.printerNameOverride = nameOverride
             model.printerNameOverride = services.settings.printerNameOverride
+            services.settings.printerModel = printerModel
+            model.printerModel = printerModel
             model.printerBaseURL = url
             model.apiKeyConfigured = !trimmedKey.isEmpty
             services.onConfigurationChanged()

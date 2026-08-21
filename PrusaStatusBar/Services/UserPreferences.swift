@@ -30,6 +30,7 @@ enum UserPreferencesKey {
     static let printerApiKeyPlaintext = "printerApiKeyPlaintext"
     static let buddyCameraEnabled = "buddyCameraEnabled"
     static let printerNameOverride = "printerNameOverride"
+    static let printerModel = "printerModel"
     static let progressBarStyle = "progressBarStyle"
     static let showJobActions = "showJobActions"
     static let showPrusaLinkButton = "showPrusaLinkButton"
@@ -327,6 +328,20 @@ public final class UserPreferences: @unchecked Sendable {
                 defaults.removeObject(forKey: UserPreferencesKey.printerNameOverride)
             }
         }
+    }
+
+    /// The illustration selected for offline and loading printer cards.
+    /// Existing installations keep the former CORE One illustration.
+    public var printerModel: PrinterModel {
+        get {
+            guard let raw = defaults.string(forKey: UserPreferencesKey.printerModel),
+                  let model = PrinterModel(rawValue: raw)
+            else {
+                return .coreOne
+            }
+            return model
+        }
+        set { defaults.set(newValue.rawValue, forKey: UserPreferencesKey.printerModel) }
     }
 
     /// Master toggle for the Buddy Camera feature. Defaults to OFF so the

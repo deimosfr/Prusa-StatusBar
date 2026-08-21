@@ -163,7 +163,9 @@ struct UpdateCheckerTests {
         // CountingReleaseClient's call count incrementing).
         for _ in 0 ..< 100 {
             let calls = await client.callCount
-            if calls >= 1 { break }
+            if calls >= 1 {
+                break
+            }
             try await Task.sleep(nanoseconds: 5_000_000)
         }
         checker.stop()

@@ -10,6 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  contents: read
   pull-requests: write
 
 env:
@@ -164,9 +165,60 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-  comment-pr:
-    name: Comment on PR with artifact links
+  publish-beta:
+    name: Publish beta DMGs
     needs: build-dmg
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+      dmg_arm64: ${{ steps.meta.outputs.dmg_arm64 }}
+      dmg_x86_64: ${{ steps.meta.outputs.dmg_x86_64 }}
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Download DMG artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: pr-${{ github.event.pull_request.number }}-dmg-*
+          path: dist
+          merge-multiple: true
+
+      - name: Resolve release metadata
+        id: meta
+        env:
+          PR_NUM: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          ARM64_DMG=$(find dist -maxdepth 1 -name '*-arm64.dmg' -print -quit)
+          X86_64_DMG=$(find dist -maxdepth 1 -name '*-x86_64.dmg' -print -quit)
+          test -n "$ARM64_DMG"
+          test -n "$X86_64_DMG"
+          echo "tag=beta-pr-${PR_NUM}-${SHA}" >> "$GITHUB_OUTPUT"
+          echo "dmg_arm64=$(basename "$ARM64_DMG")" >> "$GITHUB_OUTPUT"
+          echo "dmg_x86_64=$(basename "$X86_64_DMG")" >> "$GITHUB_OUTPUT"
+
+      - name: Publish beta release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: "Beta build for PR #${{ github.event.pull_request.number }}"
+          prerelease: true
+          files: |
+            dist/${{ steps.meta.outputs.dmg_arm64 }}
+            dist/${{ steps.meta.outputs.dmg_arm64 }}.sha256
+            dist/${{ steps.meta.outputs.dmg_x86_64 }}
+            dist/${{ steps.meta.outputs.dmg_x86_64 }}.sha256
+
+  comment-pr:
+    name: Comment on PR with beta download links
+    needs: publish-beta
     if: |
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository
@@ -177,19 +229,19 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
-            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const sha = context.sha.substring(0, 7);
-            const prNum = context.payload.pull_request.number;
+            const tag = '${{ needs.publish-beta.outputs.tag }}';
+            const releaseUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/releases/download/${tag}`;
             const body = [
-              '<!-- beta-build-comment -->',
+              `<!-- beta-build-comment:${sha} -->`,
               '## Beta build ready',
               '',
-              `Ad-hoc signed DMGs for commit \`${sha}\` -- download from [this Actions run](${runUrl}) (Artifacts section at the bottom).`,
+              `Ad-hoc signed DMGs for commit \`${sha}\`:`,
               '',
-              '| Artifact | Architecture |',
+              '| Download | Architecture |',
               '|---|---|',
-              `| \`pr-${prNum}-dmg-arm64\` | Apple Silicon (M1/M2/M3/M4) |`,
-              `| \`pr-${prNum}-dmg-x86_64\` | Intel |`,
+              `| [Download DMG](${releaseUrl}/${{ needs.publish-beta.outputs.dmg_arm64 }}) | Apple Silicon (M1/M2/M3/M4) |`,
+              `| [Download DMG](${releaseUrl}/${{ needs.publish-beta.outputs.dmg_x86_64 }}) | Intel |`,
               '',
               '**Gatekeeper bypass required** (ad-hoc signed, not notarized):',
               '```bash',
@@ -198,24 +250,9 @@ jobs:
               'Or: right-click the app > Open > Open (two-step, first time only).',
             ].join('\n');
 
-            const { data: comments } = await github.rest.issues.listComments({
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNum,
+              issue_number: context.payload.pull_request.number,
+              body,
             });
-            const existing = comments.find(c => c.body.includes('<!-- beta-build-comment -->'));
-            if (existing) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: existing.id,
-                body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNum,
-                body,
-              });
-            }

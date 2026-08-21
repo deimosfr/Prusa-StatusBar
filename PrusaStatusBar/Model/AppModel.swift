@@ -73,6 +73,7 @@ public final class AppModel {
     public var buddyCameraEnabled: Bool = false
     public var genericCameraConfig: GenericCameraConfig = .init()
     public var printerNameOverride: String?
+    public var printerModel: PrinterModel = .coreOne
     public var appLanguage: LanguageCode = .system
 
     /// Reassembled custom action configurations, keyed by slot. Public
@@ -195,6 +196,7 @@ public final class AppModel {
             secretsStore: services.genericCameraSecretsStore
         )
         printerNameOverride = services.settings.printerNameOverride
+        printerModel = services.settings.printerModel
         accent = services.settings.accent
         customAccentHex = services.settings.customAccentHex
         appLanguage = services.settings.appLanguage
