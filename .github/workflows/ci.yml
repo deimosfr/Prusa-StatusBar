@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, closed]
   push:
     branches: [main]
 
@@ -10,6 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  contents: read
   pull-requests: write
 
 env:
@@ -18,6 +20,7 @@ env:
 jobs:
   lint-test:
     name: Lint and test
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
     runs-on: macos-26
     timeout-minutes: 30
     steps:
@@ -68,7 +71,7 @@ jobs:
   build-dmg:
     name: Build ad-hoc DMG (${{ matrix.arch }})
     needs: lint-test
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: macos-26
     timeout-minutes: 45
     strategy:
@@ -164,11 +167,83 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-  comment-pr:
-    name: Comment on PR with artifact links
+  publish-beta:
+    name: Publish beta DMGs
     needs: build-dmg
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+      dmg_arm64: ${{ steps.meta.outputs.dmg_arm64 }}
+      dmg_x86_64: ${{ steps.meta.outputs.dmg_x86_64 }}
     if: |
       github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout PR revision
+        uses: actions/checkout@v6
+
+      - name: Download DMG artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: pr-${{ github.event.pull_request.number }}-dmg-*
+          path: dist
+          merge-multiple: true
+
+      - name: Resolve release metadata
+        id: meta
+        env:
+          PR_NUM: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          ARM64_DMG=$(find dist -maxdepth 1 -name '*-arm64.dmg' -print -quit)
+          X86_64_DMG=$(find dist -maxdepth 1 -name '*-x86_64.dmg' -print -quit)
+          test -n "$ARM64_DMG"
+          test -n "$X86_64_DMG"
+          echo "tag=beta-pr-${PR_NUM}" >> "$GITHUB_OUTPUT"
+          echo "dmg_arm64=$(basename "$ARM64_DMG")" >> "$GITHUB_OUTPUT"
+          echo "dmg_x86_64=$(basename "$X86_64_DMG")" >> "$GITHUB_OUTPUT"
+
+      - name: Move beta tag to this build
+        env:
+          TAG: ${{ steps.meta.outputs.tag }}
+        run: |
+          set -euo pipefail
+          git tag --force "$TAG" "$GITHUB_SHA"
+          git push origin "refs/tags/$TAG" --force
+
+      - name: Remove previous beta assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.meta.outputs.tag }}
+        run: |
+          gh release view "$TAG" --json assets --jq '.assets[].name' 2>/dev/null |
+            while IFS= read -r asset; do
+              gh release delete-asset "$TAG" "$asset" --yes
+            done || true
+
+      - name: Publish beta release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: "Beta build for PR #${{ github.event.pull_request.number }}"
+          prerelease: true
+          files: |
+            dist/${{ steps.meta.outputs.dmg_arm64 }}
+            dist/${{ steps.meta.outputs.dmg_arm64 }}.sha256
+            dist/${{ steps.meta.outputs.dmg_x86_64 }}
+            dist/${{ steps.meta.outputs.dmg_x86_64 }}.sha256
+
+  comment-pr:
+    name: Comment on PR with beta download links
+    needs: publish-beta
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.action != 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -177,19 +252,20 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
-            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const sha = context.sha.substring(0, 7);
-            const prNum = context.payload.pull_request.number;
+            const tag = '${{ needs.publish-beta.outputs.tag }}';
+            const releaseUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/releases/download/${tag}`;
+            const marker = '<!-- beta-build-comment -->';
             const body = [
-              '<!-- beta-build-comment -->',
+              marker,
               '## Beta build ready',
               '',
-              `Ad-hoc signed DMGs for commit \`${sha}\` -- download from [this Actions run](${runUrl}) (Artifacts section at the bottom).`,
+              `Ad-hoc signed DMGs for commit \`${sha}\`:`,
               '',
-              '| Artifact | Architecture |',
+              '| Download | Architecture |',
               '|---|---|',
-              `| \`pr-${prNum}-dmg-arm64\` | Apple Silicon (M1/M2/M3/M4) |`,
-              `| \`pr-${prNum}-dmg-x86_64\` | Intel |`,
+              `| [Download DMG](${releaseUrl}/${{ needs.publish-beta.outputs.dmg_arm64 }}) | Apple Silicon (M1/M2/M3/M4) |`,
+              `| [Download DMG](${releaseUrl}/${{ needs.publish-beta.outputs.dmg_x86_64 }}) | Intel |`,
               '',
               '**Gatekeeper bypass required** (ad-hoc signed, not notarized):',
               '```bash',
@@ -201,9 +277,11 @@ jobs:
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNum,
+              issue_number: context.payload.pull_request.number,
             });
-            const existing = comments.find(c => c.body.includes('<!-- beta-build-comment -->'));
+            const existing = comments.find(comment =>
+              /<!-- beta-build-comment(?::[^>]*)? -->/.test(comment.body)
+            );
             if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -215,7 +293,30 @@ jobs:
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: prNum,
+                issue_number: context.payload.pull_request.number,
                 body,
               });
             }
+
+  cleanup-beta:
+    name: Remove beta release
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Delete beta release and tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_PREFIX: beta-pr-${{ github.event.pull_request.number }}
+        run: |
+          gh release list --limit 1000 --json tagName --jq '.[].tagName' |
+            while IFS= read -r tag; do
+              case "$tag" in
+                "$TAG_PREFIX"|"$TAG_PREFIX"-*) gh release delete "$tag" --yes --cleanup-tag ;;
+              esac
+            done || true
