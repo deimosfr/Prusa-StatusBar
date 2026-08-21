@@ -6,11 +6,12 @@ import SwiftUI
 struct UnconfiguredCard: View {
     let accent: Theme.Accent
     let customHex: String
+    let printerModel: PrinterModel
     let onConfigure: () -> Void
 
     var body: some View {
         VStack(spacing: Theme.Spacing.med) {
-            Image("PrusaCoreOne")
+            Image(printerModel.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(height: 120)

@@ -67,7 +67,9 @@ public enum StatusPresenter {
         isConfigured: Bool = true
     ) -> String {
         guard isConfigured else { return AssetName.idle }
-        if isDisconnected { return AssetName.disconnected }
+        if isDisconnected {
+            return AssetName.disconnected
+        }
         return switch state {
         case .printing: AssetName.printing
         case .paused: AssetName.paused

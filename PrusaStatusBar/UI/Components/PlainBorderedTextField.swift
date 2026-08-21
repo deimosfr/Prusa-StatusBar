@@ -15,24 +15,22 @@ struct PlainBorderedTextField: View {
     var monospaced: Bool = true
 
     var body: some View {
-        Group {
-            if isSecure {
-                PlainBorderedNSTextField(
-                    placeholder: placeholder,
-                    text: $text,
-                    isSecure: true,
-                    monospaced: monospaced
-                )
-                .id("secure")
-            } else {
-                PlainBorderedNSTextField(
-                    placeholder: placeholder,
-                    text: $text,
-                    isSecure: false,
-                    monospaced: monospaced
-                )
-                .id("plain")
-            }
+        if isSecure {
+            PlainBorderedNSTextField(
+                placeholder: placeholder,
+                text: $text,
+                isSecure: true,
+                monospaced: monospaced
+            )
+            .id("secure")
+        } else {
+            PlainBorderedNSTextField(
+                placeholder: placeholder,
+                text: $text,
+                isSecure: false,
+                monospaced: monospaced
+            )
+            .id("plain")
         }
     }
 }
