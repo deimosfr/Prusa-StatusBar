@@ -246,7 +246,9 @@
                     try? await Task.sleep(nanoseconds: 100_000_000)
                     guard let self, !Task.isCancelled else { return }
                     checkReady()
-                    if hasReportedReady { return }
+                    if hasReportedReady {
+                        return
+                    }
                 }
             }
         }

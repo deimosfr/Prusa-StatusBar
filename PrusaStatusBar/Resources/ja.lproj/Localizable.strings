@@ -55,6 +55,7 @@
 // Printer tab
 "printer.connection.header"               = "PrusaLink 接続";
 "printer.display_name.footer"             = "表示名は任意です。空欄でプリンタが報告する名前を使用します。";
+"printer.model.label"                     = "プリンターのモデル";
 "printer.connect_uuid.header"             = "Prusa Connect";
 "printer.connect_uuid.field_label"        = "UUID";
 "printer.connect_uuid.footer"             = "オプション。ドロップダウンに専用Prusa Connectボタンを有効化します。";

@@ -88,7 +88,9 @@ struct MenuContentTab: View {
         .onAppear { reloadFromStorage() }
         .onDisappear {
             saveTask?.cancel()
-            if hasUUIDChange { savePrusaConnectUUID() }
+            if hasUUIDChange {
+                savePrusaConnectUUID()
+            }
         }
         .onChange(of: prusaConnectUUID) { _, _ in scheduleAutoSave() }
     }
@@ -106,13 +108,19 @@ struct MenuContentTab: View {
     }
 
     private func scheduleAutoSave() {
-        if isReloading { return }
+        if isReloading {
+            return
+        }
         saveTask?.cancel()
         saveTask = Task {
             try? await Task.sleep(nanoseconds: 600_000_000)
-            if Task.isCancelled { return }
+            if Task.isCancelled {
+                return
+            }
             await MainActor.run {
-                if hasUUIDChange { savePrusaConnectUUID() }
+                if hasUUIDChange {
+                    savePrusaConnectUUID()
+                }
             }
         }
     }

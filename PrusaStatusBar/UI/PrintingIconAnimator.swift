@@ -70,11 +70,15 @@ public final class PrintingIconAnimator {
 
         task = Task { @MainActor [weak self] in
             for frame in frames {
-                if Task.isCancelled { return }
+                if Task.isCancelled {
+                    return
+                }
                 weakButton.value?.image = frame
                 try? await Task.sleep(nanoseconds: intervalNanos)
             }
-            if Task.isCancelled { return }
+            if Task.isCancelled {
+                return
+            }
             weakButton.value?.image = settled
             completion()
             self?.task = nil

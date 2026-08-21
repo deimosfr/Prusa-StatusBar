@@ -46,8 +46,12 @@ enum MJPEGFrameGrabber {
         var soiIndex: Int?
 
         for try await byte in bytes {
-            if Date() >= deadline { throw GrabError.timeout }
-            if buffer.count >= maxBytes { throw GrabError.streamEnded }
+            if Date() >= deadline {
+                throw GrabError.timeout
+            }
+            if buffer.count >= maxBytes {
+                throw GrabError.streamEnded
+            }
 
             buffer.append(byte)
             let lastIndex = buffer.count - 1

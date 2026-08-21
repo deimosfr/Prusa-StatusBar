@@ -222,6 +222,14 @@ struct UserPreferencesTests {
     }
 
     @Test
+    func printerModelDefaultsToCoreOneAndRoundTrips() {
+        let (prefs, _) = makePreferences()
+        #expect(prefs.printerModel == .coreOne)
+        prefs.printerModel = .xlMultiTool5
+        #expect(prefs.printerModel == .xlMultiTool5)
+    }
+
+    @Test
     func printerNameOverrideEmptyStringNormalisesToNil() {
         let (prefs, _) = makePreferences()
         prefs.printerNameOverride = "Office"

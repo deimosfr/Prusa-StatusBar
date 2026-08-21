@@ -55,6 +55,7 @@
 // Printer tab
 "printer.connection.header"               = "PrusaLink 连接";
 "printer.display_name.footer"             = "显示名称为可选。留空则使用打印机报告的名称。";
+"printer.model.label"                     = "打印机型号";
 "printer.connect_uuid.header"             = "Prusa Connect";
 "printer.connect_uuid.field_label"        = "UUID";
 "printer.connect_uuid.footer"             = "可选。在下拉菜单中启用专用 Prusa Connect 按钮。";
