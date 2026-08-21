@@ -68,8 +68,12 @@ struct StatusPill: View {
     }
 
     private var label: String {
-        if unconfigured { return L10n.t("status.unconfigured") }
-        if disconnected { return L10n.t("status.disconnected") }
+        if unconfigured {
+            return L10n.t("status.unconfigured")
+        }
+        if disconnected {
+            return L10n.t("status.disconnected")
+        }
         return switch state {
         case .idle: L10n.t("status.idle")
         case .ready: L10n.t("status.ready")
@@ -84,8 +88,12 @@ struct StatusPill: View {
     }
 
     private var foreground: Color {
-        if unconfigured { return Theme.Palette.stateNeutral }
-        if disconnected { return Theme.Palette.stateNeutral }
+        if unconfigured {
+            return Theme.Palette.stateNeutral
+        }
+        if disconnected {
+            return Theme.Palette.stateNeutral
+        }
         return switch state {
         case .printing: Theme.Palette.statePrintingOrange
         case .paused: Theme.Palette.stateYellow
@@ -99,7 +107,9 @@ struct StatusPill: View {
     }
 
     private var background: Color {
-        if unconfigured || disconnected { return Theme.Palette.stateNeutral.opacity(0.14) }
+        if unconfigured || disconnected {
+            return Theme.Palette.stateNeutral.opacity(0.14)
+        }
         return switch state {
         case .printing: Theme.Palette.statePrintingOrangeMuted
         case .paused: Theme.Palette.stateYellow.opacity(0.14)

@@ -55,6 +55,7 @@
 // Printer tab
 "printer.connection.header"               = "Conexión PrusaLink";
 "printer.display_name.footer"             = "El nombre es opcional. Déjelo vacío para usar el nombre que reporte la impresora.";
+"printer.model.label"                     = "Modelo de impresora";
 "printer.connect_uuid.header"             = "Prusa Connect";
 "printer.connect_uuid.field_label"        = "UUID";
 "printer.connect_uuid.footer"             = "Opcional. Habilita un botón dedicado a Prusa Connect en el menú.";

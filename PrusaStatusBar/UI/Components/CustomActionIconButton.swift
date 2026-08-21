@@ -26,13 +26,11 @@ struct CustomActionIconButton: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        Group {
-            if isVisible {
-                visibleButton
-            } else {
-                Color.clear
-                    .frame(width: 32, height: 28)
-            }
+        if isVisible {
+            visibleButton
+        } else {
+            Color.clear
+                .frame(width: 32, height: 28)
         }
     }
 

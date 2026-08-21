@@ -174,9 +174,15 @@ struct DropdownView: View {
     }
 
     private var presentation: Presentation {
-        if !model.isConfigured { return .unconfigured }
-        if model.isDisconnected { return .disconnected }
-        if let status = model.lastStatus { return .content(status) }
+        if !model.isConfigured {
+            return .unconfigured
+        }
+        if model.isDisconnected {
+            return .disconnected
+        }
+        if let status = model.lastStatus {
+            return .content(status)
+        }
         return .loading
     }
 
@@ -336,13 +342,14 @@ extension DropdownView {
         UnconfiguredCard(
             accent: model.accent,
             customHex: model.customAccentHex,
+            printerModel: model.printerModel,
             onConfigure: onConfigurePrinter
         )
     }
 
     var disconnectedCard: some View {
         VStack(spacing: Theme.Spacing.med) {
-            Image("PrusaCoreOne")
+            Image(model.printerModel.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(height: 120)
@@ -366,7 +373,7 @@ extension DropdownView {
 
     var loadingCard: some View {
         VStack(spacing: Theme.Spacing.med) {
-            Image("PrusaCoreOne")
+            Image(model.printerModel.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(height: 120)

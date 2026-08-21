@@ -67,7 +67,9 @@ public enum LocalizationBundle {
     }
 
     private static func loadedBundle(for code: LanguageCode) -> Bundle? {
-        if let cached = cache[code.rawValue] { return cached }
+        if let cached = cache[code.rawValue] {
+            return cached
+        }
         guard
             let path = Bundle.main.path(forResource: code.rawValue, ofType: "lproj"),
             let bundle = Bundle(path: path)

@@ -71,6 +71,7 @@
 // Printer tab
 "printer.connection.header"               = "PrusaLink Connection";
 "printer.display_name.footer"             = "Display name is optional. Leave blank to use the name reported by the printer.";
+"printer.model.label"                     = "Printer model";
 "printer.field.url"                       = "URL";
 "printer.field.fallback_url"              = "Fallback URL";
 "printer.field.fallback_url.add"          = "Add fallback URL (optional)";

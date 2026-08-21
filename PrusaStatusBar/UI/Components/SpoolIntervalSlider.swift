@@ -62,7 +62,9 @@ struct SpoolIntervalSlider: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
-                        if !isDragging { isDragging = true }
+                        if !isDragging {
+                            isDragging = true
+                        }
                         handleDrag(value: value, usableWidth: usable)
                     }
                     .onEnded { _ in
