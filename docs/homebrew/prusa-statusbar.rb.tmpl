@@ -28,10 +28,9 @@ cask "prusa-statusbar" do
 
   # Build is ad-hoc signed, not notarized. Strip the quarantine xattr so
   # Gatekeeper does not block first launch.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/PrusaStatusBar.app"],
-                   sudo: false
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args: ["-dr", "com.apple.quarantine", "{{appdir}}/PrusaStatusBar.app"]
   end
 
   zap trash: [
