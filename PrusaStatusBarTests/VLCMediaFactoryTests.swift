@@ -74,18 +74,5 @@
             #expect(media != nil)
             #expect(media?.url == url)
         }
-
-        @Test func playerOptionsForceTransportForRTSPOnly() throws {
-            let rtsp = try #require(URL(string: "rtsp://cam.local/live"))
-            func opts(_ transport: GenericCameraRTSPTransport) -> [String] {
-                VLCMediaFactory.playerOptions(for: CameraStreamRequest(url: rtsp, transport: transport))
-            }
-            #expect(opts(.tcp) == ["--rtsp-tcp"])
-            #expect(opts(.http) == ["--rtsp-http"])
-            #expect(opts(.udp).isEmpty)
-            // Non-RTSP (HTTP/MJPEG) streams get no transport flag.
-            let http = try #require(URL(string: "http://cam.local/stream"))
-            #expect(VLCMediaFactory.playerOptions(for: CameraStreamRequest(url: http, transport: .tcp)).isEmpty)
-        }
     }
 #endif

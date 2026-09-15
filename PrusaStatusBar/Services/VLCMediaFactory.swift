@@ -50,21 +50,5 @@
             options.append(":no-audio")
             return options
         }
-
-        /// Player/library-level options (CLI-style `--` flags). This libvlc
-        /// build honors the RTSP transport reliably only when set here, not just
-        /// per media, so the transport is forced at both levels.
-        static func playerOptions(for request: CameraStreamRequest) -> [String] {
-            let scheme = request.url.scheme?.lowercased() ?? ""
-            guard scheme == "rtsp" || scheme == "rtsps" else { return [] }
-            switch request.transport {
-            case .tcp:
-                return ["--rtsp-tcp"]
-            case .http:
-                return ["--rtsp-http"]
-            case .udp, .udpMulticast:
-                return []
-            }
-        }
     }
 #endif

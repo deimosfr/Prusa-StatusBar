@@ -159,7 +159,9 @@
                 scheduleRetry()
                 return
             }
-            let player = VLCMediaPlayer(options: VLCMediaFactory.playerOptions(for: request))
+            // VLCKit supports only its shared library. Creating one library per
+            // tile or Quick Look popup can deadlock libvlc during a transition.
+            let player = VLCMediaPlayer()
             player.drawable = videoView
             player.delegate = self
             player.media = media
