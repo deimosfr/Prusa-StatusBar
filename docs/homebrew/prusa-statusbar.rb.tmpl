@@ -3,14 +3,12 @@ cask "prusa-statusbar" do
 
   on_arm do
     sha256 "__SHA256_ARM64__"
-    url "__URL_ARM64__",
-        verified: "github.com/deimosfr/Prusa-StatusBar/"
+    url "__URL_ARM64__"
   end
 
   on_intel do
     sha256 "__SHA256_X86_64__"
-    url "__URL_X86_64__",
-        verified: "github.com/deimosfr/Prusa-StatusBar/"
+    url "__URL_X86_64__"
   end
 
   name "Prusa StatusBar"
@@ -22,7 +20,7 @@ cask "prusa-statusbar" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "PrusaStatusBar.app"
 
